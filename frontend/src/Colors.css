@@ -1,0 +1,62 @@
+:root {
+    --primary-color: #ffa800;
+    /* Primary color */
+    --secondary-color: #003656;
+    /* Secondary color */
+    --tertiary-color: #f8f9fa;
+    /* Tertiary color */
+    --default-color: white;
+    /* Default color */
+    --dark-color: black;
+    /* Dark color */
+    --link-color: #61dafb;
+    /* Link color */
+}
+
+@font-face {
+    font-family: 'Geist Sans';
+    src: url('./assets/fonts/Geist-v1.4.0/Geist/otf/Geist-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.primary-bg {
+    background-color: var(--primary-color);
+}
+
+.secondary-bg {
+    background-color: var(--secondary-color);
+}
+
+.tertiary-bg {
+    background-color: var(--tertiary-color);
+}
+
+.default-bg {
+    background-color: var(--default-color);
+}
+
+.dark-bg {
+    background-color: var(--dark-color);
+}
+
+/* Text color classes */
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.tertiary-text {
+    color: var(--tertiary-color);
+}
+
+.default-text {
+    color: var(--default-color);
+}
+
+.dark-text {
+    color: var(--dark-color);
+}
