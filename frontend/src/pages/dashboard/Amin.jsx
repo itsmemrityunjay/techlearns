@@ -207,6 +207,7 @@ function AdminDashboard() {
                 icon: iconURL,
             });
             alert('Course successfully added!');
+
         } catch (error) {
             console.error('Error adding course: ', error);
             alert('Failed to add course');

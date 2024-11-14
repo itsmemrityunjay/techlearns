@@ -6,6 +6,10 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useAuth } from '../../database/AuthContext';
+import {
+    toast
+    , ToastContainer
+} from 'react-toastify';
 
 const Competitions = () => {
     const [showModal, setShowModal] = useState(false);
@@ -49,7 +53,8 @@ const Competitions = () => {
     // Handle icon upload
     const handleIconUpload = async (file) => {
         if (!file) {
-            alert('Please select an icon file to upload.');
+            // alert('Please select an icon file to upload.');
+            toast.error('Please select an icon file to upload.');
             return;
         }
 
@@ -64,7 +69,8 @@ const Competitions = () => {
                 },
                 (error) => {
                     console.error('Error uploading icon:', error);
-                    alert('Failed to upload icon.');
+                    // alert('Failed to upload icon.');
+                    toast.error('Failed to upload icon.');
                 },
                 async () => {
                     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
@@ -73,12 +79,14 @@ const Competitions = () => {
                         ...prevData,
                         icon: downloadURL,
                     }));
-                    alert('Icon successfully uploaded!');
+                    // alert('Icon successfully uploaded!');
+                    toast.success('Icon successfully uploaded!');
                 }
             );
         } catch (error) {
             console.error('Error in handleIconUpload:', error);
-            alert('Failed to upload icon.');
+            // alert('Failed to upload icon.');
+            toast.error('Failed to upload icon.');
         }
     };
 

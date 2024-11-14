@@ -66,6 +66,7 @@ function AdminDashboard() {
     const handleProfileImageUpload = async () => {
         if (!profileData.profileImageFile) {
             alert("Please select an image.");
+
             return;
         }
         const storageRef = ref(storage, `profile-images/${profileData.profileImageFile.name}`);

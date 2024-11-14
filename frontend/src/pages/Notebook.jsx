@@ -7,6 +7,7 @@ import ReactQuill from 'react-quill';
 import Note from "../assets/Notebook.svg";
 import 'react-quill/dist/quill.snow.css'; // import styles for react-quill
 import { toast } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { collection, addDoc } from "firebase/firestore";  // Firestore functions
 
@@ -47,7 +48,8 @@ const Notebook = () => {
         try {
             // Save notebook to Firestore
             const docRef = await addDoc(collection(db, "notebooks"), notebook);
-            alert("Notebook published successfully!");
+            // alert("Notebook published successfully!");
+            // toast.success('Notebook published successfully!');
             console.log("Notebook published with ID: ", docRef.id);
             toast.success('Notebook published successfully!');
         } catch (error) {

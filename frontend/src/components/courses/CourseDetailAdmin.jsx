@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import { db } from '../../database/Firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import MainHero from '../MainHero';
+import { toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
 import TableOfContents from './TableofContent';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './CourseDetail.css';
+import { ToastContainer } from 'react-toastify';
 
 const CourseDetailAdmin = () => {
     const { courseId } = useParams();
@@ -52,10 +54,12 @@ const CourseDetailAdmin = () => {
         try {
             const docRef = doc(db, 'courses', courseId);
             await updateDoc(docRef, { sections });
-            alert("Changes saved successfully!");
+            // alert("Changes saved successfully!");
+            toast.success("Changes saved successfully!");
         } catch (error) {
             console.error("Error saving changes:", error);
-            alert("Error saving changes. Please try again.");
+            // alert("Error saving changes. Please try again.");
+            toast.error("Error saving changes. Please try again.");
         }
         setIsEditing(false);
     };
