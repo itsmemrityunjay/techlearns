@@ -6,6 +6,7 @@ import { db } from '../../database/Firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { getAuth } from 'firebase/auth';
+import img from "../discuss/disimg.jpg"
 
 const DiscussHero = () => {
     const [showModal, setShowModal] = useState(false);
@@ -74,13 +75,19 @@ const DiscussHero = () => {
     };
 
     return (
-        <div className='container mx-auto py-8'>
-            <div className="flex justify-center items-center">
-                <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl bg-white shadow-lg p-6 rounded-lg">
-                    <div className="flex-1 mb-6 md:mb-0 mt-14">
-                        <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">Discussions</h1>
+        <div className='container mx-auto py-8'
+        >
+            <div className="flex justify-center items-center" >
+                <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl bg-white shadow-xl p-6 rounded-lg"   style={{
+                    backgroundImage: `url(${img})`, // Referencing the public folder directly
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                }}>
+                    <div className="flex-1 mb-6 md:mb-0 mt-14" >
+                        <h1 className="text-4xl font-bold text-blue-900 mb-4 ml-6">DISCUSSIONS</h1>
                         <p className="text-gray-600 mb-6 ml-6">
-                            Discuss the Kaggle platform & machine learning topics – this includes sharing feedback, asking questions, and more.{' '}
+                         <span className='text-yellow-500'>Discussion: </span> Kaggle & Machine Learning  
+                        Join the conversation on Kaggle's powerful tools, datasets, and competitions! Share your feedback, ask questions, and discuss machine learning topics like data preprocessing, model optimization, and more with fellow enthusiasts. Together, let’s learn and grow!{' '}
                             <a className="text-black-600 underline" href="/docs/competitions" target="_blank" rel="noopener noreferrer">
                                 documentation
                             </a> or learn about{' '}
@@ -104,12 +111,17 @@ const DiscussHero = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl relative overflow-y-auto h-[80vh]">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto"
+                >
+                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl relative overflow-y-auto h-[80vh]"  style={{
+                    backgroundImage: `url(${img})`, // Referencing the public folder directly
+                    backgroundSize: 'cover', 
+                    backgroundPosition: 'center',
+                }}>
                         <h2 className="text-3xl font-bold text-gray-800 mb-4">New Topic</h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-gray-700">Topic Category</label>
+                                <label className="block text-gray-800">Topic Category</label>
                                 <select
                                     name="type"
                                     value={formData.type}
