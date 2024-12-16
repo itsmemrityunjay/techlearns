@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { getAuth } from 'firebase/auth';
-
+import img from "../discuss/disimg.jpg"
 const DiscussMap = () => {
     const [topics, setTopics] = useState([]);
     const [filteredTopics, setFilteredTopics] = useState([]);
@@ -131,7 +131,7 @@ const DiscussMap = () => {
 
     return (
         <div className="container mx-auto py-8">
-            <h1 className="text-4xl font-bold mb-6">Discussions</h1>
+            <h1 className="text-4xl font-bold mb-6 text-blue-900">Discussions</h1>
 
             <input
                 type="text"
@@ -175,15 +175,15 @@ const DiscussMap = () => {
             </div>
 
             {filteredTopics.length > 0 ? (
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-8 mt-8">
                     {filteredTopics.map((topic) => (
-                        <div key={topic.id} className="border p-4 rounded shadow">
+                        <div key={topic.id} className="border p-4 rounded shadow-lg rounded-xl">
                             <div
                                 className="cursor-pointer flex justify-between items-center"
                                 onClick={() => toggleAccordion(topic.id)}
                             >
                                 <div className="flex items-center">
-                                    <img src={topic.authorImage} alt={topic.author} className="w-10 h-10 rounded-full mr-3" />
+                                    <img src={topic.authorImage} alt={topic.author} className="w-10 h-10 rounded-full mr-7" />
                                     <div>
                                         <h2 className="text-xl font-bold">{topic.title}</h2>
                                         <p className="text-gray-500">
@@ -205,7 +205,7 @@ const DiscussMap = () => {
                             </div>
 
                             {openAccordion === topic.id && (
-                                <div className="mt-1">
+                                <div className="mt-3 w-5/6 ml-14 rounded-2xl">
                                     <ReactQuill value={topic.content} readOnly={true} theme="bubble" />
 
                                     <div className="mt-1">

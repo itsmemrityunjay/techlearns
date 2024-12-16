@@ -9,11 +9,17 @@ import Hero from '../components/home/Hero';
 import InfoSection from '../components/home/InfoSection';
 import SolutionCards from '../components/home/SolutionCard';
 import CourseList from '../components/home/Courses';
-
+import img from "../components/discuss/disimg.jpg"
 
 const Home = () => {
     return (
-        <div style={{ fontFamily: "Geist Sans" }}>
+        <div   style={{
+            fontFamily: "Geist Sans",
+            backgroundImage: `url(${img})`,
+            backgroundSize: "cover",
+            backgroundPosition: 'center',
+            // minHeight: "100vh",
+        }}>
 
             {/* <Sidebar /> */}
             <Hero />

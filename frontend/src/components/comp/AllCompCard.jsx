@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../database/Firebase'; // Firestore database
 import { collection, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'; // New competition-related icon
 
 const AllCompCard = () => {
     const [competitions, setCompetitions] = useState([]);
@@ -20,17 +21,15 @@ const AllCompCard = () => {
         const now = new Date();
         const start = new Date(startDate);
         const end = new Date(endDate);
-
-        // Check if the current date is within the start and end date range
         return now >= start && now <= end;
     };
 
     const navigate = useNavigate();
 
     return (
-        <div className="">
-            <h1 className="text-3xl font-bold mb-6">Live Competitions</h1>
-            <div className="grid grid-cols-1 gap-6">
+        <div className="p-6 bg-gray-100 min-h-screen">
+            <h1 className="text-3xl font-semibold text-center text-yellow-500 mb-8">Live Competitions</h1> {/* Heading color updated */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {competitions.map((comp) => {
                     const {
                         id,
@@ -46,24 +45,33 @@ const AllCompCard = () => {
                         status,
                     } = comp;
 
-                    // Show only approved and live competitions
                     if (status === 'approved' && isCompetitionLive(`${startDate}T${startTime}`, `${endDate}T${endTime}`)) {
                         return (
-                            <div key={id}
-                                className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer"
-                                onClick={() => navigate(`/competition/${comp.id}`)}>
-                                <h2 className="text-xl font-bold">{title}</h2>
-                                <p className="text-gray-600">{subtitle}</p>
-                                <p>Start: {new Date(`${startDate}T${startTime}`).toLocaleString()}</p>
-                                <p>End: {new Date(`${endDate}T${endTime}`).toLocaleString()}</p>
-                                <p>Privacy: {privacy}</p>
-                                <p>Who Can Join: {whoCanJoin}</p>
-                                <p>Prize Pool: {prizePool}</p>
+                            <div
+                                key={id}
+                                className="w-full max-w-xs bg-white shadow-lg border border-gray-300 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105 mx-auto"
+                                onClick={() => navigate(`/competition/${comp.id}`)}
+                            >
+                                <div className="p-6">
+                                    <div className="flex items-center mb-4">
+                                        <EmojiEventsIcon className="text-yellow-500 mr-2" fontSize="large" /> {/* Icon color */}
+                                        <h2 className="text-xl font-semibold text-yellow-500">{title}</h2> {/* Title color updated */}
+                                    </div>
+                                    <p className="text-gray-600 text-sm mb-4">{subtitle}</p>
+
+                                    <div className="text-gray-700 text-sm space-y-1">
+                                        <p><strong>Start:</strong> {new Date(`${startDate}T${startTime}`).toLocaleString()}</p>
+                                        <p><strong>End:</strong> {new Date(`${endDate}T${endTime}`).toLocaleString()}</p>
+                                        <p><strong>Privacy:</strong> {privacy}</p>
+                                        <p><strong>Who Can Join:</strong> {whoCanJoin}</p>
+                                        <p><strong>Prize Pool:</strong> {prizePool}</p>
+                                    </div>
+                                </div>
                             </div>
                         );
                     }
 
-                    return null; // Hide if not live or not approved
+                    return null;
                 })}
             </div>
         </div>

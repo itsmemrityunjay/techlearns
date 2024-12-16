@@ -41,22 +41,22 @@ const data = [
 ];
 
 
-const ButtonCard = ({ title, description, imgSrc, keyFeatures, showFeatures }) => (
-    <div className="flex flex-col bg-white gap-8">
+const ButtonCard = ({ title, description, imgSrc, keyFeatures, showFeatures, }) => (
+    <div className="flex flex-col bg-gray-100 gap-8 shadow-md rounded-xl">
         <div className='flex items-center'>
-            <div className="text-left mb-4">
-                <span className="text-xl font-bold mb-2 block">{title}</span>
-                <p className="text-lg text-gray-500">{description}</p>
+            <div className="text-left mb-4 ml-8 mt-2">
+                <span className="text-xl font-bold mb-2 block mt-2 uppercase text-sm">{title}</span>
+                <p className="text-lg text-gray-500 w-11/12 text-sm">{description}</p>
             </div>
-            <img src={imgSrc} alt={title} width="100" height="100" className="mb-4" />
+            <img src={imgSrc} alt={title} width="90" height="90" className=" mr-12" />
         </div>
         {showFeatures && (
-            <div className="mt-4">
-                <span className="block font-semibold mb-2">Key Features</span>
+            <div className="mt-4 ml-8 mb-8">
+                <span className="block font-semibold mb-2 text-customBlue">KEY FEATURES</span>
                 {keyFeatures.map((feature, index) => (
                     <a key={index} href={feature.link} className="flex items-center mb-2">
-                        <span className="material-icons mx-2" style={{ fontSize: '30px' }}>{feature.icon}</span>
-                        <p className='text-2xl text-gray-500'>{feature.label}</p>
+                        <span className="material-icons mx-2 ml-4 text-customOrange" style={{ fontSize: '30px',  }}>{feature.icon}</span>
+                        <p className='text-lg mt-2 ml-2 text-gray-500'>{feature.label}</p>
                     </a>
                 ))}
             </div>
@@ -71,7 +71,7 @@ const WohsTechlearner = () => {
         <div className="container mx-auto py-8">
             <div className='mx-2'>
 
-                <h2 className="text-3xl font-bold text-left mb-8">Who's Techlearner?</h2>
+                <h2 className="text-3xl font-bold text-left mb-8 text-customBlue">WHO'S TECHLEARNS?</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {data.map((item) => (
                         <ButtonCard
@@ -81,6 +81,7 @@ const WohsTechlearner = () => {
                             imgSrc={item.imgSrc}
                             keyFeatures={item.keyFeatures}
                             showFeatures={showMore}  // Pass the state to control feature visibility
+                            // className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
                         />
                     ))}
                 </div>
