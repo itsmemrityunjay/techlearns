@@ -63,7 +63,7 @@ const DiscussMap = () => {
         if (type === '') {
             setFilteredTopics(topics);
         } else {
-            const filtered = topics.filter((topic) => topic.type === type);
+            const filtered = topics.filter((topic) => topic.type === filterType);
             setFilteredTopics(filtered);
         }
     };
@@ -155,20 +155,20 @@ const DiscussMap = () => {
                     General Discussion
                 </button>
                 <button
-                    className={`px-4 py-2 rounded-full ${filterType === 'Feedback' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
-                    onClick={() => handleFilter('Feedback')}
+                    className={`px-4 py-2 rounded-full ${filterType === 'feedback' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
+                    onClick={() => handleFilter('feedback')}
                 >
                     Feedback
                 </button>
                 <button
-                    className={`px-4 py-2 rounded-full ${filterType === 'Question' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
-                    onClick={() => handleFilter('Question')}
+                    className={`px-4 py-2 rounded-full ${filterType === 'question' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
+                    onClick={() => handleFilter('question')}
                 >
                     Question
                 </button>
                 <button
-                    className={`px-4 py-2 rounded-full ${filterType === 'Course' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
-                    onClick={() => handleFilter('Course')}
+                    className={`px-4 py-2 rounded-full ${filterType === 'course' ? 'secondary-bg text-white' : 'bg-gray-200'}`}
+                    onClick={() => handleFilter('course')}
                 >
                     Course
                 </button>

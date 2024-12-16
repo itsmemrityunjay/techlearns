@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Menu, AccountCircle, WbSunny, DarkMode, Home, School, Forum, EmojiEvents, Note } from '@mui/icons-material';
 
 const Navbar = () => {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
@@ -77,38 +78,40 @@ const Navbar = () => {
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-80 p-2 shadow"
                             >
-                                <li>
-                                    <Link to="/signin" className="text-xl">
-                                        SIGNIN
+
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/signin" className="x-8 y-4 flex items-center space-x-4">
+                                        <Home /> <span className="text-xl">SIGNIN</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/signup" className="text-xl">
-                                        SIGNUP
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/signup" className="x-8 y-4 flex items-center space-x-4">
+                                        <School /> <span className="text-xl">SIGNUP</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/competition" className="text-xl">
-                                        COMPETITION
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/competition" className="x-8 y-4 flex items-center space-x-4">
+                                        <EmojiEvents /> <span className="text-xl">COMPETITION</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/course" className="text-xl">
-                                        COURSE
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/course" className="x-8 y-4 flex items-center space-x-4">
+                                        <School /> <span className="text-xl">COURSE</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/notebook" className="text-xl">
-                                        NOTEBOOK
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/notebook" className="x-8 y-4 flex items-center space-x-4">
+                                        <Note /> <span className="text-xl">NOTEBOOK</span>
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link to="/discussion" className="text-xl">
-                                        DISCUSSION
+                                <li className=" text-2xl font-medium">
+                                    <Link to="/discussion" className="x-8 y-4 flex items-center space-x-4">
+                                        <Forum /> <span className="text-xl">DISCUSSION</span>
                                     </Link>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
