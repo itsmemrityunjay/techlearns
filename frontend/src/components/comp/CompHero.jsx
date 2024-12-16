@@ -173,299 +173,314 @@ const Competitions = () => {
         <div className='container mx-auto py-8'>
             <div className="flex justify-center items-center">
                 {/* Main Container */}
-                <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl bg-white shadow-lg p-6 rounded-lg">
-                    {/* Left Section */}
-                    <div className="flex-1 mb-6 md:mb-0 mt-14">
-                        <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">Competitions</h1>
-                        <p className="text-gray-600 mb-6 ml-6">
-                            Grow your data science skills by competing in our exciting <br /> competitions. Find help in the{' '}
-                            <a
-                                className="text-black-600 underline"
-                                href="/docs/competitions"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                documentation
-                            </a>{' '}
-                            or learn about{' '}
-                            <br />
-                            <a
-                                className="text-black-600 underline"
-                                href="/c/about/community"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Community Competitions
-                            </a>.
-                        </p>
-                        {/* Button to trigger modal */}
-                        <div className="flex space-x-4 ml-6">
-                            <button
-                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
-                                onClick={() => setShowModal(true)}
-                            >
-                                Host a Competition
-                            </button>
-                        </div>
-                    </div>
+                <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl shadow-lg p-6 rounded-lg bg-gradient-to-r from-purple-100 via-purple-50 to-blue-100">
+    {/* Left Section */}
+    <div className="flex-1 mb-6 md:mb-0 mt-14">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">Competitions</h1>
+        <p className="text-gray-600 mb-6 ml-6">
+            Grow your data science skills by competing in our exciting <br /> competitions. Find help in the{' '}
+            <a
+                className="text-black-600 underline"
+                href="/docs/competitions"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                documentation
+            </a>{' '}
+            or learn about{' '}
+            <br />
+            <a
+                className="text-black-600 underline"
+                href="/c/about/community"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Community Competitions
+            </a>.
+        </p>
+        {/* Button to trigger modal */}
+        <div className="flex space-x-4 ml-6">
+            <button
+                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
+                onClick={() => setShowModal(true)}
+            >
+                Host a Competition
+            </button>
+        </div>
+    </div>
 
-                    {/* Right Section - Image */}
-                    <div className="flex-shrink-0 mr-6">
-                        <img
-                            src={CompHero}
-                            alt="Competitions"
-                            width="280"
-                            height="208"
-                            className="w-72 h-auto"
-                        />
-                    </div>
-                </div>
+    {/* Right Section - Image */}
+    <div className="flex-shrink-0 mr-6">
+        <img
+            src={CompHero}
+            alt="Competitions"
+            width="280"
+            height="208"
+            className="w-72 h-auto"
+        />
+    </div>
+</div>
+
             </div>
 
             {/* Modal for hosting competition */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl relative overflow-y-auto h-[80vh]">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Host a Competition</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Competition Image */}
-                            <div className="mb-4">
-                                <label className="block mb-2 font-bold">Competition Image</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => setIconFile(e.target.files[0])}
-                                    className="border rounded p-2 w-full"
-                                />
-                                <button
-                                    type="button"
-                                    className="secondary-bg text-white px-4 py-2 rounded mt-2"
-                                    onClick={() => handleIconUpload(iconFile)}
-                                >
-                                    Upload Icon
-                                </button>
-                            </div>
-
-                            {/* Competition Type */}
-                            <div>
-                                <label className="block text-gray-700">Competition Type</label>
-                                <select
-                                    name="type"
-                                    value={formData.type}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                >
-                                    <option value="">Select Competition Type</option>
-                                    <option value="data-science">Data Science</option>
-                                    <option value="ai">AI</option>
-                                    <option value="machine-learning">Machine Learning</option>
-                                </select>
-                            </div>
-
-                            {/* Title */}
-                            <div>
-                                <label className="block text-gray-700">Title</label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                />
-                            </div>
-
-                            {/* Subtitle */}
-                            <div>
-                                <label className="block text-gray-700">Subtitle</label>
-                                <input
-                                    type="text"
-                                    name="subtitle"
-                                    value={formData.subtitle}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                />
-                            </div>
-
-                            {/* Privacy Access */}
-                            <div>
-                                <label className="block text-gray-700">Privacy Access</label>
-                                <select
-                                    name="privacy"
-                                    value={formData.privacy}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                >
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                </select>
-                            </div>
-
-                            {/* Who Can Join */}
-                            <div>
-                                <label className="block text-gray-700">Who Can Join</label>
-                                <select
-                                    name="whoCanJoin"
-                                    value={formData.whoCanJoin}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                >
-                                    <option value="everyone">Everyone</option>
-                                    <option value="invitation-only">Invitation Only</option>
-                                </select>
-                            </div>
-
-                            {/* Eligibility Criteria */}
-                            <div>
-                                <label className="block text-gray-700">Eligibility Criteria</label>
-                                <textarea
-                                    name="eligibility"
-                                    value={formData.eligibility}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    placeholder="Describe who is eligible to participate."
-                                ></textarea>
-                            </div>
-
-                            {/* Prize Pool */}
-                            <div>
-                                <label className="block text-gray-700">Prize Pool</label>
-                                <input
-                                    type="text"
-                                    name="prizePool"
-                                    value={formData.prizePool}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    placeholder="Enter prize pool details."
-                                />
-                            </div>
-
-                            {/* Enable Notebook */}
-                            <div>
-                                <label className="block text-gray-700">Enable Notebook</label>
-                                <input
-                                    type="checkbox"
-                                    name="enableNotebook"
-                                    checked={formData.enableNotebook}
-                                    onChange={handleChange}
-                                    className="mr-2"
-                                /> Enable notebook feature
-                            </div>
-
-                            {/* Evaluation Criteria */}
-                            <div>
-                                <label className="block text-gray-700">Evaluation Criteria</label>
-                                <textarea
-                                    name="evaluationCriteria"
-                                    value={formData.evaluationCriteria}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    placeholder="Describe how submissions will be evaluated."
-                                ></textarea>
-                            </div>
-
-                            {/* File Submission */}
-                            <div>
-                                <label className="block text-gray-700">File Submission</label>
-                                <input
-                                    type="checkbox"
-                                    name="fileSubmission"
-                                    checked={formData.fileSubmission}
-                                    onChange={handleChange}
-                                    className="mr-2"
-                                /> Allow file submissions
-                            </div>
-
-                            {/* File Upload */}
-                            {formData.fileSubmission && (
-                                <div>
-                                    <label className="block text-gray-700">Upload File</label>
-                                    <input
-                                        type="file"
-                                        name="file"
-                                        onChange={handleFileChange}
-                                        className="w-full p-2 border border-gray-300 rounded"
-                                    />
-                                </div>
-                            )}
-
-                            {/* Start Date */}
-                            <div>
-                                <label className="block text-gray-700">Start Date</label>
-                                <input
-                                    type="date"
-                                    name="startDate"
-                                    value={formData.startDate}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                />
-                            </div>
-
-                            {/* Start Time */}
-                            <div>
-                                <label className="block text-gray-700">Start Time</label>
-                                <input
-                                    type="time"
-                                    name="startTime"
-                                    value={formData.startTime}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                />
-                            </div>
-
-                            {/* End Date */}
-                            <div>
-                                <label className="block text-gray-700">End Date</label>
-                                <input
-                                    type="date"
-                                    name="endDate"
-                                    value={formData.endDate}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                />
-                            </div>
-
-                            {/* End Time */}
-                            <div>
-                                <label className="block text-gray-700">End Time</label>
-                                <input
-                                    type="time"
-                                    name="endTime"
-                                    value={formData.endTime}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded"
-                                    required
-                                />
-                            </div>
-
-                            {/* Success and Error Messages */}
-                            {successMessage && <p className="text-green-600">{successMessage}</p>}
-                            {errorMessage && <p className="text-red-600">{errorMessage}</p>}
-
-                            {/* Form Buttons */}
-                            <div className="flex justify-end space-x-4">
-                                <button
-                                    type="button"
-                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full"
-                                    onClick={() => setShowModal(false)}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
-                                >
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
+  
+{/* Modal for hosting competition */}
+{showModal && (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
+        <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-2xl relative overflow-y-auto h-[80vh]">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Host a Competition</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                
+                {/* Competition Image */}
+                <div className="mb-4">
+                    <label className="block mb-2 font-bold text-gray-700">Competition Image</label>
+                    <div className="flex items-center">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setIconFile(e.target.files[0])}
+                            className="hidden"
+                            id="competitionImage"
+                        />
+                        <label
+                            htmlFor="competitionImage"
+                            className="cursor-pointer bg-[--secondary-color] text-white py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition duration-200"
+                        >
+                            Choose File
+                        </label>
+                        <button
+                            type="button"
+                            className="ml-4 bg-[--secondary-color] text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition duration-200"
+                            onClick={() => handleIconUpload(iconFile)}
+                        >
+                            Upload Icon
+                        </button>
                     </div>
                 </div>
-            )}
+
+                {/* Competition Type */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Competition Type</label>
+                    <select
+                        name="type"
+                        value={formData.type}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    >
+                        <option value="">Select Competition Type</option>
+                        <option value="data-science">Data Science</option>
+                        <option value="ai">AI</option>
+                        <option value="machine-learning">Machine Learning</option>
+                    </select>
+                </div>
+
+                {/* Title */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Title</label>
+                    <input
+                        type="text"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    />
+                </div>
+
+                {/* Subtitle */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Subtitle</label>
+                    <input
+                        type="text"
+                        name="subtitle"
+                        value={formData.subtitle}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                    />
+                </div>
+
+                {/* Privacy Access */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Privacy Access</label>
+                    <select
+                        name="privacy"
+                        value={formData.privacy}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                    >
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+
+                {/* Who Can Join */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Who Can Join</label>
+                    <select
+                        name="whoCanJoin"
+                        value={formData.whoCanJoin}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                    >
+                        <option value="everyone">Everyone</option>
+                        <option value="invitation-only">Invitation Only</option>
+                    </select>
+                </div>
+
+                {/* Eligibility Criteria */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Eligibility Criteria</label>
+                    <textarea
+                        name="eligibility"
+                        value={formData.eligibility}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        placeholder="Describe who is eligible to participate."
+                    ></textarea>
+                </div>
+
+                {/* Prize Pool */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Prize Pool</label>
+                    <input
+                        type="text"
+                        name="prizePool"
+                        value={formData.prizePool}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        placeholder="Enter prize pool details."
+                    />
+                </div>
+
+                {/* Enable Notebook */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Enable Notebook</label>
+                    <input
+                        type="checkbox"
+                        name="enableNotebook"
+                        checked={formData.enableNotebook}
+                        onChange={handleChange}
+                        className="mr-2"
+                    /> Enable notebook feature
+                </div>
+
+                {/* Evaluation Criteria */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Evaluation Criteria</label>
+                    <textarea
+                        name="evaluationCriteria"
+                        value={formData.evaluationCriteria}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        placeholder="Describe how submissions will be evaluated."
+                    ></textarea>
+                </div>
+
+                {/* File Submission */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">File Submission</label>
+                    <input
+                        type="checkbox"
+                        name="fileSubmission"
+                        checked={formData.fileSubmission}
+                        onChange={handleChange}
+                        className="mr-2"
+                    /> Allow file submissions
+                </div>
+
+                {/* File Upload */}
+                {/* {formData.fileSubmission && (
+                    <div>
+                        <label className="block text-gray-700 font-semibold">Upload File</label>
+                        <input
+                            type="file"
+                            name="file"
+                            onChange={handleFileChange}
+                            className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        />
+                    </div>
+                )} */}
+
+                {/* Start Date */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Start Date</label>
+                    <input
+                        type="date"
+                        name="startDate"
+                        value={formData.startDate}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    />
+                </div>
+
+                {/* Start Time */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">Start Time</label>
+                    <input
+                        type="time"
+                        name="startTime"
+                        value={formData.startTime}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    />
+                </div>
+
+                {/* End Date */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">End Date</label>
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={formData.endDate}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    />
+                </div>
+
+                {/* End Time */}
+                <div>
+                    <label className="block text-gray-700 font-semibold">End Time</label>
+                    <input
+                        type="time"
+                        name="endTime"
+                        value={formData.endTime}
+                        onChange={handleChange}
+                        className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                        required
+                    />
+                </div>
+
+                {/* Success and Error Messages */}
+                {successMessage && <p className="text-green-600">{successMessage}</p>}
+                {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+
+                {/* Form Buttons */}
+                <div className="flex justify-end space-x-4">
+                    <button
+                        type="button"
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-[--secondary-color] hover:bg-[--primary-color] text-white px-4 py-2 rounded-3xl shadow-lg hover:shadow-xl transition duration-200"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+)}
+
+
 
             {/* Display Success or Error Messages Outside Modal if Needed */}
             {successMessage && (

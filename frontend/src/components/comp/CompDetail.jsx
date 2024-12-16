@@ -86,7 +86,7 @@ function CompDetail() {
         <div className="container mx-auto">
             <div className="flex">
                 <div className="flex-grow bg-white rounded-lg shadow-md p-5">
-                    <div className="flex gap-y-20 justify-between items-center mb-4">
+                <div className="flex gap-y-20 justify-between items-center mb-4">
                         <div>
                             <span className="font-black text-6xl">{compData.title}</span>
                             <Typography variant="subtitle1" className="text-gray-600">
@@ -112,24 +112,34 @@ function CompDetail() {
                     </div>
 
                     {/* Competition Details */}
-                    <div className="bg-gray-100 p-4 rounded-lg mb-5">
-                        <div className="mb-4">
-                            <Typography variant="h6" className="font-bold">Competition Host</Typography>
-                            <Typography className="text-gray-600">{compData.author}</Typography>
-                        </div>
-                        <div className="mb-4">
-                            <Typography variant="h6" className="font-bold">Prizes & Awards</Typography>
-                            <Typography className="text-gray-600">{compData.prizePool || compData.prizes}</Typography>
-                        </div>
-                        <div className="mb-4">
-                            <Typography variant="h6" className="font-bold">Eligibility</Typography>
-                            <Typography className="text-gray-600">{compData.eligibility || "N/A"}</Typography>
-                        </div>
-                        <div className="mb-4">
-                            <Typography variant="h6" className="font-bold">Evaluation Criteria</Typography>
-                            <Typography className="text-gray-600">{compData.evaluationCriteria || "N/A"}</Typography>
-                        </div>
-                    </div>
+                    <div className="p-6 border-2 border-gray-300 rounded-lg bg-sky-950 mb-5 mt-12 sm:mt-8 md:mt-12">
+    <div className="mb-6 sm:mb-4">
+        <Typography variant="h6" className="font-bold text-white border-b border-gray-400 pb-2 mb-4">
+            Competition Host
+        </Typography>
+        <Typography className="text-white mt-2 sm:mt-4">{compData.author}</Typography>
+    </div>
+    <div className="mb-6 sm:mb-4">
+        <Typography variant="h6" className="font-bold text-white border-b border-gray-400 pb-2">
+            Prizes & Awards
+        </Typography>
+        <Typography className="text-white mt-2 sm:mt-4">{compData.prizePool || compData.prizes}</Typography>
+    </div>
+    <div className="mb-6 sm:mb-4">
+        <Typography variant="h6" className="font-bold text-white border-b border-gray-400 pb-2">
+            Eligibility
+        </Typography>
+        <Typography className="text-white mt-2 sm:mt-4">{compData.eligibility || "N/A"}</Typography>
+    </div>
+    <div className="mb-6 sm:mb-4">
+        <Typography variant="h6" className="font-bold text-white border-b border-gray-400 pb-2">
+            Evaluation Criteria
+        </Typography>
+        <Typography className="text-white mt-4 sm:mt-6">{compData.evaluationCriteria || "N/A"}</Typography>
+    </div>
+</div>
+
+
 
                     {/* Overview Section */}
                     <div className="mb-5">
@@ -153,20 +163,23 @@ function CompDetail() {
                     </div>
 
                     {/* FAQ Section */}
-                    <div className="bg-base-200 p-6 my-10 rounded-lg shadow-lg">
-                        <div className="text-xl font-bold mb-4">Frequently Asked Questions</div>
-                        {faqs.map((faq, index) => (
-                            <div key={index} className="collapse bg-base-100 mb-4 border-b border-gray-200">
-                                <input type="checkbox" />
-                                <div className="collapse-title text-lg font-semibold text-gray-800">
-                                    {faq.question}
-                                </div>
-                                <div className="collapse-content">
-                                    <p className="text-gray-600">{faq.answer}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <div className="bg-transparent p-6 my-10 rounded-lg border-2 border-blue-300">
+    <div className="text-xl font-bold mb-4 text-gray-800">Frequently Asked Questions</div>
+    {faqs.map((faq, index) => (
+        <div key={index} className="collapse bg-base-100 mb-4 ">
+            <input type="checkbox" />
+            <div className="collapse-title text-lg font-semibold text-gray-800 px-4 py-2  border-b-2  hover:border-2 hover:border-blue-500 ">
+                {faq.question}
+            </div>
+            <div className="collapse-content">
+                <p className="text-gray-600">{faq.answer}</p>
+            </div>
+        </div>
+    ))}
+</div>
+
+
+
 
                     {/* Tags */}
                     {compData.tags && compData.tags.length > 0 && (

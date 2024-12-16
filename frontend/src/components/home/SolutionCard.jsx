@@ -34,10 +34,10 @@ const SolutionCards = () => {
     return (
         <div className='container mx-auto py-8'>
             <div className="flex items-center mb-4">
-                <Star className="mr-2" />
-                <h1 className="text-2xl font-bold">Solution Write-ups</h1>
+                <h1 className="text-3xl font-bold mb-4 flex items-center uppercase text-customBlue">Solution Write-ups</h1>
+                <Star className="mr-2 ml-4 text-customBlue mb-4" fontSize='large' />
             </div>
-            <p className="mb-6">Read the best solutions from top contributors.</p>
+            <p className="mb-8">Read the best solutions from top contributors.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {solutions.map(solution => (
                     <div
@@ -57,13 +57,14 @@ const SolutionCards = () => {
                                     <p className="text-gray-600">By {solution.author || 'Anonymous'}</p>
                                 </div>
                             </div>
-                            {/* Render HTML safely using dangerouslySetInnerHTML */}
+                            {/* Render HTML safely and limit the lines */}
                             <p
-                                className="mt-4 text-gray-700"
+                                className="mt-4 text-gray-700 line-clamp-5"
                                 dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(solution.content)
+                                    __html: DOMPurify.sanitize(solution.content),
                                 }}
                             />
+                            <p className="mt-2 text-blue-500 cursor-pointer">...Read More</p>
                         </div>
                     </div>
                 ))}
