@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/home/Sidebar"; // Import the Sidebar component
+import Sidebar from "../components/home/Sidebar";
+import Sidebar1 from "../components/home/SideBar1"; // Import the Sidebar component
 
 const Layout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,10 +17,11 @@ const Layout = ({ children }) => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Sidebar />
+      {/* <Sidebar /> */}
+      <Sidebar1 />
 
       {/* Main content area */}
-      <main className="flex-1 p-6 overflow-y-auto transition-all duration-300">
+      <main className="flex-1 p-6 ml-5 overflow-y-auto transition-all duration-300">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             {/* Loader */}
