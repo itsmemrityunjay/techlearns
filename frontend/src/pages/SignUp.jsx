@@ -75,6 +75,7 @@ const SignUp = () => {
                             />
                             <button
                                 type="submit"
+                                onClick={handleEmailSignUp}
                                 className="bg-[--secondary-color] text-white font-semibold py-2 rounded-lg w-full"
                             >
                                 Register with Email

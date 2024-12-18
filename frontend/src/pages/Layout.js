@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
       <Sidebar1 />
 
       {/* Main content area */}
-      <main className="flex-1 p-6 ml-5 overflow-y-auto transition-all duration-300">
+      <main className="flex-1 p-6 ml-4 overflow-y-auto transition-all duration-300">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             {/* Loader */}
