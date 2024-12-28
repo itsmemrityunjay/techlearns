@@ -12,15 +12,15 @@ const ProtectedRoute = ({ children, roles }) => {
   }
 
   // Show loading state while user data is being fetched
-  if (!userData) {
-    return (
-      <div>
-        <div className="flex items-center justify-center h-screen">
-          <div className="w-16 h-16 border-4 border-blue-500 border-solid rounded-full border-t-transparent animate-spin"></div>
-        </div>
-      </div>
-    );
-  }
+  // if (!userData) {
+  //   return (
+  //     <div>
+  //       <div className="flex items-center justify-center h-screen">
+  //         <div className="w-16 h-16 border-4 border-blue-500 border-solid rounded-full border-t-transparent animate-spin"></div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   // Redirect based on role and route path
   const roleBasedPaths = {

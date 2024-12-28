@@ -27,8 +27,8 @@ const AllCompCard = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-3xl font-semibold text-center text-yellow-500 mb-8">Live Competitions</h1> {/* Heading color updated */}
+        <div className="p-6 secondary-bg ">
+            <h1 className="text-3xl text-center text-white mb-8" style={{fontFamily:"raleway"}}>Live Competitions</h1> {/* Heading color updated */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {competitions.map((comp) => {
                     const {

@@ -11,6 +11,8 @@
     /* Dark color */
     --link-color: #61dafb;
     /* Link color */
+  --bg-color:#e4e4e391;
+  --gray-color:#2C333F;
 }
 
 @font-face {

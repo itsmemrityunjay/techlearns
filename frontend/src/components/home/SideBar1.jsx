@@ -112,6 +112,7 @@ function DashboardLayoutAppBar() {
     return (
         <>
             {/* Drawer */}
+            <div>
             <ConfirmationModal isOpen={isOpen} onClose={onClose} onConfirm={onConfirm} message={'You sure You wanna LogOut?'} />
             <Drawer
                 variant={isMobile ? "temporary" : "permanent"}
@@ -237,12 +238,12 @@ function DashboardLayoutAppBar() {
                     </ListItem>
                 </List>
             </Drawer>
-
+            </div>
             {/* AppBar that starts from the side of the drawer */}
             <AppBar
                 position="fixed"
                 sx={{
-                    backgroundColor: "#fff",
+                    backgroundColor: "transparent",
                     height: 56,
                     zIndex: 1201,
                     boxShadow: "none",
