@@ -94,7 +94,7 @@ const Searchbar = () => {
                 </div>
 
                 {/* Display Filtered Competitions */}
-                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {filteredCompetitions.map((comp, index) => (
                         <div key={index}
                             className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer"
@@ -120,9 +120,11 @@ const Searchbar = () => {
                             <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
                                 {/* Image with curved corners */}
                                 <img src={comp.icon} alt={comp.title} className="w-full h-40 object-cover rounded-t-lg" />
-                                <div className="p-4">
-                                    <h4 className="text-md font-semibold mb-2">{comp.title}</h4>
-                                    <p className="text-sm text-gray-600 mb-4">{comp.description}</p>
+                                <div className="p-4 flex flex-col justify-self-stretch justify-around">
+                                    <div>
+                                        <h4 className="text-md font-semibold text-black mb-2">{comp.title}</h4>
+                                        <p className="text-sm text-gray-600 mb-4">{comp.subtitle}</p>
+                                    </div>
                                     <div className="flex justify-between items-center text-sm text-gray-500 mb-2">
                                         <span>{comp.privacy}</span>
                                         <span>{comp.status}</span>
@@ -133,6 +135,7 @@ const Searchbar = () => {
                                         <span className="text-sm text-green-500">{comp.status}</span>
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
