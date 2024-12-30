@@ -6,9 +6,10 @@ import DiscussMap from '../components/discuss/DiscussMap'
 const Discussions = () => {
     return (
         <>
-
+               <div >
             <DiscussHero />
             <DiscussMap />
+            </div>
         </>
     )
 }

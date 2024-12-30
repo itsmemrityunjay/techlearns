@@ -573,7 +573,7 @@ function AdminDashboard() {
                 </div>
 
                 <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <div onClick={() => handleCardClick({ type: "user", data: users })} className="bg-gradient-to-r py-16 from-purple-500 via-pink-500 to-red-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
+                    <div onClick={() => handleCardClick({ type: "user", data: users })} className="bg-gradient-to-r py-16 from-purple-500 via-pink-500 to-red-500 rounded-lg  p-6 text-white cursor-pointer">
                         <h2 className="text-xl font-semibold mb-2">User Management</h2>
                         <p>Manage users, promote to sub-admin, block/unblock accounts</p>
                     </div>
