@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import { SiCplusplus, SiJava, SiCss3, SiHtml5, SiPython } from "react-icons/si";
+import { useNavigate } from "react-router-dom";
 // import { SiJava } from 'react-icons/si';
 const CourseBanner = () => {
+
+  const Navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -13,9 +16,10 @@ const CourseBanner = () => {
         borderRadius: "8px",
         padding: "20px 30px",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        marginTop:"30px",
-        width:"100%"
+        marginTop: "30px",
+        width: "100%"
       }}
+      onClick={() => Navigate("/course")}
     >
       {/* Text Section */}
       <Box>
