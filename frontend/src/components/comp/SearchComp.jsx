@@ -13,11 +13,10 @@ import {
   Celebration,
   SmartToy,
   BarChart,
-  BorderColor,
 } from "@mui/icons-material";
-import gradiantimg from "../../components/comp/gradiant.jpg";
 import UpgradeButton from "../../components/comp/compComponent";
 import CourseBanner from "./divider";
+
 const filters = [
   {
     title: "All Competitions",
@@ -40,12 +39,12 @@ const filters = [
     icon: <Science />,
   },
   {
-    title: "Community",
+    title: "Data Science",
     description: "Created by fellow Kagglers",
     icon: <People />,
   },
   {
-    title: "Playground",
+    title: "AI",
     description: "Fun practice problems",
     icon: <Celebration />,
   },
@@ -59,6 +58,11 @@ const filters = [
     description: "Open-ended explorations",
     icon: <BarChart />,
   },
+  {
+    title: "Machine Learning",
+    description: "Open-ended explorations",
+    icon: <BarChart />,
+  },
 ];
 
 const Searchbar = () => {
@@ -66,7 +70,6 @@ const Searchbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Competitions");
 
-  // Fetch competitions from Firestore
   useEffect(() => {
     const fetchCompetitions = async () => {
       try {
@@ -84,7 +87,7 @@ const Searchbar = () => {
   }, []);
 
   const navigate = useNavigate();
-  // Filter and Search Logic
+
   const filteredCompetitions = competitions.filter((comp) => {
     const matchesSearch =
       comp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,7 +99,19 @@ const Searchbar = () => {
       case "Featured":
         return matchesSearch && comp.isFeatured;
       case "Getting Started":
-        return matchesSearch && comp.type === "ml-fundamentals";
+        return matchesSearch && comp.type === "Getting Started";
+      case "Research":
+        return matchesSearch && comp.type === "research";
+      case "Data Science":
+        return matchesSearch && comp.type === "data-science";
+      case "AI":
+        return matchesSearch && comp.type === "ai";
+      case "Machine Learning":
+        return matchesSearch && comp.type === "machine-learning";
+      case "Simulation":
+        return matchesSearch && comp.type === "simulation";
+      case "Analytics":
+        return matchesSearch && comp.type === "analytics";
       default:
         return false;
     }
@@ -105,7 +120,6 @@ const Searchbar = () => {
   return (
     <div className="container mx-auto py-8">
       <div className="flex flex-col items-center bg-white-100">
-        {/* Search Bar */}
         <div className="rounded-lg p-4 mb-6 w-[100%]">
           <div className="flex items-center mb-4">
             <span className="text-[--secondary-color] mr-2">
@@ -118,7 +132,6 @@ const Searchbar = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 border border-[--secondary-color] rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-
             <button
               className="flex items-center ml-2 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100"
               style={{ borderColor: "#003656" }}
@@ -128,12 +141,9 @@ const Searchbar = () => {
             </button>
           </div>
         </div>
-        <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8 ">
-          {/* Left Side - Buttons */}
+        <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8">
           <div className="flex flex-col w-full lg:w-2/3 gap-6">
             <UpgradeButton />
-
-            {/* Filter Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
               {filters.map((filter, index) => (
                 <button
@@ -144,7 +154,6 @@ const Searchbar = () => {
                     }`}
                   onClick={() => setActiveFilter(filter.title)}
                 >
-                  {/* Icon Container with unique background color */}
                   <div
                     className={`flex items-center justify-center w-11 h-11 rounded-full ${activeFilter === filter.title
                       ? "bg-white text-[--primary-color]"
@@ -153,20 +162,18 @@ const Searchbar = () => {
                     style={{
                       backgroundColor:
                         index === 0
-                          ? "#D9F1FF" // Light Blue
+                          ? "#D9F1FF"
                           : index === 1
-                            ? "#FFD9EC" // Light Pink
+                            ? "#FFD9EC"
                             : index === 2
-                              ? "#E6D9FF" // Light Purple
+                              ? "#E6D9FF"
                               : index === 3
-                                ? "#FFF9D9" // Light Yellow
-                                : "#FFEAD9", // Light Orange
+                                ? "#FFF9D9"
+                                : "#FFEAD9",
                     }}
                   >
                     {filter.icon}
                   </div>
-
-                  {/* Title */}
                   <span
                     className={`${activeFilter === filter.title ? "text-white" : "text-gray-800"
                       }`}
@@ -178,9 +185,7 @@ const Searchbar = () => {
               ))}
             </div>
           </div>
-
-          {/* Right Side - Image */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end ">
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
             <img
               src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
               alt="Right Side Image"
@@ -189,47 +194,45 @@ const Searchbar = () => {
           </div>
         </div>
 
-        {/* Display Filtered Competitions */}
-        <div className="w-full h-[500px] mt-5">
-          <div className="w-[90%] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredCompetitions.map((comp, index) => (
+        <div className="w-full mt-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredCompetitions.map((comp) => (
               <div
-                key={index}
-                className="p-6 rounded-lg shadow-md cursor-pointer flex flex-col justify-between mt-5"
-                // style={{ backgroundColor: comp.bgColor || "#f8f9fa" }} // Default background color
+                key={comp.id}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-xl flex flex-col"
                 onClick={() => navigate(`/competition/${comp.id}`)}
-                style={{
-                  backgroundImage: `url(${gradiantimg})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
               >
-                {/* Image in a small circle */}
-                <div className="flex items-center mb-4">
+                <div className="">
                   <img
-                    src={comp.icon || "https://via.placeholder.com/50"} // Default placeholder
-                    alt={comp.title}
-                    className="w-10 h-10 rounded-full border border-gray-200"
+                    src={comp.icon || "https://via.placeholder.com/300x200"}
+                    alt={comp.title || "Competition"}
+                    className="w-full h-48 object-cover"
                   />
-                  <p className="ml-3 text-sm uppercase opacity-80">
-                    {comp.category || "Strategy"}
-                  </p>
                 </div>
+                <div className="p-4 flex flex-col justify-between flex-1">
+                  <div>
+                    <h3 className="text-lg font-semibold">
+                      {comp.title || "Untitled Competition"}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {comp.subtitle ? comp.subtitle.split(' ').slice(0, 25).join(' ') + (comp.subtitle.split(' ').length > 25 ? '...' : '') : "No description available."}
+                    </p>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="flex items-center bg-orange-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
+                      <span className="font-semibold mr-2">Start Date:</span>
+                      <span>{comp.startDate}</span>
+                    </div>
+                    <div className="flex items-center bg-yellow-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
+                      <span className="font-semibold mr-2">End Date:</span>
+                      <span>{comp.endDate}</span>
+                    </div>
+                    <div className="flex items-center bg-purple-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
+                      <span className="font-semibold mr-2">Who Can Join:</span>
+                      <span>{comp.whoCanJoin}</span>
+                    </div>
+                  </div>
 
-                {/* Title and description */}
-                <h3 className="text-lg font-semibold mt-2 line-clamp-1">
-                  {comp.title}
-                </h3>
-                <p className="text-sm mt-1">{comp.description}</p>
-
-                {/* Footer with duration and returns */}
-                <div className="mt-4">
-                  <p className="text-sm opacity-70">
-                    {comp.duration || "3 yrs CAGR"}
-                  </p>
-                  <h2 className="text-xl font-bold">
-                    {comp.returns || "7.20%"}
-                  </h2>
                 </div>
               </div>
             ))}
