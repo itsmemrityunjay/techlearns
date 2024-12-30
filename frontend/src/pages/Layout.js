@@ -15,13 +15,13 @@ const Layout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" style={{backgroundColor:"var(--bg-color)"}}>
       {/* Sidebar */}
       {/* <Sidebar /> */}
       <Sidebar1 />
 
       {/* Main content area */}
-      <main className="flex-1 p-6 ml-4 overflow-y-auto transition-all duration-300">
+      <main className="flex-1 p-6 ml-4 overflow-y-auto transition-all duration-300" >
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             {/* Loader */}

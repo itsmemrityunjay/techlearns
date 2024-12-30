@@ -170,10 +170,11 @@ const Competitions = () => {
     };
 
     return (
-        <div className='container mx-auto py-8'>
+        <div className='container mx-auto py-8 lg:w-[100%]'>
             <div className="flex justify-center items-center">
                 {/* Main Container */}
-                <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl shadow-lg p-6 rounded-lg bg-gradient-to-r from-purple-100 via-purple-50 to-blue-100">
+                {/* <div className="border flex flex-col md:flex-row items-start justify-between w-full max-w-8xl p-6 rounded-lg bg-gradient-to-r from-purple-100 via-purple-50 to-blue-100"> */}
+                <div className="bg-white mt-5 flex flex-col md:flex-row items-start justify-between w-full max-w-8xl p-6 rounded-lg">
     {/* Left Section */}
     <div className="flex-1 mb-6 md:mb-0 mt-14">
         <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">Competitions</h1>
