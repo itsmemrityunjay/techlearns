@@ -204,7 +204,7 @@ const Competitions = () => {
                         {/* Button to trigger modal */}
                         <div className="flex space-x-4 ml-6">
                             <button
-                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
+                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200 w-60 h-16"
                                 onClick={() => setShowModal(true)}
                             >
                                 Host a Competition
