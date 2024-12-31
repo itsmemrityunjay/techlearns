@@ -69,6 +69,8 @@ const Searchbar = () => {
   const [competitions, setCompetitions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Competitions");
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
 
   useEffect(() => {
     const fetchCompetitions = async () => {
@@ -129,12 +131,17 @@ const Searchbar = () => {
               type="text"
               placeholder="Search competitions"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setIsSearchActive(e.target.value.trim() !== "");
+                setShowFilters(e.target.value.trim() === "");
+              }}
               className="flex-1 border border-[--secondary-color] rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               className="flex items-center ml-2 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100"
               style={{ borderColor: "#003656" }}
+              onClick={() => setShowFilters((prev) => !prev)}
             >
               <FilterList className="secondary-text" />
               <span className="ml-1 secondary-text">Filters</span>
@@ -142,50 +149,55 @@ const Searchbar = () => {
           </div>
         </div>
         <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8">
-          <div className="flex flex-col w-full lg:w-2/3 gap-6">
-            <UpgradeButton />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
-              {filters.map((filter, index) => (
-                <button
-                  key={index}
-                  className={`flex items-center p-4 border rounded-full shadow-sm relative gap-4 ${activeFilter === filter.title
-                    ? "bg-[--primary-color] text-white font-bold border-none"
-                    : "bg-white border-gray-300 hover:bg-gray-100"
-                    }`}
-                  onClick={() => setActiveFilter(filter.title)}
-                >
-                  <div
-                    className={`flex items-center justify-center w-11 h-11 rounded-full ${activeFilter === filter.title
-                      ? "bg-white text-[--primary-color]"
-                      : ""
+          {showFilters && (
+            <div className="flex flex-col w-full lg:w-2/3 gap-6">
+              <UpgradeButton />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
+                {filters.map((filter, index) => (
+                  <button
+                    key={index}
+                    className={`flex items-center p-4 border rounded-full shadow-sm relative gap-4 ${activeFilter === filter.title
+                      ? "bg-[--primary-color] text-white font-bold border-none"
+                      : "bg-white border-gray-300 hover:bg-gray-100"
                       }`}
-                    style={{
-                      backgroundColor:
-                        index === 0
-                          ? "#D9F1FF"
-                          : index === 1
-                            ? "#FFD9EC"
-                            : index === 2
-                              ? "#E6D9FF"
-                              : index === 3
-                                ? "#FFF9D9"
-                                : "#FFEAD9",
-                    }}
+                    onClick={() => setActiveFilter(filter.title)}
                   >
-                    {filter.icon}
-                  </div>
-                  <span
-                    className={`${activeFilter === filter.title ? "text-white" : "text-gray-800"
-                      }`}
-                    style={{ fontSize: "19px", fontFamily: "raleway" }}
-                  >
-                    {filter.title}
-                  </span>
-                </button>
-              ))}
+                    <div
+                      className={`flex items-center justify-center w-11 h-11 rounded-full ${activeFilter === filter.title
+                        ? "bg-white text-[--primary-color]"
+                        : ""
+                        }`}
+                      style={{
+                        backgroundColor:
+                          index === 0
+                            ? "#D9F1FF"
+                            : index === 1
+                              ? "#FFD9EC"
+                              : index === 2
+                                ? "#E6D9FF"
+                                : index === 3
+                                  ? "#FFF9D9"
+                                  : "#FFEAD9",
+                      }}
+                    >
+                      {filter.icon}
+                    </div>
+                    <span
+                      className={`${activeFilter === filter.title
+                        ? "text-white"
+                        : "text-gray-800"
+                        }`}
+                      style={{ fontSize: "19px", fontFamily: "raleway" }}
+                    >
+                      {filter.title}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
+          )}
+          <div className={`w-full lg:w-1/2 flex justify-center lg:justify-end ${showFilters ? "block" : "hidden"
+            }`}>
             <img
               src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
               alt="Right Side Image"
@@ -199,7 +211,7 @@ const Searchbar = () => {
             {filteredCompetitions.map((comp) => (
               <div
                 key={comp.id}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:shadow-xl flex flex-col"
+                className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer transition-all hover:shadow-lg flex flex-col"
                 onClick={() => navigate(`/competition/${comp.id}`)}
               >
                 <div className="">
@@ -215,7 +227,10 @@ const Searchbar = () => {
                       {comp.title || "Untitled Competition"}
                     </h3>
                     <p className="text-gray-600 text-sm">
-                      {comp.subtitle ? comp.subtitle.split(' ').slice(0, 25).join(' ') + (comp.subtitle.split(' ').length > 25 ? '...' : '') : "No description available."}
+                      {comp.subtitle
+                        ? comp.subtitle.split(" ").slice(0, 25).join(" ") +
+                        (comp.subtitle.split(" ").length > 25 ? "..." : "")
+                        : "No description available."}
                     </p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -232,7 +247,6 @@ const Searchbar = () => {
                       <span>{comp.whoCanJoin}</span>
                     </div>
                   </div>
-
                 </div>
               </div>
             ))}

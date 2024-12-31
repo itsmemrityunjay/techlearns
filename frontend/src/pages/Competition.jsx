@@ -9,8 +9,8 @@ const Competition = () => {
         <div>
             <Competitions />
             <Searchbar />
-            <TechGetStarted />
-            <AllCompCard />
+            {/* <TechGetStarted />
+            <AllCompCard /> */}
         </div>
     )
 }
