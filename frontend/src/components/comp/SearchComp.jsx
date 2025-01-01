@@ -16,6 +16,7 @@ import {
 } from "@mui/icons-material";
 import UpgradeButton from "../../components/comp/compComponent";
 import CourseBanner from "./divider";
+import Footer from '../comp/footer';
 
 const filters = [
   {
@@ -151,8 +152,8 @@ const Searchbar = () => {
         <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8">
           {showFilters && (
             <div className="flex flex-col w-full lg:w-2/3 gap-6">
-              <UpgradeButton />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
+              <UpgradeButton/>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6 ">
                 {filters.map((filter, index) => (
                   <button
                     key={index}
@@ -163,7 +164,7 @@ const Searchbar = () => {
                     onClick={() => setActiveFilter(filter.title)}
                   >
                     <div
-                      className={`flex items-center justify-center w-11 h-11 rounded-full ${activeFilter === filter.title
+                      className={`flex items-center justify-center w-4 h-4 rounded-full ${activeFilter === filter.title
                         ? "bg-white text-[--primary-color]"
                         : ""
                         }`}
@@ -211,14 +212,14 @@ const Searchbar = () => {
             {filteredCompetitions.map((comp) => (
               <div
                 key={comp.id}
-                className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer transition-all hover:shadow-lg flex flex-col"
+                className="mt-8 w-full border border-gray-200 hover:border-gray-700 hover:text-blue-800 bg-white rounded-2xl overflow-hidden cursor-pointer flex flex-col"
                 onClick={() => navigate(`/competition/${comp.id}`)}
               >
                 <div className="">
                   <img
                     src={comp.icon || "https://via.placeholder.com/300x200"}
                     alt={comp.title || "Competition"}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-24 object-cover"
                   />
                 </div>
                 <div className="p-4 flex flex-col justify-between flex-1">
@@ -226,12 +227,12 @@ const Searchbar = () => {
                     <h3 className="text-lg font-semibold">
                       {comp.title || "Untitled Competition"}
                     </h3>
-                    <p className="text-gray-600 text-sm">
+                    {/* <p className="text-gray-600 text-sm">
                       {comp.subtitle
                         ? comp.subtitle.split(" ").slice(0, 25).join(" ") +
                         (comp.subtitle.split(" ").length > 25 ? "..." : "")
                         : "No description available."}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <div className="flex items-center bg-orange-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
@@ -253,6 +254,7 @@ const Searchbar = () => {
           </div>
         </div>
         <CourseBanner />
+        <Footer/>
       </div>
     </div>
   );
