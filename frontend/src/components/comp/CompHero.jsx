@@ -5,11 +5,14 @@ import { db, storage } from '../../database/Firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import heroimg from "../../components/comp/mainhero.jpg";
 import { useAuth } from '../../database/AuthContext';
+
 import {
     toast
     , ToastContainer
 } from 'react-toastify';
+
 
 const Competitions = () => {
     const [showModal, setShowModal] = useState(false);
@@ -100,7 +103,6 @@ const Competitions = () => {
         e.preventDefault();
         setSuccessMessage('');
         setErrorMessage('');
-
         try {
             let fileURL = '';
             // If file submission is enabled and a file is selected, upload the file
@@ -172,15 +174,22 @@ const Competitions = () => {
     };
 
     return (
-        <div className='container mx-auto py-8 lg:w-[100%]'>
-            <div className="flex justify-center items-center">
+        <div className='container mx-auto py-8 ' >
+            {/* <div className="flex justify-center items-center"> */}
                 {/* Main Container */}
                 {/* <div className="border flex flex-col md:flex-row items-start justify-between w-full max-w-8xl p-6 rounded-lg bg-gradient-to-r from-purple-100 via-purple-50 to-blue-100"> */}
-                <div className="bg-white mt-5 flex flex-col md:flex-row items-start justify-between w-full max-w-8xl p-6 rounded-lg">
+                <div className="w-full mt-5 flex flex-col md:flex-row items-start justify-between w-full max-w-8xl p-6 rounded-xl" style={{
+            backgroundImage:`url(${heroimg})`,
+            backgroundSize: "contain", // Ensures the whole image is visible
+            backgroundRepeat: "no-repeat", // Prevents tiling of the image
+            backgroundPosition: "center",
+            height: "450px",
+            width:'100%',
+        }}>
                     {/* Left Section */}
-                    <div className="flex-1 mb-6 md:mb-0 mt-14">
-                        <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">Competitions</h1>
-                        <p className="text-gray-600 mb-6 ml-6">
+                    <div className="flex-1 mb-6 md:mb-0 mt-14 ml-12">
+                        <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-6 mt-8">Competitions</h1>
+                        <p className="text-gray-600 mb-6 ml-6 mt-4" style={{fontSize:"16px"}}>
                             Grow your data science skills by competing in our exciting <br /> competitions. Find help in the{' '}
                             <a
                                 className="text-black-600 underline"
@@ -204,27 +213,28 @@ const Competitions = () => {
                         {/* Button to trigger modal */}
                         <div className="flex space-x-4 ml-6">
                             <button
-                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200 w-60 h-16"
+                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200 w-50 h-12"
                                 onClick={() => setShowModal(true)}
                             >
                                 Host a Competition
                             </button>
                         </div>
-                    </div>
+                    {/* </div> */}
 
                     {/* Right Section - Image */}
-                    <div className="flex-shrink-0 mr-6">
+                    {/* <div className="flex-shrink-0 mr-6">
                         <img
                             src={CompHero}
-                            alt="Competitions"
+                            altt="Competitions"
                             width="280"
                             height="208"
                             className="w-72 h-auto"
                         />
-                    </div>
+                    </div> */}
                 </div>
 
             </div>
+
 
             {/* Modal for hosting competition */}
 
