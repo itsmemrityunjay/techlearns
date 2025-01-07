@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/home/Sidebar";
 import Sidebar1 from "../components/home/SideBar1"; // Import the Sidebar component
+import Footer from "../components/comp/footer";
 
 const Layout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,13 +16,16 @@ const Layout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex h-screen" style={{backgroundColor:"var(--bg-color)"}}>
+    <div
+      className="flex h-screen"
+      style={{ backgroundColor: "var(--bg-color)" }}
+    >
       {/* Sidebar */}
       {/* <Sidebar /> */}
       <Sidebar1 />
 
       {/* Main content area */}
-      <main className="flex-1 p-6 ml-4 overflow-y-auto transition-all duration-300" >
+      <main className="flex-1 p-6 ml-4 overflow-y-auto transition-all duration-300">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             {/* Loader */}
@@ -39,6 +43,9 @@ const Layout = ({ children }) => {
         ) : (
           children // Render the specific page content when loaded
         )}
+        <div className="contaier mx-12">
+          <Footer />
+        </div>
       </main>
     </div>
   );
