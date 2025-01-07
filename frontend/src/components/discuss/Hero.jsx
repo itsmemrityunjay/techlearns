@@ -84,11 +84,9 @@ const DiscussHero = () => {
                                 height: "450px",
                                 width:'100%',
                                                     
-                            }}>
-                           
-           
-                        <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-24 mt-8">Join the Discussion!</h1>
-                        <p className="text-gray-600 mb-6 lg:ml-24 sm:w-full sm:mr-8 lg:w-1/2 mt-48">
+                            }}>         
+                        <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-24 pt-32">Join the Discussion!</h1>
+                        <p className="text-gray-600 mb-6 lg:ml-24 sm:w-full sm:mr-8 lg:w-1/2">
                             Discuss the Kaggle platform & machine learning topics – this includes sharing feedback, asking questions, and more.{' '}
                             <a className="text-black-600 underline" href="/docs/competitions" target="_blank" rel="noopener noreferrer">
                                 documentation
