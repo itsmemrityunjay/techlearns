@@ -125,8 +125,8 @@ const Searchbar = () => {
       <div className="flex flex-col items-center bg-white-100">
         <div className="rounded-lg p-4 mb-6 w-[100%]">
           <div className="flex items-center mb-4">
-            <span className="text-[--secondary-color] mr-2">
-              <Search />
+            <span className="text-[--secondary-color] mr-6 ">
+              <Search size={32} />
             </span>
             <input
               type="text"
@@ -137,10 +137,10 @@ const Searchbar = () => {
                 setIsSearchActive(e.target.value.trim() !== "");
                 setShowFilters(e.target.value.trim() === "");
               }}
-              className="flex-1 border border-[--secondary-color] rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 h-14 border border-[--secondary-color] focus:border-none rounded-full py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[--primary-color]"
             />
             <button
-              className="flex items-center ml-2 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100"
+              className="flex items-center ml-2 border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-100 h-14"
               style={{ borderColor: "#003656" }}
               onClick={() => setShowFilters((prev) => !prev)}
             >
@@ -164,7 +164,7 @@ const Searchbar = () => {
                     onClick={() => setActiveFilter(filter.title)}
                   >
                     <div
-                      className={`flex items-center justify-center w-4 h-4 rounded-full ${activeFilter === filter.title
+                      className={`flex items-center justify-center w-12 h-12 rounded-full ${activeFilter === filter.title
                         ? "bg-white text-[--primary-color]"
                         : ""
                         }`}
