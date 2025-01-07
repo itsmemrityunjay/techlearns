@@ -163,7 +163,7 @@ const Courses = () => {
             />
           </div>
         </div>
-        <div className="relative bg-gradient-to-br from-white via-teal-50 to-teal-40 py-12">
+        <div className="relative bg-gradient-to-br rounded-xl from-white via-teal-50 to-teal-40 py-12">
           {/* Left Icon */}
           <div className="absolute top-16 left-6 text-teal-400">
             <FontAwesomeIcon icon={faPaperPlane} size="3x" />
@@ -177,7 +177,7 @@ const Courses = () => {
           {/* Content */}
           <div className="text-center">
             {/* Badge */}
-            <div className="inline-block px-6 py-2 mb-6 bg-teal-200 text-teal-800 font-bold text-sm rounded-full uppercase tracking-wide shadow-md">
+            <div className="inline-block px-6 py-2 mb-6 bg-teal-200 text-teal-800 font-bold text-lg rounded-full uppercase tracking-wide shadow-md">
               Why Choose Us
             </div>
 
@@ -188,7 +188,7 @@ const Courses = () => {
           </div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6cd xl  mx-auto mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-8xl justify-center items-center mx-auto mt-12">
             {/* Card Template */}
             {[
               {
@@ -222,7 +222,7 @@ const Courses = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white shadow-xl rounded-3xl p-4 flex items-start transform transition hover:scale-105 hover:shadow-2xl"
+                className="bg-white shadow-xl rounded-3xl p-4 mx-12 flex items-start transform transition hover:scale-105 hover:shadow-2xl"
               >
                 <div className={`${feature.bg} p-5 rounded-xl`}>
                   <svg
@@ -255,7 +255,7 @@ const Courses = () => {
         {/* Dropdown Trigger */}
       </div>
 
-      <div className="h-auto dark:bg-gray-900">
+      <div className="h-auto dark:bg-gray-900 mt-12">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <section id="recommendations" className="mb-10"></section>
@@ -312,8 +312,8 @@ const Courses = () => {
             />
           ))}
         </div>
-        <div className="text-black min-h-[500px]  flex items-center justify-center px-2 md:px-20">
-          <div className="w-full max-w-7xl">
+        <div className="text-black min-h-[500px]  flex items-center justify-center px-2 ">
+          <div className="w-full max-w-8xl">
             {/* Heading Section */}
             <div className="border-b border-gray-300 pb-4">
               <nav className="flex space-x-8 text-sm font-semibold">
@@ -413,7 +413,7 @@ const Courses = () => {
           Learning Focused on Your Goals
         </h1>
 
-        <div className="flex flex-col lg:flex-row w-full max-w-7xl gap-10">
+        <div className="flex flex-col lg:flex-row w-full  gap-10">
           {/* Left Side (Goals Section) */}
           <div className="flex flex-col gap-6">
             {/* Card 1 */}
