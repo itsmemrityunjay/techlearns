@@ -655,8 +655,8 @@ const Courses = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
-        {/* Left Content */}
+      {/* <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
+      
         <div className="max-w-lg">
           <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
             Master New Skills <br /> with{" "}
@@ -675,7 +675,7 @@ const Courses = () => {
             Are you tired of pulling all-nighters and still struggling to keep
             up with your coursework?
           </p>
-          {/* Button */}
+        
           <div className="flex items-center gap-4 mb-8">
             <button className="bg-black text-white py-2 px-8 rounded-full flex items-center font-semibold shadow-md hover:bg-gray-900">
               <span className="mr-2">Get Started</span>
@@ -700,7 +700,7 @@ const Courses = () => {
             </div>
           </div>
 
-          {/* Logos Section */}
+      
           <div className="flex justify-center lg:justify-start gap-8 mt-10 py-5">
             <img
               src="https://www.theuniques.in/static/media/theuniquesCommunity.de2335f2609ada2712b0.png"
@@ -719,7 +719,7 @@ const Courses = () => {
             />
           </div>
         </div>
-        {/* Right Illustration */}
+     
         <div className="mt-12 lg:mt-0 lg:ml-16">
           <img
             src="https://img.freepik.com/premium-photo/memoji-happy-man-white-background-emoji_826801-6830.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
@@ -727,75 +727,96 @@ const Courses = () => {
             className="w-full max-w-md lg:max-w-lg"
           />
         </div>
-      </div>
-      <div className="flex flex-col md:flex-row items-center justify-between bg-white px-8 py-12 space-y-8 md:space-y-0">
+      </div> */}
+     <div className="p-8 bg-white">
+      {/* Main Grid Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Left Section */}
-        <div className="md:w-1/3 flex flex-col items-center space-y-6">
-          {/* UI/UX Design Card */}
-          <div className="bg-gray-100 rounded-xl shadow-md p-6 w-64 text-center">
-            <h2 className="text-lg font-bold text-gray-800">UI/UX Design</h2>
-            <div className="flex items-center justify-center mt-4">
-              <img
-                src="https://img.freepik.com/premium-photo/person-is-looking-computer-screen-that-says-job-search_858586-183.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-                alt="Profile"
-                className="w-full h-auto rounded-[50px_0_0_50px]"
-              />
-              <div className="ml-3 text-left">
-                <p className="font-semibold text-gray-800">Anika</p>
-                <p className="text-sm text-gray-500">123 courses</p>
-              </div>
-            </div>
-          </div>
+        <div className="space-y-8">
+          {/* Peace of Mind Card */}
+           <div className="flex items-center gap-8">
+           <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+  <div className="flex-shrink-0">
+    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+      <img
+        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+        alt="Mental Health Icon"
+        className="w-8 h-8"
+      />
+    </div>
+  </div>
 
-          {/* Circular Image */}
-          <div className="w-40 h-40 rounded-full overflow-hidden shadow-md">
-            <img
-              src="https://img.freepik.com/free-photo/day-office-travel-agency_23-2150769937.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-              alt="Team Meeting"
-              className="w-full h-full object-cover"
-            />
-          </div>
+  <div className="ml-4">
+    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+    <p className="text-sm text-gray-600">
+      Take care of your mental well-being effectively.
+    </p>
+  </div>
+</div>
+
+          <div className="flex flex-col items-end">
+  <img
+            src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+            alt="Meditation Class"
+      className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+          />
+  </div>
+
+
+         </div>
+     
+          {/* Mental Health Card */}
+          <div className="flex items-center gap-8">
+          <div className="flex flex-col items-end">
+  <img
+            src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+            alt="Meditation Class"
+            className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+          />
+  </div>
+  <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+  <div className="flex-shrink-0">
+    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+      <img
+        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+        alt="Mental Health Icon"
+        className="w-8 h-8"
+      />
+    </div>
+  </div>
+
+  <div className="ml-4">
+    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+    <p className="text-sm text-gray-600">
+      Take care of your mental well-being effectively.
+    </p>
+  </div>
+</div>
+
         </div>
+        </div>
+        
 
         {/* Right Section */}
-        <div className="md:w-2/3">
-          {/* Heading */}
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Who We Are</h1>
+        
+        <div className="flex flex-col items-start justify-start pt-24">
+        <h2 className="text-2xl font-bold text-yellow-500 tracking-[0.3em]">
+  Techlearns
+</h2>
 
-          {/* Descriptive Content */}
+  <div className="mt-6 text-left">
+    <h2 className="text-4xl font-bold text-gray-800">
+      Every Story Has Its Purpose
+    </h2>
+    <p className="text-lg text-gray-600 mt-4">
+      Wondering how many times a day you're in a mindful state? Check your score. The higher the score, the greater your ability to be mindful.
+    </p>
+  </div>
+</div>
 
-          <div className="flex items-start space-x-4">
-            {/* Decorative Icons */}
-            <div className="flex flex-col space-y-4">
-              <div className="p-3 text-gray-700 text-xl font-bold">◀</div>
-              <div className="p-3 text-gray-700 text-xl font-bold">◑</div>
-            </div>
 
-            {/* Paragraphs */}
-            <div>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                We value open communication, creativity, and a customer-centric
-                approach in all our endeavours.
-              </p>
-              <br />
-              <p className="text-gray-700 leading-relaxed">
-                Our team is composed of individuals with expertise in areas such
-                as software development, design, project management, data
-                analysis, marketing, and customer support.
-              </p>
-            </div>
-          </div>
-
-          {/* Circular Image */}
-          <div className="w-64 h-64 rounded-full overflow-hidden shadow-md mt-8">
-            <img
-              src="https://img.freepik.com/premium-photo/html-system-websites-collage-design_23-2150432955.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-              alt="Laptop Work"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
       </div>
+    </div>
     </div>
   );
 };
