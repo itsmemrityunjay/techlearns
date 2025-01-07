@@ -386,7 +386,7 @@ const Courses = () => {
               ].map((stat, index) => (
                 <div
                   key={index}
-                  className="bg-yellow-300 rounded-full py-2 px-1 text-center"
+                  className="bg-[#ffa800] rounded-full py-2 px-1 text-center"
                 >
                   <h2 className="text-lg md:text-1xl font-bold text-gray-800">
                     {stat.value}
@@ -548,7 +548,7 @@ const Courses = () => {
             ].map((topic, index) => (
               <button
                 key={index}
-                className="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-lg shadow-md hover:bg-yellow-300 hover:shadow-lg transition duration-300 ease-in-out w-full h-12 flex items-center justify-center"
+                className="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-3xl shadow-md hover:bg-[#ffa800] hover:shadow-lg transition duration-300 ease-in-out w-full h-20 flex items-center justify-center text-lg"
               >
                 {topic}
               </button>
@@ -557,7 +557,7 @@ const Courses = () => {
         </div>
 
         {/* Popular Instructors */}
-        <div>
+        <div className="mt-20">
           <h2 className="text-2xl font-bold mb-4">Popular Instructors</h2>
           <p className="text-gray-600 mb-6">
             These real-world experts are highly rated by learners like you.
@@ -621,7 +621,7 @@ const Courses = () => {
           </div>
         </div>
       </div>
-      <div className="py-16 px-6 sm:px-12 lg:px-24 flex flex-col lg:flex-row items-center justify-between max-w-screen-2xl mx-auto">
+      <div className="py-16 sm:px-12 lg:px-0 flex flex-col lg:flex-row items-center justify-between max-w-screen-2xl mx-auto">
         {/* Left Text Section */}
         <div className="lg:w-1/2 text-left">
           <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
@@ -635,7 +635,7 @@ const Courses = () => {
             <br /> with change.
           </p>
           <button
-            className="bg-yellow-300 text-black font-medium py-3 px-6 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md"
+            className="bg-[#ffa800] text-black font-medium py-3 px-6 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md"
             onClick={handleButtonClick} // Handle button click
           >
             Let's discuss →
@@ -728,95 +728,95 @@ const Courses = () => {
           />
         </div>
       </div> */}
-     <div className="p-8 bg-white">
-      {/* Main Grid Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left Section */}
-        <div className="space-y-8">
-          {/* Peace of Mind Card */}
-           <div className="flex items-center gap-8">
-           <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
-  <div className="flex-shrink-0">
-    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-      <img
-        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-        alt="Mental Health Icon"
-        className="w-8 h-8"
-      />
-    </div>
-  </div>
+      <div className="p-8 bg-white">
+        {/* Main Grid Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Left Section */}
+          <div className="space-y-8">
+            {/* Peace of Mind Card */}
+            <div className="flex items-center gap-8">
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
+                  </div>
+                </div>
 
-  <div className="ml-4">
-    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-    <p className="text-sm text-gray-600">
-      Take care of your mental well-being effectively.
-    </p>
-  </div>
-</div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">
+                    Take care of your mental well-being effectively.
+                  </p>
+                </div>
+              </div>
 
-          <div className="flex flex-col items-end">
-  <img
-            src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
-            alt="Meditation Class"
-      className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
-          />
-  </div>
+              <div className="flex flex-col items-end">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+                />
+              </div>
 
 
-         </div>
-     
-          {/* Mental Health Card */}
-          <div className="flex items-center gap-8">
-          <div className="flex flex-col items-end">
-  <img
-            src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
-            alt="Meditation Class"
-            className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
-          />
-  </div>
-  <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
-  <div className="flex-shrink-0">
-    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-      <img
-        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-        alt="Mental Health Icon"
-        className="w-8 h-8"
-      />
-    </div>
-  </div>
+            </div>
 
-  <div className="ml-4">
-    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-    <p className="text-sm text-gray-600">
-      Take care of your mental well-being effectively.
-    </p>
-  </div>
-</div>
+            {/* Mental Health Card */}
+            <div className="flex items-center gap-8">
+              <div className="flex flex-col items-end">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+                />
+              </div>
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
+                  </div>
+                </div>
+
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">
+                    Take care of your mental well-being effectively.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          {/* Right Section */}
+
+          <div className="flex flex-col items-start justify-start pt-24">
+            <h2 className="text-2xl font-bold text-yellow-500 tracking-[0.3em]">
+              Techlearns
+            </h2>
+
+            <div className="mt-6 text-left">
+              <h2 className="text-4xl font-bold text-gray-800">
+                Every Story Has Its Purpose
+              </h2>
+              <p className="text-lg text-gray-600 mt-4">
+                Wondering how many times a day you're in a mindful state? Check your score. The higher the score, the greater your ability to be mindful.
+              </p>
+            </div>
+          </div>
+
 
         </div>
-        </div>
-        
-
-        {/* Right Section */}
-        
-        <div className="flex flex-col items-start justify-start pt-24">
-        <h2 className="text-2xl font-bold text-yellow-500 tracking-[0.3em]">
-  Techlearns
-</h2>
-
-  <div className="mt-6 text-left">
-    <h2 className="text-4xl font-bold text-gray-800">
-      Every Story Has Its Purpose
-    </h2>
-    <p className="text-lg text-gray-600 mt-4">
-      Wondering how many times a day you're in a mindful state? Check your score. The higher the score, the greater your ability to be mindful.
-    </p>
-  </div>
-</div>
-
-
       </div>
-    </div>
     </div>
   );
 };
