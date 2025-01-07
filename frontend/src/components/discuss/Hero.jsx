@@ -6,7 +6,7 @@ import { db } from '../../database/Firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { getAuth } from 'firebase/auth';
-
+import discuss from "../comp/discuss.jpg";
 const DiscussHero = () => {
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -75,11 +75,20 @@ const DiscussHero = () => {
 
     return (
         <div className='container mx-auto py-8'>
-            <div className="flex justify-center items-center">
-                <div className="flex flex-col md:flex-row items-start lg:justify-between sm:justify-center  max-w-8xl lg:bg-white lg:shadow mt-5 p-6 rounded-lg sm:w-full lg:w-[97%]">
-                    <div className="flex-1 mb-6 md:mb-0 mt-14 ">
-                        <h1 className="lg:text-4xl font-bold text-gray-800 mb-4 lg:ml-6  sm:text-2xl uppercase  ">Discussions</h1>
-                        <p className="text-gray-600 mb-6 lg:ml-6 sm:w-full sm:mr-8">
+              {/* hero section */}
+              <div className='mt-12' style={{
+                                backgroundImage:`url(${discuss})`,
+                                backgroundSize: "contain", // Ensures the whole image is visible
+                                backgroundRepeat: "no-repeat", // Prevents tiling of the image
+                                backgroundPosition: "center",
+                                height: "450px",
+                                width:'100%',
+                                                    
+                            }}>
+                           
+           
+                        <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-24 mt-8">Join the Discussion!</h1>
+                        <p className="text-gray-600 mb-6 lg:ml-24 sm:w-full sm:mr-8 lg:w-1/2 mt-48">
                             Discuss the Kaggle platform & machine learning topics – this includes sharing feedback, asking questions, and more.{' '}
                             <a className="text-black-600 underline" href="/docs/competitions" target="_blank" rel="noopener noreferrer">
                                 documentation
@@ -88,19 +97,14 @@ const DiscussHero = () => {
                                 Community Competitions
                             </a>.
                         </p>
-                        <div className="flex space-x-4 lg:ml-6">
+                        <div className="flex space-x-4 lg:ml-24">
                             <button
                                 className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
                                 onClick={() => setShowModal(true)}
                             >
                                 New Topic
-                            </button>
-                        </div>
-                    </div>
-                    <div className="flex-shrink-0 mr-6">
-                        <img src={CompHero} alt="Competitions" width="280" height="208" className="w-72 h-auto" />
-                    </div>
-                </div>
+                            </button>   
+                            </div>        
             </div>
 
             {showModal && (

@@ -1,119 +1,66 @@
 import React from "react";
 import { FooterLink2 } from "../../components/comp/footerlink";
 import { Link } from "react-router-dom";
-
-// Images
-// import Logo from "../comp/bg.jpg";
-
-// Icons
 import { FaFacebook, FaGoogle, FaTwitter, FaYoutube } from "react-icons/fa";
-
+import Logo from "../../assets/Logo-w.png"; // Import your logo
 const BottomFooter = ["Privacy Policy", "Cookie Policy", "Terms"];
 const Resources = [
-  "Articles",
-  "Blog",
-  "Chart Sheet",
   "Code challenges",
   "Docs",
   "Projects",
   "Videos",
   "Workspaces",
 ];
-const Plans = ["Paid memberships", "For students", "Business solutions"];
-const Community = ["Forums", "Chapters", "Events"];
 
 const Footer = () => {
   return (
-    <div className="bg-richblack-800">
-      <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-richblack-400 leading-6 mx-auto relative py-14">
-        <div className="border-b w-[100%] flex flex-col lg:flex-row pb-5 border-richblack-700">
-          {/* Section 1 */}
-          <div className="lg:w-[50%] flex flex-wrap flex-row justify-between lg:border-r lg:border-richblack-700 pl-3 lg:pr-5 gap-3">
-            <div className="w-[30%] flex flex-col gap-3 lg:w-[30%] mb-7 lg:pl-0">
-              {/* <img src={Logo} alt="" className="object-contain" /> */}
-              <h1 className="text-richblack-50 font-semibold text-[16px]">
+    <div className="bg-[#161D29] w-full  my-4 md:px-8 lg:px-16">
+      <div className="flex flex-col lg:flex-row gap-10 items-center justify-between w-11/12 max-w-maxContent text-richblack-400 leading-6 mx-auto relative py-14">
+        <div className="border-b w-full flex flex-col lg:flex-row pb-10 border-richblack-700 gap-10">
+          {/* Logo Section */}
+          <div className="flex flex-col items-start pr-10">
+            <img src={Logo} alt="Logo" className="w-48 h-auto " />
+          </div>
+          {/* Footer Content */}
+          <div className="lg:w-[50%] flex flex-wrap flex-col sm:flex-row justify-between lg:border-r lg:border-richblack-700 pl-3 lg:pr-5 gap-10">
+            <div className="w-full sm:w-[30%] flex flex-col gap-5 mb-10 ml-6 lg:pl-0">
+              <h1 className="text-richblack-50 font-semibold text-white text-[18px]">
                 Company
               </h1>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-4 text-[#6E727F]">
                 {["About", "Careers", "Affiliates"].map((ele, i) => {
                   return (
                     <div
                       key={i}
                       className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
                     >
-                      <Link to={ele.toLowerCase()}>{ele}</Link>
+                      <Link to={`/${ele.toLowerCase()}`}>{ele}</Link>
                     </div>
                   );
                 })}
               </div>
-              <div className="flex gap-3 text-lg">
+              <div className="flex gap-5 text-lg text-white ">
                 <FaFacebook />
                 <FaGoogle />
                 <FaTwitter />
                 <FaYoutube />
               </div>
-              <div></div>
             </div>
 
-            <div className="w-[48%] lg:w-[30%] mb-7 lg:pl-0">
-              <h1 className="text-richblack-50 font-semibold text-[16px]">
+            <div className="w-full sm:w-[30%] mb-10 lg:pl-0">
+              <h1 className="text-richblack-50 font-semibold text-white text-[18px]">
                 Resources
               </h1>
-
-              <div className="flex flex-col gap-2 mt-2">
+              <div className="flex flex-col gap-4 mt-4 text-[#6E727F]">
                 {Resources.map((ele, index) => {
                   return (
                     <div
                       key={index}
                       className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
                     >
-                      <Link to={ele.split(" ").join("-").toLowerCase()}>
-                        {ele}
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <h1 className="text-richblack-50 font-semibold text-[16px] mt-7">
-                Support
-              </h1>
-              <div className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200 mt-2">
-                <Link to={"/help-center"}>Help Center</Link>
-              </div>
-            </div>
-
-            <div className="w-[48%] lg:w-[30%] mb-7 lg:pl-0">
-              <h1 className="text-richblack-50 font-semibold text-[16px]">
-                Plans
-              </h1>
-
-              <div className="flex flex-col gap-2 mt-2">
-                {Plans.map((ele, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
-                    >
-                      <Link to={ele.split(" ").join("-").toLowerCase()}>
-                        {ele}
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-              <h1 className="text-richblack-50 font-semibold text-[16px] mt-7">
-                Community
-              </h1>
-
-              <div className="flex flex-col gap-2 mt-2">
-                {Community.map((ele, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
-                    >
-                      <Link to={ele.split(" ").join("-").toLowerCase()}>
+                      <Link
+                        to={`/${ele.replace(/ /g, "-").toLowerCase()}`}
+                      >
                         {ele}
                       </Link>
                     </div>
@@ -123,15 +70,14 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Section 2 */}
-          <div className="lg:w-[50%] flex flex-wrap flex-row justify-between pl-3 lg:pl-5 gap-3">
+          <div className="lg:w-[50%] flex flex-wrap flex-col sm:flex-row justify-between pl-3 lg:pl-5 gap-10">
             {FooterLink2.map((ele, i) => {
               return (
-                <div key={i} className="w-[48%] lg:w-[30%] mb-7 lg:pl-0">
-                  <h1 className="text-richblack-50 font-semibold text-[16px]">
+                <div key={i} className="w-full sm:w-[30%] mb-10 lg:pl-0">
+                  <h1 className="text-richblack-50 text-white font-semibold text-[18px]">
                     {ele.title}
                   </h1>
-                  <div className="flex flex-col gap-2 mt-2">
+                  <div className="flex flex-col text-[#6E727F] gap-4 mt-4">
                     {ele.links.map((link, index) => {
                       return (
                         <div
@@ -150,29 +96,27 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-between w-11/12 max-w-maxContent text-richblack-400 mx-auto  pb-14 text-sm">
-        {/* Section 1 */}
-        <div className="flex justify-between lg:items-start items-center flex-col lg:flex-row gap-3 w-full">
-          <div className="flex flex-row">
+      <div className="flex flex-col sm:flex-row items-center justify-between w-11/12 max-w-maxContent text-richblack-400 mx-auto pb-14 text-sm">
+        <div className="flex flex-col sm:flex-row justify-between w-full gap-5">
+          <div className="flex flex-wrap justify-center sm:justify-start text-[#6E727F] gap-5">
             {BottomFooter.map((ele, i) => {
               return (
                 <div
                   key={i}
-                  className={` ${
+                  className={`${
                     BottomFooter.length - 1 === i
                       ? ""
                       : "border-r border-richblack-700 cursor-pointer hover:text-richblack-50 transition-all duration-200"
-                  } px-3 `}
+                  } px-5 `}
                 >
-                  <Link to={ele.split(" ").join("-").toLocaleLowerCase()}>
-                    {ele}
-                  </Link>
+                  <Link to={`/${ele.replace(/ /g, "-").toLowerCase()}`}>{ele}</Link>
                 </div>
               );
             })}
           </div>
-
-          <div className="text-center">Made with ❤ CodeHelp © 2023 Studynotion</div>
+          <div className="text-center mt-4 text-[#6E727F] sm:mt-0">
+            Made with ❤ CodeHelp © 2023 Studynotion
+          </div>
         </div>
       </div>
     </div>
