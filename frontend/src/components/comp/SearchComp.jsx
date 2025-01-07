@@ -98,23 +98,23 @@ const Searchbar = () => {
 
     switch (activeFilter) {
       case "All Competitions":
-        return matchesSearch;
+        return matchesSearch && comp.status!=="pending";
       case "Featured":
         return matchesSearch && comp.isFeatured;
       case "Getting Started":
-        return matchesSearch && comp.type === "Getting Started";
+        return matchesSearch && comp.type === "Getting Started" && comp.status!=="pending";
       case "Research":
-        return matchesSearch && comp.type === "research";
+        return matchesSearch && comp.type === "research" && comp.status!=="pending";
       case "Data Science":
-        return matchesSearch && comp.type === "data-science";
+        return matchesSearch && comp.type === "data-science" && comp.status!=="pending";
       case "AI":
-        return matchesSearch && comp.type === "ai";
+        return matchesSearch && comp.type === "ai" && comp.status!=="pending";
       case "Machine Learning":
-        return matchesSearch && comp.type === "machine-learning";
+        return matchesSearch && comp.type === "machine-learning" && comp.status!=="pending";
       case "Simulation":
-        return matchesSearch && comp.type === "simulation";
+        return matchesSearch && comp.type === "simulation" && comp.status!=="pending";
       case "Analytics":
-        return matchesSearch && comp.type === "analytics";
+        return matchesSearch && comp.type === "analytics" && comp.status!=="pending";
       default:
         return false;
     }
@@ -208,7 +208,7 @@ const Searchbar = () => {
         </div>
 
         <div className="w-full mt-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredCompetitions.map((comp) => (
               <div
                 key={comp.id}
@@ -223,29 +223,29 @@ const Searchbar = () => {
                   />
                 </div>
                 <div className="p-4 flex flex-col justify-between flex-1">
-                  <div>
+                  <div >
                     <h3 className="text-lg font-semibold">
                       {comp.title || "Untitled Competition"}
                     </h3>
-                    {/* <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-sm mt-2">
                       {comp.subtitle
-                        ? comp.subtitle.split(" ").slice(0, 25).join(" ") +
+                        ? comp.subtitle.split(" ").slice(0, 15).join(" ") +
                         (comp.subtitle.split(" ").length > 25 ? "..." : "")
                         : "No description available."}
-                    </p> */}
+                    </p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <div className="flex items-center bg-orange-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
-                      <span className="font-semibold mr-2">Start Date:</span>
-                      <span>{comp.startDate}</span>
+                      <span className="font-semibold mr-2 text-sm">Start Date:</span>
+                      <span className="text-sm">{comp.startDate}</span>
                     </div>
                     <div className="flex items-center bg-yellow-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
-                      <span className="font-semibold mr-2">End Date:</span>
-                      <span>{comp.endDate}</span>
+                      <span className="font-semibold mr-2 text-sm">End Date:</span>
+                      <span className="text-sm">{comp.endDate}</span>
                     </div>
                     <div className="flex items-center bg-purple-50 text-gray-800 rounded-lg w-full justify-between px-4 py-2 shadow-sm">
-                      <span className="font-semibold mr-2">Who Can Join:</span>
-                      <span>{comp.whoCanJoin}</span>
+                      <span className="font-semibold mr-2 text-sm">Who Can Join:</span>
+                      <span className="text-sm">{comp.whoCanJoin}</span>
                     </div>
                   </div>
                 </div>

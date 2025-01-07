@@ -4,7 +4,7 @@ import { borderRadius, color, fontSize, fontWeight } from '@mui/system';
 
 const Divider = () => {
   const style = {
-    height: '160px', // Adjust height as needed
+    height: '180px', // Adjust height as needed
     backgroundImage:`url(${bgimg})`, // Replace with your image URL
     backgroundSize: 'contain',
     backgroundPosition: 'center',

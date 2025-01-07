@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { db } from '../database/Firebase';
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -45,9 +47,20 @@ export default function KaggleSignIn() {
     const handleGoogleSignIn = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then((result) => {
+            .then(async (result) => {
                 navigate('/user');  // Redirect on successful Google sign-in
-                console.log('Google sign-in successful:', result.user);
+                const User = result.user;
+                try {
+                    await addDoc(collection(db, 'users'), {
+                        createdAt: new Date(),
+                        role: "user", // Set as pending for admin approval
+                        email: User.email,
+                    });
+                }
+                catch (dbError) {
+                    console.error('Error saving user data to Firestore:', dbError);
+                    toast.error('Failed to save user data. Please try again.');
+                }
             })
             .catch((error) => {
                 console.error('Error with Google sign-in:', error);
@@ -181,31 +194,36 @@ export default function KaggleSignIn() {
                                 />
                                 <span
                                     onClick={togglePasswordVisibility}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                    className="absolute top-2 right-4 cursor-pointer"
                                 >
-                                    {showPassword ? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.017.156-2.008.454-2.952m15.66 12.729a9.98 9.98 0 001.886-2.854M9.58 9.58a3 3 0 104.24 4.24m-1.68 1.68A5.985 5.985 0 0112 15c-3.314 0-6-2.686-6-6 0-1.114.305-2.156.835-3.055m9.907 9.907C20.825 12.156 21 11.08 21 10c0-5.523-4.477-10-10-10-2.746 0-5.246 1.14-7.051 3.075m14.228 14.229l1.415-1.415m0-10.707a9.978 9.978 0 00-2.516-2.516m-9.726 9.726A10.05 10.05 0 0112 19c-5.523 0-10-4.477-10-10 0-1.017.156-2.008.454-2.952m15.66 12.729a9.98 9.98 0 001.886-2.854M9.58 9.58a3 3 0 104.24 4.24m-1.68 1.68A5.985 5.985 0 0112 15c-3.314 0-6-2.686-6-6 0-1.114.305-2.156.835-3.055m9.907 9.907C20.825 12.156 21 11.08 21 10c0-5.523-4.477-10-10-10-2.746 0-5.246 1.14-7.051 3.075m14.228 14.229l1.415-1.415" />
-                                        </svg>
-                                    ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.98 8.923a10.05 10.05 0 00-.461 2.076C3.39 11.692 3 12.826 3 14c0 3.866 2.239 7.128 5.458 8.58m10.915-3.785C18.464 19.017 15.365 21 12 21c-3.365 0-6.464-1.983-8.373-4.54M3 3l18 18m-2.73-2.73A9.955 9.955 0 0021 14c0-5.523-4.477-10-10-10-1.2 0-2.343.212-3.423.6M12 4a5.985 5.985 0 015.938 5.062m-1.68 1.68A3 3 0 0012 9c-.798 0-1.547.312-2.122.875M7.05 7.05A9.977 9.977 0 0012 4" />
-                                        </svg>
-                                    )}
+                                    {showPassword ? 'Hide' : 'Show'}
                                 </span>
                             </div>
                         </div>
 
-                        {/* Sign In Button */}
-                        <button type="submit" className="w-full secondary-bg text-white font-semibold py-3 rounded-lg">
+                        {/* Error Message */}
+                        {errorMessage && (
+                            <p className="text-red-500 text-sm">{errorMessage}</p>
+                        )}
+
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg"
+                        >
                             Sign In
                         </button>
+                    </form>
 
-                        {/* Password Reset */}
-                        <button onClick={handlePasswordReset} className="w-full bg-gray-100 secondary-text font-semibold py-3 rounded-lg mt-4">
+                    {/* Password Reset Link */}
+                    <div className="text-sm text-center">
+                        <button
+                            onClick={handlePasswordReset}
+                            className="text-blue-500 hover:text-blue-700"
+                        >
                             Forgot Password?
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
             <ToastContainer />
