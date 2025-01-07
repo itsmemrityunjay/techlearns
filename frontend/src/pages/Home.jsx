@@ -9,13 +9,14 @@ import Hero from '../components/home/Hero';
 import InfoSection from '../components/home/InfoSection';
 import SolutionCards from '../components/home/SolutionCard';
 import CourseList from '../components/home/Courses';
-import img from "../components/discuss/disimg.jpg"
+import img from "../components/discuss/disimg.jpg";
+import Footer from "../components/comp/footer";
 
 const Home = () => {
     return (
-        <div   style={{
+        <div style={{
             fontFamily: "Geist Sans",
-            backgroundImage: `url(${img})`,
+            // backgroundImage: `url(${img})`,
             backgroundSize: "cover",
             backgroundPosition: 'center',
             // minHeight: "100vh",
@@ -32,7 +33,7 @@ const Home = () => {
             <StatisticalTestCard />
             <InfoSection />
             <TechSection />
-            {/* <Footer /> */}
+            <Footer />
         </div>
     )
 }

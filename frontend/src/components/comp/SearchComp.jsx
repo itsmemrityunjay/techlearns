@@ -98,23 +98,23 @@ const Searchbar = () => {
 
     switch (activeFilter) {
       case "All Competitions":
-        return matchesSearch && comp.status!=="pending";
+        return matchesSearch && comp.status !== "pending";
       case "Featured":
         return matchesSearch && comp.isFeatured;
       case "Getting Started":
-        return matchesSearch && comp.type === "Getting Started" && comp.status!=="pending";
+        return matchesSearch && comp.type === "Getting Started" && comp.status !== "pending";
       case "Research":
-        return matchesSearch && comp.type === "research" && comp.status!=="pending";
+        return matchesSearch && comp.type === "research" && comp.status !== "pending";
       case "Data Science":
-        return matchesSearch && comp.type === "data-science" && comp.status!=="pending";
+        return matchesSearch && comp.type === "data-science" && comp.status !== "pending";
       case "AI":
-        return matchesSearch && comp.type === "ai" && comp.status!=="pending";
+        return matchesSearch && comp.type === "ai" && comp.status !== "pending";
       case "Machine Learning":
-        return matchesSearch && comp.type === "machine-learning" && comp.status!=="pending";
+        return matchesSearch && comp.type === "machine-learning" && comp.status !== "pending";
       case "Simulation":
-        return matchesSearch && comp.type === "simulation" && comp.status!=="pending";
+        return matchesSearch && comp.type === "simulation" && comp.status !== "pending";
       case "Analytics":
-        return matchesSearch && comp.type === "analytics" && comp.status!=="pending";
+        return matchesSearch && comp.type === "analytics" && comp.status !== "pending";
       default:
         return false;
     }
@@ -152,7 +152,7 @@ const Searchbar = () => {
         <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8">
           {showFilters && (
             <div className="flex flex-col w-full lg:w-2/3 gap-6">
-              <UpgradeButton/>
+              <UpgradeButton />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6 ">
                 {filters.map((filter, index) => (
                   <button
@@ -254,7 +254,7 @@ const Searchbar = () => {
           </div>
         </div>
         <CourseBanner />
-        <Footer/>
+        {/* <Footer/> */}
       </div>
     </div>
   );
