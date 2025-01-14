@@ -18,9 +18,9 @@ const TechSection = () => {
         <div className="relative flex flex-col md:flex-row justify-between items-center bg-white p-10 rounded-lg shadow-lg w-full max-w-8xl mt-7 mb-7 container mx-auto py-8">
             {/* Left Section - Text */}
             <div className="md:w-1/2 p-6">
-                <h2 className="text-3xl font-bold mb-4">Who are Kagglers?</h2>
+                <h2 className="text-3xl font-bold mb-4">Who are TechLearners?</h2>
                 <p className="text-gray-600 text-base">
-                    Kagglers come from all walks of life: students, seasoned professionals, and distinguished researchers. They use Kaggle to learn data science & ML, stay up-to-date on the latest techniques, and collaborate.
+                TechLearns come from all walks of life: students, seasoned professionals, and distinguished researchers. They use TechLearns to learn data science & ML, stay up-to-date on the latest techniques, and collaborate.
                 </p>
             </div>
 

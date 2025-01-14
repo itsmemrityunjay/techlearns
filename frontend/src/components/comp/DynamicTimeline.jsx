@@ -87,8 +87,8 @@ export default function DynamicTimeline() {
                         {index > 0 && <TimelineConnector />}
                         <TimelineDot
                             sx={{
-                                bgcolor: "#0a052c",
-                                color: 'white',
+                                bgcolor: "#E6D9FF",
+                                color: 'black',
                                 mt: 4, // Moves the icon slightly downward
                             }}
                         >
