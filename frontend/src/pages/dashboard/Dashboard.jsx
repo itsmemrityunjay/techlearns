@@ -83,7 +83,7 @@ const Dashboard = () => {
                 <div className="flex space-x-4">
                     <div className="relative">
                         <input type="text" placeholder="Search..." className="pl-10 pr-4 py-2 rounded-full bg-gray-100 outline-none" />
-                        <Search className="absolute left-2 top-2 text-gray-500" />
+                        <Search className="absolute left-2 top-2 text-gray-500 " />
                     </div>
                     <IconButton><Notifications className="text-gray-700" /></IconButton>
                     <IconButton><AccountCircle className="text-gray-700" /></IconButton>
