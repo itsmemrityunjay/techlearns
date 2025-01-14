@@ -94,11 +94,11 @@ function CompDetail() {
     return (
         <div className="container mx-auto">
             <div className="flex">
-                <div className="flex-grow rounded-lg shadow-md p-5">
-           
-                <div className=" justify-between items-start">
-                             {/* hero section */}
-                             {/* <div className='mt-12' style={{
+                <div className="flex-grow">
+
+                    <div className=" justify-between items-start">
+                        {/* hero section */}
+                        {/* <div className='mt-12' style={{
                                 backgroundImage:`url(${herocompetition})`,
                                 backgroundSize: "contain", // Ensures the whole image is visible
                                 backgroundRepeat: "no-repeat", // Prevents tiling of the image
@@ -108,104 +108,121 @@ function CompDetail() {
                                                     
                             }}>
                             </div> */}
-    {/* Left Section */}
-    <div className="relative bg-cover bg-center rounded-lg shadow-md p-5 w-full h-[45vh] " style={{ backgroundImage: `url(${compData.icon || compData.imageUrl})` }}>
-    <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg "></div> {/* Optional overlay for better text visibility */}
-    <div className="relative flex flex-col justify-center items-center gap-y-6 text-white ">
-        <div className="text-center justify-center mb-4">
-            <span className="font-black text-6xl">{compData.title}</span>
-            <Typography variant="subtitle1" className="text-gray-300">
-                {compData.subtitle || compData.description}
-            </Typography>
-        </div>
-        <div className="flex flex-col items-center justify-center item-center space-y-4">
-            {!isRegistered ? (
-                <Button
-                    variant="contained"
-                    className="bg-black text-white py-2  text-center px-4"
-                    onClick={handleJoinCompetition}
-                >
-                    Join Competition
-                </Button>
-            ) : (
-                <Button variant="contained" className="bg-green-600 justify-center item-center text-white py-2 px-4">
-                    Submit Entry
-                </Button>
-            )}
-        </div>
-    </div>
-</div>
+                        {/* Left Section */}
+                        <div
+                            className="relative bg-cover bg-center rounded-lg shadow-lg p-6 w-full h-[45vh] transition-transform hover:scale-105"
+                            style={{ backgroundImage: `url(${compData.icon || compData.imageUrl})` }}
+                        >
+                            {/* Dark overlay for text visibility */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70 rounded-lg"></div>
 
-    {/* Right Section (Competition Details) */}
-    <div className="p-6 rounded-lg bg-white mb-5 mt-12 sm:mt-8 md:mt-12 w-full">
-  {/* Flex container for rows */}
-  <div className="flex gap-6 mt-4">
-    {/* Box 1 */}
-    <div className="flex w-1/2 mb-4">
-      <div style={{ height: "60px", width: "60px", backgroundColor: "gray", borderRadius: "10px" ,marginTop:"2px",display: "flex",
-      justifyContent: "center",
-      alignItems: "center",}}>
-      <PersonIcon style={{ color: "black", fontSize: "32px" }} />
-      </div>
-      <div className="ml-4">
-        <Typography variant="h6" className="font-bold text-black pb-2">
-          Competition Host
-        </Typography>
-        <Typography className="text-black sm:mt-4">{compData.author}</Typography>
-      </div>
-    </div>
+                            {/* Content */}
+                            <div className="relative flex flex-col justify-center items-center gap-y-6 text-white h-full">
+                                {/* Title and Subtitle */}
+                                <div className="text-center">
+                                    <h1 className="font-extrabold text-2xl md:text-3xl tracking-wide mb-2">{compData.title}</h1>
+                                    <p className="text-gray-300 text-sm md:text-base">{compData.subtitle || compData.description}</p>
+                                </div>
 
-    {/* Box 2 */}
-    <div className="flex w-1/2 mb-4">
-      <div style={{ height: "60px", width: "60px", backgroundColor: "gray", borderRadius: "10px",marginTop:"2px",display: "flex",
-      justifyContent: "center",
-      alignItems: "center", }}>
-      <MonetizationOnIcon style={{ color: "black", fontSize: "32px" }} />
-      </div>
-      <div className="ml-4">
-        <Typography variant="h6" className="font-bold text-black pb-2">
-          Prizes & Awards
-        </Typography>
-        <Typography className="text-black mt-2 sm:mt-4">{compData.prizePool || compData.prizes}</Typography>
-      </div>
-    </div>
+                                {/* Buttons */}
+                                <div className="flex flex-col items-center space-y-4">
+                                    {!isRegistered ? (
+                                        <button
+                                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200"
+                                            onClick={handleJoinCompetition}
+                                        >
+                                            Join Competition
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200"
+                                        >
+                                            Submit Entry
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
 
-    {/* Box 3 */}
-    <div className="flex w-1/2 mb-4">
-      <div style={{ height: "60px", width: "60px", backgroundColor: "gray", borderRadius: "10px",marginTop:"2px",display: "flex",
-      justifyContent: "center",
-      alignItems: "center", }}>
-      <HowToRegIcon style={{ color: "black", fontSize: "32px" }} />
-      </div>
-      <div className="ml-4">
-        <Typography variant="h6" className="font-bold text-black pb-2">
-          Eligibility
-        </Typography>
-        <Typography className="text-black mt-2 sm:mt-4">{compData.eligibility || "N/A"}</Typography>
-      </div>
-    </div>
 
-    {/* Box 4 */}
-    <div className="flex w-1/2 mb-4">
-      <div style={{ height: "60px", width: "60px", backgroundColor: "gray", borderRadius: "10px",marginTop:"2px",  display: "flex",
-      justifyContent: "center",
-      alignItems: "center", }}>
-      <AssessmentIcon style={{ color: "black", fontSize: "32px" }} />
-      </div>
-      <div className="ml-4">
-        <Typography variant="h6" className="font-bold text-black pb-2">
-          Evaluation Criteria
-        </Typography>
-        <Typography className="text-black mt-4 sm:mt-6">{compData.evaluationCriteria || "N/A"}</Typography>
-      </div>
-    </div>
-  </div>
-</div>
+                        {/* Right Section (Competition Details) */}
+                        <div className="p-6 rounded-lg bg-white mb-5 mt-12 sm:mt-8 md:mt-12 w-full">
+                            {/* Flex container for rows */}
+                            <div className="flex lg:flex-nowrap flex-wrap gap-6 mt-4">
+                                {/* Box 1 */}
+                                <div className="flex w-1/2 mb-4">
+                                    <div style={{
+                                        height: "60px", width: "60px", backgroundColor: "#ffead9", borderRadius: "10px", marginTop: "2px", display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}>
+                                        <PersonIcon style={{ color: "black", fontSize: "32px" }} />
+                                    </div>
+                                    <div className="ml-4">
+                                        <Typography variant="h6" className="font-bold text-black pb-2">
+                                            Competition Host
+                                        </Typography>
+                                        <Typography className="text-black sm:mt-4">{compData.author}</Typography>
+                                    </div>
+                                </div>
 
-</div>
+                                {/* Box 2 */}
+                                <div className="flex w-1/2 mb-4">
+                                    <div style={{
+                                        height: "60px", width: "60px", backgroundColor: "#ffd9ec", borderRadius: "10px", marginTop: "2px", display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}>
+                                        <MonetizationOnIcon style={{ color: "black", fontSize: "32px" }} />
+                                    </div>
+                                    <div className="ml-4">
+                                        <Typography variant="h6" className="font-bold text-black pb-2">
+                                            Prizes & Awards
+                                        </Typography>
+                                        <Typography className="text-black mt-2 sm:mt-4">{compData.prizePool || compData.prizes}</Typography>
+                                    </div>
+                                </div>
+
+                                {/* Box 3 */}
+                                <div className="flex w-1/2 mb-4">
+                                    <div style={{
+                                        height: "60px", width: "60px", backgroundColor: "#e6d9ff", borderRadius: "10px", marginTop: "2px", display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}>
+                                        <HowToRegIcon style={{ color: "black", fontSize: "32px" }} />
+                                    </div>
+                                    <div className="ml-4">
+                                        <Typography variant="h6" className="font-bold text-black pb-2">
+                                            Who Can Join
+                                        </Typography>
+                                        <Typography className="text-black mt-2 sm:mt-4">{compData.whoCanJoin || "N/A"}</Typography>
+                                    </div>
+                                </div>
+
+                                {/* Box 4 */}
+                                <div className="flex w-1/2 mb-4">
+                                    <div style={{
+                                        height: "60px", width: "60px", backgroundColor: "#fff9d9", borderRadius: "10px", marginTop: "2px", display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}>
+                                        <AssessmentIcon style={{ color: "black", fontSize: "32px" }} />
+                                    </div>
+                                    <div className="ml-4">
+                                        <Typography variant="h6" className="font-bold text-black pb-2">
+                                            Status
+                                        </Typography>
+                                        <Typography className="text-black mt-4 sm:mt-6">{compData.status || "N/A"}</Typography>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
                     {/* Overview Section */}
-                    <div className="mb-24 mt-12">
+                    {/* <div className="mb-24 mt-12 w-full">
                         <Typography variant="h6" className="font-bold mb-2 text-center secondary-text">Overview</Typography>
                         <Typography className="text-gray-600 leading-relaxed text-center secondary-text">{compData.subtitle}</Typography>
                         <div className="flex justify-between items-center mt-4">
@@ -224,41 +241,41 @@ function CompDetail() {
                                 <Typography>{compData.endDate}</Typography>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/*  */}
-                    <DynamicTimeline/>
+                    <DynamicTimeline />
                     {/* divider competition */}
-                    <div 
-                    style={{
-                        backgroundImage:`url(${divider2})`,
-                        backgroundSize: "contain",
-                        backgroundRepeat: "no-repeat", 
-                        backgroundPosition: "center",
-                        height: "450px",
-                        width:'100%',
-                    }}
+                    <div
+                        style={{
+                            backgroundImage: `url(${divider2})`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            height: "450px",
+                            width: '100%',
+                        }}
                     >
                     </div>
 
                     {/* FAQ Section */}
                     <div className="bg-transparent p-6 mb-4">
-                    <div className="flex justify-center items-center w-full">
-      <img src={faqimg} alt="FAQ Image" className="w-126 h-auto" />
-    </div>
-    <div className="text-3xl font-bold mb-4 text-purple-950 text-center">Frequently Asked Questions</div>
-    {faqs.map((faq, index) => (
-        <div key={index} className="collapse border border-purple-600 mb-4 hover:text-white hover:bg-purple-100">
-            <input type="checkbox" />
-            <div className="collapse-title text-lg font-semibold text-gray-800 px-4 py-2 ml-8 mt-4 " style={{}}>
-                {faq.question}
-            </div>
-            <div className="collapse-content">
-                <p className="text-gray-600 ml-8 w-11/12">{faq.answer}</p>
-            </div>
-        </div>
-    ))}
-</div>
+                        <div className="flex justify-center items-center w-full">
+                            <img src={faqimg} alt="FAQ Image" className="w-126 h-auto" />
+                        </div>
+                        <div className="text-3xl font-bold mb-4 text-purple-950 text-center">Frequently Asked Questions</div>
+                        {faqs.map((faq, index) => (
+                            <div key={index} className="collapse border border-purple-600 mb-4 hover:text-white hover:bg-purple-100">
+                                <input type="checkbox" />
+                                <div className="collapse-title text-lg font-semibold text-gray-800 px-4 py-2 ml-8 mt-4 " style={{}}>
+                                    {faq.question}
+                                </div>
+                                <div className="collapse-content">
+                                    <p className="text-gray-600 ml-8 w-11/12">{faq.answer}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
 
 
@@ -272,7 +289,7 @@ function CompDetail() {
                         </div>
                     )}
                     <Divider />
-                    <Footer/>
+
                 </div>
             </div>
         </div>
