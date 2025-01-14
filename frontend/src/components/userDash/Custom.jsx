@@ -56,7 +56,7 @@ const CustomComponent = () => {
 
     return (
         <div className='container mx-auto py-8'>
-           <section className="relative pt-40 pb-24">
+            <section className="relative pt-40 pb-24">
                 <img
                     src="https://pagedone.io/asset/uploads/1705473378.png"
                     alt="cover-image"

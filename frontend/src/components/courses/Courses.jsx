@@ -27,7 +27,7 @@ const CourseCard = ({ title, description, icon, onClick }) => (
     className="flex items-start p-4 dark:bg-gray-800 dark:text-white text-dark rounded-md mb-4 cursor-pointer hover:shadow-lg transition-shadow"
   >
     <div className="text-3xl mr-4">
-      <img src={icon} alt="icon" />
+      <img src={icon} alt="icon" height={72} width={72} />
     </div>
     <div>
       <h3 className="text-lg font-semibold">{title}</h3>
@@ -298,7 +298,8 @@ const Courses = () => {
         </p>
 
         <div
-          className={view === "grid" ? "grid grid-cols-3 gap-6" : "space-y-6"}
+          className={`grid gap-6 ${view === "flex" ? "grid-cols-1" : "grid-cols-3"
+            }`}
         >
           {allCourses.map((course) => (
             <CourseCard

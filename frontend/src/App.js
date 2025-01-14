@@ -25,6 +25,7 @@ import Amin from "./pages/dashboard/Amin";
 import CompDetail from "./components/comp/CompDetail";
 import EditProfile from "./pages/dashboard/EditProfile";
 import CourseDetailAdmin from "./components/courses/CourseDetailAdmin";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -157,6 +158,7 @@ function App() {
                 </Layout>
               }
             />
+            <Route path="*" element={<NotFound />} />
 
             {/* Add more routes here */}
           </Routes>

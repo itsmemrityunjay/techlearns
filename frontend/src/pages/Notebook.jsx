@@ -61,6 +61,7 @@ const Notebook = () => {
     return (
         <div>
             {user ? (
+                console.log("User is logged in:", user),
                 <div className="notebook-container">
                     <div className="flex justify-center items-center mb-8">
                         <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl bg-white shadow-lg p-6 rounded-lg">
