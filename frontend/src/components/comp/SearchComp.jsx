@@ -152,7 +152,7 @@ const Searchbar = () => {
         <div className="lg:w[97%] flex flex-col lg:flex-row items-start justify-between gap-8">
           {showFilters && (
             <div className="flex flex-col w-full lg:w-2/3 gap-6">
-              <UpgradeButton />
+              <UpgradeButton/>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6 ">
                 {filters.map((filter, index) => (
                   <button

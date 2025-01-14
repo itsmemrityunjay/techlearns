@@ -7,6 +7,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'chart.js/auto';
+import GroupIcon from '@mui/icons-material/Group';
 import {
     getFirestore,
     collection,
@@ -20,7 +21,12 @@ import { useNavigate } from 'react-router-dom';
 import { db, storage } from '../../database/Firebase';
 import ModalMain from './Modal';
 import { useAuth } from '../../database/AuthContext';
-
+// import GroupIcon from '@mui/icons-material/Group';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import SchoolIcon from '@mui/icons-material/School';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PersonIcon from '@mui/icons-material/Person';
 function AdminDashboard() {
     const [users, setUsers] = useState([]);
     const [competitions, setCompetitions] = useState([]);
@@ -480,7 +486,7 @@ function AdminDashboard() {
     return (
         <div className="flex flex-col lg:flex-row h-screen">
             <div className="flex-1 md:p-6 space-y-6">
-                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div className="mt-12 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <input
                         type="text"
                         placeholder="Search here..."
@@ -492,34 +498,91 @@ function AdminDashboard() {
                         <span>Admin</span>
                     </div>
                 </div>
+                <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+  {/* User Management Card */}
+  <div
+    onClick={() => handleCardClick({ type: "user", data: users })}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-blue-100 text-blue-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <GroupIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">User Management</h2>
+      <p className="text-sm text-gray-500">Manage users, roles, and access</p>
+    </div>
+  </div>
 
-                <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <div onClick={() => handleCardClick({ type: "user", data: users })} className="bg-gradient-to-r py-16 from-purple-500 via-pink-500 to-red-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">User Management</h2>
-                        <p>Manage users, promote to sub-admin, block/unblock accounts</p>
-                    </div>
-                    <div onClick={() => handleCardClick({ type: "competition", data: competitions })} className="bg-gradient-to-r py-16 from-green-500 to-blue-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">Competition Management</h2>
-                        <p>Approve or reject competitions, view details</p>
-                    </div>
-                    <div onClick={() => handleCardClick({ type: "course", data: courses })} className="bg-gradient-to-r py-16 from-yellow-500 to-orange-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">Course Management</h2>
-                        <p>View, edit, or delete course entries</p>
-                    </div>
-                    <div onClick={() => setModalIsOpen(true)} className="bg-gradient-to-r py-16 from-lime-500 to-amber-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">Add New Course</h2>
-                        <p>Create New course entries</p>
-                    </div>
-                    <div onClick={handleOpenApprovalModal} className="bg-gradient-to-r py-16 from-blue-500 to-yellow-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">Approve Competitions</h2>
-                        <p>Approve or Reject New Competition.</p>
-                    </div>
-                    <div onClick={() => { navigate("/edit-profile") }} className="bg-gradient-to-r py-16 from-orange-500 to-lime-500 rounded-lg shadow-lg p-6 text-white cursor-pointer">
-                        <h2 className="text-xl font-semibold mb-2">Manage Your Profile</h2>
-                        <p>View and Edit your Profile.</p>
-                    </div>
+  {/* Competition Management Card */}
+  <div
+    onClick={() => handleCardClick({ type: "competition", data: competitions })}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-purple-100 text-purple-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <SportsEsportsIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">Competition Management</h2>
+      <p className="text-sm text-gray-500">Approve or reject competitions, view details</p>
+    </div>
+  </div>
 
-                </section>
+  {/* Course Management Card */}
+  <div
+    onClick={() => handleCardClick({ type: "course", data: courses })}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-green-100 text-green-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <SchoolIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">Course Management</h2>
+      <p className="text-sm text-gray-500">View, edit, or delete course entries</p>
+    </div>
+  </div>
+
+  {/* Add New Course Card */}
+  <div
+    onClick={() => setModalIsOpen(true)}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-yellow-100 text-yellow-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <AddCircleOutlineIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">Add New Course</h2>
+      <p className="text-sm text-gray-500">Create new course entries</p>
+    </div>
+  </div>
+
+  {/* Approve Competitions Card */}
+  <div
+    onClick={handleOpenApprovalModal}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-red-100 text-red-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <CheckCircleIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">Approve Competitions</h2>
+      <p className="text-sm text-gray-500">Approve or reject new competitions</p>
+    </div>
+  </div>
+
+  {/* Manage Your Profile Card */}
+  <div
+    onClick={() => navigate("/edit-profile")}
+    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+  >
+    <div className="bg-teal-100 text-teal-500 rounded-full h-14 w-14 flex items-center justify-center">
+      <PersonIcon fontSize="medium" />
+    </div>
+    <div>
+      <h2 className="text-sm font-semibold text-gray-700">Manage Your Profile</h2>
+      <p className="text-sm text-gray-500">View and edit your profile</p>
+    </div>
+  </div>
+</section>
                 {addCourseModal}
                 {approveCompetitionsModal}
 

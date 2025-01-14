@@ -2,7 +2,7 @@ import React from "react";
 
 const UpgradeButton = () => {
   return (
-    <div className="w-[65%] flex items-center justify-right bg-[#dfdbf5] p-4 rounded-full shadow-lg gap-4 mt-20">
+    <div className="w-[65%] flex items-center justify-right bg-[#dfdbf5] p-4 rounded-full shadow-lg gap-4">
       {/* Icon Container */}
       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#003656]">
         <svg
@@ -23,8 +23,8 @@ const UpgradeButton = () => {
 
       {/* Text Content */}
       <div>
-        <p className="text-gray-800 font-medium text-sm">
-        Level up your skills and ace competitions with confidence!
+        <p className="text-gray-800 font-medium text-md">
+        Connect, share, learn, and grow with tech enthusiasts worldwide!
         </p>
       </div>
     </div>
