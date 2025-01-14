@@ -155,89 +155,93 @@ const DiscussMap = () => {
         onChange={handleSearch}
         className="w-full p-2 mb-6 border border-gray-300 rounded h-12"
       />
-    
+
       <div className="flex items-start justify-between gap-8">
         <div className="w-11/12">
-      <div className="lg:w-full mt-24">
-        <UpgradeButton />
-      </div> 
-      <div className="mb-6 flex space-x-4 flex-wrap gap-8 w-3/4 mt-12">
-        <button
-          className={`flex justify-start items-center  w-40 h-16 text-2xl px-4 py-2 rounded-full ${
-            filterType === "" ? "primary-bg text-white" : "bg-white border-gray-300 hover:bg-gray-100"
-          }`}
-          style={{borderWidth:"2px"}}
-          onClick={() => handleFilter("")}
-        >
-                <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-blue-100">
-      <FilterList className="text-black" />
-    </span>
-          All
-        </button>
-        <button
-          className={`flex justify-start items-center w-80 h-16 text-2xl px-4 py-2 rounded-full border ${
-            filterType === "General Discussion"
-              ? "secondary-bg text-white"
-              : "bg-white  border-gray-300 hover:bg-gray-100 "
-          }`}
-          style={{borderWidth:"2px"}}
-          onClick={() => handleFilter("General Discussion")}
-        >
-    <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-purple-100">
-      <FilterList className="text-black" />
-    </span>
-          General Discussion
-        </button>
-        <button
-          className={`flex justify-start items-center w-52 h-16 text-2xl px-4 py-2 rounded-full ${
-            filterType === "Feedback"
-              ? "secondary-bg text-white"
-              : "bg-white  border-gray-300 hover:bg-gray-100"
-          }`}
-          style={{borderWidth:"2px"}}
-          onClick={() => handleFilter("Feedback")}
-        >
-                          <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-orange-100">
-      <FilterList className="text-black" />
-    </span>
-          Feedback
-        </button>
-        <button
-          className={`flex justify-start items-center w-48 h-16 text-2xl px-4 py-2 rounded-full ${
-            filterType === "Question"
-              ? "secondary-bg text-white"
-              : "bg-white  border-gray-300 hover:bg-gray-100"
-          }`}
-          style={{borderWidth:"2px"}}
-          onClick={() => handleFilter("Question")}
-        >
-                         <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-green-100">
-      <FilterList className="text-black" />
-    </span>
-          Question
-        </button>
-        <button
-          className={`flex justify-start items-center w-44 h-16 text-2xl px-4 py-2 rounded-full ${
-            filterType === "Course" ? "secondary-bg text-white" : "bg-white  border-gray-300 hover:bg-gray-100"
-          }`}
-          style={{borderWidth:"2px"}}
-          onClick={() => handleFilter("Course")}
-        >
-           <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-pink-100">
-      <FilterList className="text-black" />
-    </span>
-          Course
-        </button>
-      </div>
-      </div>
-      <div className={`w-full lg:w-1/2 flex justify-center lg:justify-end`}>
-            <img
-              src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
-              alt="Right Side Image"
-              className="max-w-full h-auto rounded-lg"
-            />
+          <div className="lg:w-full mt-24">
+            <UpgradeButton />
           </div>
+          <div className="mb-6 flex space-x-4 flex-wrap gap-8 w-3/4 mt-12">
+            <button
+              className={`flex justify-start items-center  w-40 h-16 text-2xl px-4 py-2 rounded-full ${
+                filterType === ""
+                  ? "primary-bg text-white"
+                  : "bg-white border-gray-300 hover:bg-gray-100"
+              }`}
+              style={{ borderWidth: "2px" }}
+              onClick={() => handleFilter("")}
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-blue-100">
+                <FilterList className="text-black" />
+              </span>
+              All
+            </button>
+            <button
+              className={`flex justify-start items-center w-80 h-16 text-2xl px-4 py-2 rounded-full border ${
+                filterType === "General Discussion"
+                  ? "secondary-bg text-white"
+                  : "bg-white  border-gray-300 hover:bg-gray-100 "
+              }`}
+              style={{ borderWidth: "2px" }}
+              onClick={() => handleFilter("General Discussion")}
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-purple-100">
+                <FilterList className="text-black" />
+              </span>
+              General Discussion
+            </button>
+            <button
+              className={`flex justify-start items-center w-52 h-16 text-2xl px-4 py-2 rounded-full ${
+                filterType === "Feedback"
+                  ? "secondary-bg text-white"
+                  : "bg-white  border-gray-300 hover:bg-gray-100"
+              }`}
+              style={{ borderWidth: "2px" }}
+              onClick={() => handleFilter("Feedback")}
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-orange-100">
+                <FilterList className="text-black" />
+              </span>
+              Feedback
+            </button>
+            <button
+              className={`flex justify-start items-center w-48 h-16 text-2xl px-4 py-2 rounded-full ${
+                filterType === "Question"
+                  ? "secondary-bg text-white"
+                  : "bg-white  border-gray-300 hover:bg-gray-100"
+              }`}
+              style={{ borderWidth: "2px" }}
+              onClick={() => handleFilter("Question")}
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-green-100">
+                <FilterList className="text-black" />
+              </span>
+              Question
+            </button>
+            <button
+              className={`flex justify-start items-center w-44 h-16 text-2xl px-4 py-2 rounded-full ${
+                filterType === "Course"
+                  ? "secondary-bg text-white"
+                  : "bg-white  border-gray-300 hover:bg-gray-100"
+              }`}
+              style={{ borderWidth: "2px" }}
+              onClick={() => handleFilter("Course")}
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-pink-100">
+                <FilterList className="text-black" />
+              </span>
+              Course
+            </button>
           </div>
+        </div>
+        <div className={`w-full lg:w-1/2 flex justify-center lg:justify-end`}>
+          <img
+            src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
+            alt="Right Side Image"
+            className="max-w-full h-auto rounded-lg"
+          />
+        </div>
+      </div>
 
       {filteredTopics.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 ">
@@ -274,7 +278,7 @@ const DiscussMap = () => {
                         day: "numeric",
                       })}
                     </p>
-                    <h2 className="lg:text-xl font-bold sm:text-lg mt-2">
+                    <h2 className="lg:text-2xl font-bold sm:text-lg mt-2">
                       {topic.title}
                     </h2>
                   </div>
@@ -302,14 +306,18 @@ const DiscussMap = () => {
 
                   <div className="mt-1 ml-14">
                     <button
-                      className="primary-bg text-white px-4 py-2 rounded"
+                      className="flex justify-start items-center text-black w-56 h-12 text-md  px-4 py-2 rounded-full border bg-white border-gray-300 hover:bg-gray-100"
                       onClick={() =>
                         setComments((prev) => ({
                           ...prev,
                           [topic.id]: !prev[topic.id],
                         }))
                       }
+                      style={{ borderWidth: "2px" }}
                     >
+                      <span className="inline-flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-blue-100">
+                        <FilterList className="text-black" />
+                      </span>
                       {comments[topic.id] ? "Hide Comments" : "Show Comments"}
                     </button>
 
@@ -326,13 +334,17 @@ const DiscussMap = () => {
                                 [topic.id]: e.target.value,
                               }))
                             }
-                            className="lg:w-2/3 w-full p-2 border border-gray-300 rounded"
+                            className="lg:w-2/3 w-full p-2 border border-gray-300 rounded-full"
+                          style={{}}
                           />
                           <button
                             onClick={() => handleAddComment(topic.id)}
-                            className="lg:px-4 mt-2 px-4 py-2 secondary-bg text-white rounded"
+                            className="lg:px-4 mt-2 px-4 py-2 bg-none text-black w-48 h-12 text-md border-gray-300 flex justify-start items-center  text-md rounded-full border hover:bg-gray-100"
                             style={{ marginTop: "-1px" }}
                           >
+                            <span className="inline-flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-purple-100">
+                              <FilterList className="text-black" />
+                            </span>
                             Add Comment
                           </button>
                         </div>
@@ -362,6 +374,7 @@ const DiscussMap = () => {
                                       ...prev,
                                       [`${topic.id}-${index}`]: e.target.value,
                                     }))
+                                   
                                   }
                                   className="w-full p-2 rounded bg-gray-100 border-l-4"
                                   style={{ borderColor: "blue" }}

@@ -27,6 +27,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonIcon from '@mui/icons-material/Person';
+import MyDailyActivitiesChart from './Chart';
 function AdminDashboard() {
     const [users, setUsers] = useState([]);
     const [competitions, setCompetitions] = useState([]);
@@ -583,9 +584,10 @@ function AdminDashboard() {
     </div>
   </div>
 </section>
+ 
                 {addCourseModal}
                 {approveCompetitionsModal}
-
+  {/* <MyDailyActivitiesChart/> */}
                 {/* Chart Component */}
                 <div className="col-span-1 md:col-span-2 p-4 bg-white shadow-md rounded-lg h-60">
                     <h3 className="font-semibold mb-2">Dashboard Insights</h3>

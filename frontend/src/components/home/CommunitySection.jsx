@@ -1,53 +1,121 @@
-import React from 'react';
+import React, { useState } from 'react';
+import 'tailwindcss/tailwind.css';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const CommunitySection = () => {
-    return (
-        <div className="min-h-full bg-white flex flex-col lg:flex-row items-center justify-between container mx-auto py-8 ">
+  const [activeTab, setActiveTab] = useState('C++');
 
-            {/* Left Side: Text */}
-            <div className="lg:w-1/2 flex flex-col mx-2 space-y-6 text-left lg:text-left">
-                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900">
-                    Build your ML skills in a supportive and helpful community
-                </h1>
-                <p className="text-lg lg:text-xl text-gray-600">
-                    Kaggle's community is a diverse group of 20 million data scientists, ML engineers & enthusiasts from around the world.
-                </p>
-            </div>
+  const codeSamples = {
+    'C++': `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *   int val;
+ *   ListNode *next;
+ *   ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+void trimLeftTrailingSpaces(string &input) {
+    input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
+        return !isspace(ch);
+    }));
+}
+void trimRightTrailingSpaces(string &input) {
+    input.erase(find_if(input.rbegin(), input.rend(), [](int ch) {
+        return !isspace(ch);
+    }).base(), input.end());
+}`,
+    'Java': `// Java code for Linked List
+class Node {
+    int data;
+    Node next;
 
-            {/* Right Side: Browser Mockup */}
-            <div className="relative lg:w-1/2 flex justify-center items-center mt-12 lg:mt-0">
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
 
-                {/* Background Overlapping Circles */}
-                {/* <div className="absolute w-40 h-40 bg-yellow-300 rounded-full overflow-hidden -bottom-10 -right-10 opacity-70"></div>
-                <div className="absolute w-40 h-40 bg-blue-400 rounded-full overflow-hidden -top-8 -right-16 opacity-70"></div> */}
+class LinkedList {
+    Node head;
+}`,
+    'Python': `# Python code for Linked List
+class Node:
+    def _init_(self, data):
+        self.data = data
+        self.next = None
 
-                {/* Browser Mockup */}
-                <div className="bg-white shadow-xl rounded-xl overflow-hidden w-full max-w-2xl relative z-10">
-                    {/* Mockup Header with Circles */}
-                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center space-x-2">
-                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                    </div>
+class LinkedList:
+    def _init_(self):
+        self.head = None`,
+  };
 
-                    {/* Mockup Content */}
-                    <div className="carousel carousel-vertical rounded-box h-96">
-                        <div className="carousel-item w-full">
-                            <img src="https://www.kaggle.com/static/images/home/logged-out/datasets-landing@1.png" />
-                        </div>
-                        <div className="carousel-item w-full">
-                            <img src="https://www.kaggle.com/static/images/home/logged-out/notebooks-landing@1.png" />
-                        </div>
-                        <div className="carousel-item w-full">
-                            <img src="https://www.kaggle.com/static/images/home/logged-out/models-landing@1.png" />
-                        </div>
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeSamples[activeTab]);
+    alert('Code copied to clipboard!');
+  };
 
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="bg-gray-50 min-h-screen flex flex-col">
+      {/* Header Section */}
+      <div className="text-center mt-12">
+        <div className="flex items-center justify-center">
+          <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
+            <span className="text-teal-600 text-3xl">{`</>`}</span>
+          </div>
         </div>
-    );
-};
+        <h1 className="text-3xl font-semibold mt-4">Developer Playground</h1>
+        <p className="text-gray-600 mt-2">
+          Test, debug, and learn with our developer tools. Easily switch between supported coding languages.
+        </p>
+      </div>
 
+      {/* Code Editor Section */}
+      <div className="flex-1 bg-white shadow-lg rounded-lg mx-auto mt-8 w-3/4">
+        {/* Tabs */}
+        <div className="flex border-b">
+          {['C++', 'Java', 'Python'].map((tab) => (
+            <button
+              key={tab}
+              className={`px-4 py-2 w-1/3 text-center font-medium ${
+                activeTab === tab ? 'text-teal-600 border-b-2 border-teal-600' : 'text-gray-500'
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Code Block */}
+        <div className="p-4 overflow-auto">
+          <SyntaxHighlighter
+            language={activeTab.toLowerCase()}
+            style={tomorrow}
+            showLineNumbers
+          >
+            {codeSamples[activeTab]}
+          </SyntaxHighlighter>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-end p-4 border-t">
+          <button
+            className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md mr-2"
+            onClick={handleCopy}
+          >
+            Copy
+          </button>
+          <button className="bg-yellow-500 hover:bg-teal-600 text-white px-4 py-2 rounded-md">
+            Run
+          </button>
+          <button className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md ml-2">
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default CommunitySection;

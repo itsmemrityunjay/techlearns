@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Editor } from '@monaco-editor/react';
 import axios from 'axios';
 import { getDatabase, ref, set, get, child } from "firebase/database"; // Firebase DB for storing notebooks
+import { FaJs, FaPython, FaCode } from "react-icons/fa";
 
 const Editors = ({ userId }) => {
     const [code, setCode] = useState('// Write your code here');
@@ -110,7 +111,10 @@ const Editors = ({ userId }) => {
             {/* Top bar */}
             <div className="flex bg-gray-100 p-4 border-b border-gray-300">
                 <div className="relative">
-                    <button className="mr-4 px-4 py-2 bg-gray-200 hover:bg-gray-300">File</button>
+                <button className="mr-4 px-4 py-2 text-sm font-medium text-white bg-black hover:bg-gray-800 rounded-md shadow-sm">
+    File
+</button>
+
                     {/* Dropdown for notebooks */}
                     <div className="absolute hidden group-hover:block bg-white shadow-md p-2 mt-2 border">
                         <h3 className="text-md font-semibold">Saved Notebooks</h3>
@@ -133,18 +137,25 @@ const Editors = ({ userId }) => {
                 {/* Edit/Save Button */}
                 <button
                     onClick={isEditing ? handleSave : () => setIsEditing(true)}
-                    className="mr-4 px-4 py-2 bg-gray-200 hover:bg-gray-300"
+                    className="mr-4 px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
                     {isEditing ? 'Save' : 'Edit'}
                 </button>
 
                 {/* View Menu */}
-                <button className="mr-4 px-4 py-2 bg-gray-200 hover:bg-gray-300">View</button>
+                <button className="mr-4 px-4 py-2 text-sm font-medium bg-yellow-500 dark:bg-yellow-700 dark:hover:bg-yellow-600 hover:bg-gray-yellow rounded-md shadow-sm">
+                        View
+                    </button>
 
                 {/* Run Button */}
-                <button onClick={handleRun} className="mr-4 px-4 py-2 bg-gray-200 hover:bg-gray-300">Run</button>
+                <button
+                    onClick={handleRun}
+                    className="px-4 py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600"
+                >
+                    Run
+                </button>
 
-                <button className="mr-4 px-4 py-2 bg-gray-200 hover:bg-gray-300">Help</button>
+               
             </div>
 
             {/* Main layout */}
@@ -175,22 +186,36 @@ const Editors = ({ userId }) => {
 
                     <button
                         onClick={handleRun}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-blue-600"
                     >
                         Run Code
                     </button>
                 </div>
 
                 {/* Input Upload Section */}
-                <div className="flex flex-col w-full md:w-1/4 p-4 h-auto bg-gray-50 border-t md:border-t-0 md:border-r border-gray-300">
-                    <h3 className="text-lg font-medium mb-2">Input</h3>
-                    <input
-                        type="file"
-                        onChange={handleInputUpload}
-                        className="block mb-4"
-                        accept=".txt"
-                    />
-                </div>
+                <div className="flex flex-col w-full md:w-1/4 p-6 h-auto bg-white shadow-md rounded-lg border border-gray-200">
+            <h3 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
+                Upload Your File
+            </h3>
+            <div className="flex flex-col items-center">
+                <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer bg-yellow-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                >
+                    Choose File
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    onChange={handleInputUpload}
+                    className="hidden"
+                    accept=".txt"
+                />
+                <p className="mt-2 text-sm text-gray-500">
+                    Supported format: <span className="font-semibold">.txt</span>
+                </p>
+            </div>
+        </div>
 
                 {/* Output Section */}
                 <div className="flex flex-col w-full md:w-1/4 p-4 h-auto">
