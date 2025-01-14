@@ -89,80 +89,91 @@ const EditProfile = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-8">
-            <div className="bg-white rounded-2xl shadow-lg px-8 py-10 w-full max-w-md">
+            <div className="bg-white rounded-2xl shadow-lg px-8 py-10 w-full ">
                 <h1 className="text-3xl font-bold text-center mb-6">Edit Profile</h1>
                 {error && <p className="text-red-500 text-center mb-4">{error}</p>}
                 <form onSubmit={handleUpdate}>
-                    <label className="block mb-4">
-                        First Name:
-                        <input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
-                        />
-                    </label>
-                    <label className="block mb-4">
-                        Last Name:
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
-                        />
-                    </label>
-                    <label className="block mb-4">
+                    <div className='flex flex-wrap gap-8 w-full'>
+                        <label className="block text-xl font-semibold mb-4">
+                            First Name:
+                            <input
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="w-full p-2 border rounded-full h-14 mt-4"
+                            />
+                        </label>
+                        <label className="block text-xl font-semibold mb-4">
+                            Last Name:
+                            <input
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                className="w-full p-2 border rounded-full h-14 mt-4"
+                            />
+                        </label>
+                    </div>
+                    <label className="block text-xl font-semibold mb-4">
                         Age:
                         <input
                             type="number"
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
+                            className="w-full p-2 border rounded-full h-14 mt-4"
                         />
                     </label>
-                    <label className="block mb-4">
+                    <label className="block text-xl font-semibold mb-4">
                         Address:
                         <input
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
+                            className="w-full p-2 border rounded-full h-14 mt-4"
                         />
                     </label>
-                    <label className="block mb-4">
+                    <label className="block text-xl font-semibold mb-4">
                         Education:
                         <input
                             type="text"
                             value={education}
                             onChange={(e) => setEducation(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
+                            className="w-full p-2 border rounded-full h-14 mt-4"
                         />
                     </label>
-                    <label className="block mb-4">
+                    <label className="block text-xl font-semibold mb-4">
                         Phone Number:
                         <input
                             type="tel"
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
-                            className="w-full p-2 border rounded-lg"
+                            className="w-full p-2 border rounded-full h-14 mt-4"
                         />
                     </label>
-                    <label className="block mb-4">
+                    <label className="block text-xl font-semibold mb-4">
                         Profile Image:
                         <input
                             type="file"
                             onChange={handleImageUpload} // Capture file and upload
-                            className="w-full p-2 border rounded-lg"
+                            className="w-full p-2 border rounded-full h-14 mt-4"
                         />
                         {uploadingImage && <p className="text-blue-500 mt-2">Uploading image...</p>}
                     </label>
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded-lg font-semibold"
-                        disabled={uploadingImage || !profileImageUrl} // Disable until image is uploaded
-                    >
-                        Save Changes
-                    </button>
+                    <div className='flex gap-8'>
+                        <button
+                            type="submit"
+                            className="h-16 bg-[--primary-color] w-4/6 text-white p-2 rounded-3xl font-semibold"
+                            disabled={uploadingImage || !profileImageUrl} // Disable until image is uploaded
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            type="submit"
+                            className="h-16 bg-[--secondary-color] w-4/6 text-white p-2 rounded-3xl font-semibold"
+                            disabled={uploadingImage || !profileImageUrl} // Disable until image is uploaded
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
