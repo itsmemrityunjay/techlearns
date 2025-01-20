@@ -22,7 +22,9 @@ import { db, storage } from '../../database/Firebase';
 import ModalMain from './Modal';
 import { useAuth } from '../../database/AuthContext';
 
+
 function AdminDashboard() {
+    
     const [users, setUsers] = useState([]);
     const [competitions, setCompetitions] = useState([]);
     const [courses, setCourses] = useState([]);
@@ -42,6 +44,7 @@ function AdminDashboard() {
 
     const [approvalModalOpen, setApprovalModalOpen] = useState(false);
     // const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+    
 
     const [profileData, setProfileData] = useState({
         name: '',

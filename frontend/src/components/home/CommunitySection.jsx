@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useInView } from 'react-intersection-observer';
 
 const CommunitySection = () => {
   const [activeTab, setActiveTab] = useState('C++');
+  const [displayedCode, setDisplayedCode] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const { ref: headingRef, inView } = useInView({ triggerOnce: false });
 
   const codeSamples = {
     'C++': `/**
@@ -55,10 +60,35 @@ class LinkedList:
     alert('Code copied to clipboard!');
   };
 
+  const typewriterEffect = (code, reverse = false) => {
+    let index = reverse ? code.length : 0;
+    setIsTyping(true);
+
+    const interval = setInterval(() => {
+      setDisplayedCode((prev) => code.slice(0, reverse ? --index : ++index));
+      if (index === (reverse ? code.length : 0)) {
+        clearInterval(interval);
+        setIsTyping(false);
+      }
+    }, 20); // Faster typing for smooth effect
+
+    return () => clearInterval(interval);
+  };
+
+  useEffect(() => {
+    if (!isTyping) {
+      if (inView) {
+        typewriterEffect(codeSamples[activeTab]);
+      } else {
+        typewriterEffect(codeSamples[activeTab], true);
+      }
+    }
+  }, [inView, activeTab]);
+
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Header Section */}
-      <div className="text-center mt-12">
+      <div className="text-center mt-12" ref={headingRef}>
         <div className="flex items-center justify-center">
           <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
             <span className="text-teal-600 text-3xl">{`</>`}</span>
@@ -94,7 +124,7 @@ class LinkedList:
             style={tomorrow}
             showLineNumbers
           >
-            {codeSamples[activeTab]}
+            {displayedCode || '// Select a tab to display the code'}
           </SyntaxHighlighter>
         </div>
 

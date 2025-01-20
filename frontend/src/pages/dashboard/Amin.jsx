@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dashboard, Leaderboard, ShoppingCart, Settings, AccountCircle } from '@mui/icons-material';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+import { PieChart } from '@mui/x-charts/PieChart';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import Modal from 'react-modal';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -11,6 +12,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import {
     getFirestore,
     collection,
+    onSnapshot,
     addDoc,
     getDocs,
     updateDoc,
@@ -35,6 +37,7 @@ function AdminDashboard() {
     const [discussions, setDiscussions] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [courseTitle, setCourseTitle] = useState('');
@@ -223,19 +226,6 @@ function AdminDashboard() {
         setModalIsOpen(false);
     };
 
-
-    // Chart data state
-    const [chartData, setChartData] = useState({ labels: [], datasets: [] });
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        await Promise.all([fetchUsers(), fetchCompetitions(), fetchCourses(), fetchDiscussions()]);
-        updateChartData();
-    };
-
     const fetchUsers = async () => {
         const querySnapshot = await getDocs(collection(db, "users"));
         setUsers(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -252,25 +242,73 @@ function AdminDashboard() {
     };
 
     const fetchDiscussions = async () => {
-        const querySnapshot = await getDocs(collection(db, "discussions"));
+        const querySnapshot = await getDocs(collection(db, "topics"));
         setDiscussions(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
-
-    // Update chart data based on Firebase data
-    const updateChartData = () => {
-        setChartData({
-            labels: ["Users", "Competitions", "Courses", "Discussions"],
-            datasets: [
-                {
-                    label: "Total Counts",
-                    data: [users.length, competitions.length, courses.length, discussions.length],
-                    backgroundColor: ["#ef4444", "#10b981", "#3b82f6", "#f59e0b"],
-                }
-            ]
+  
+      // Real-time listener for users collection
+      useEffect(() => {
+        const unsubscribeUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
+          const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setUsers(usersData);
+          updateChartData(usersData, competitions, courses, discussions);
         });
-    };
-
-
+    
+        return () => unsubscribeUsers();
+      }, [competitions, courses, discussions]);
+    
+      // Real-time listener for competitions collection
+      useEffect(() => {
+        const unsubscribeCompetitions = onSnapshot(collection(db, 'competitions'), (snapshot) => {
+          const competitionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCompetitions(competitionsData);
+          updateChartData(users, competitionsData, courses, discussions);
+        });
+    
+        return () => unsubscribeCompetitions();
+      }, [users, courses, discussions]);
+    
+      // Real-time listener for courses collection
+      useEffect(() => {
+        const unsubscribeCourses = onSnapshot(collection(db, 'courses'), (snapshot) => {
+          const coursesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCourses(coursesData);
+          updateChartData(users, competitions, coursesData, discussions);
+        });
+    
+        return () => unsubscribeCourses();
+      }, [users, competitions, discussions]);
+    
+      // Real-time listener for discussions collection
+      useEffect(() => {
+        const unsubscribeDiscussions = onSnapshot(collection(db, 'topics'), (snapshot) => {
+          const discussionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setDiscussions(discussionsData);
+          updateChartData(users, competitions, courses, discussionsData);
+        });
+    
+        return () => unsubscribeDiscussions();
+      }, [users, competitions, courses]);
+    
+      // Function to update chart data
+      const updateChartData = (usersData, competitionsData, coursesData, discussionsData) => {
+        setChartData({
+          labels: ['Users', 'Competitions', 'Courses', 'Discussions'],
+          datasets: [
+            {
+              label: 'Total Counts',
+              data: [
+                usersData.length,
+                competitionsData.length,
+                coursesData.length,
+                discussionsData.length,
+              ],
+              backgroundColor: ['#ef4444', '#10b981', '#3b82f6', '#f59e0b'],
+            },
+          ],
+        });
+      };
+    
     const navigate = useNavigate();
     const handleCardClick = (item) => {
         setSelectedItem(item);
@@ -485,7 +523,7 @@ function AdminDashboard() {
 
 
     return (
-        <div className="flex flex-col lg:flex-row h-screen">
+        <div className="flex flex-col lg:flex-row">
             <div className="flex-1 md:p-6 space-y-6">
                 <div className="mt-12 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                     <input
@@ -589,7 +627,8 @@ function AdminDashboard() {
                 {approveCompetitionsModal}
   {/* <MyDailyActivitiesChart/> */}
                 {/* Chart Component */}
-                <div className="col-span-1 md:col-span-2 p-4 bg-white shadow-md rounded-lg h-60">
+                <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-8 justify-between items-center'>
+                <div className=" p-4 bg-white shadow-md h-64 rounded-lg bg-[#D9F1F]">
                     <h3 className="font-semibold mb-2">Dashboard Insights</h3>
                     <Line
                         data={chartData}
@@ -604,6 +643,24 @@ function AdminDashboard() {
                         }}
                     />
                 </div>
+                <div className=' p-4 bg-white shadow-md h-64 rounded-lg bg-[#D9F1F]'>
+                <PieChart
+  series={[
+    {
+      data: [
+        { id: "Users", value: users.length, color: "#ef4444", label: `Users = ${users.length}` },
+        { id: "Competitions", value: competitions.length, color: "#10b981", label: `Competitions = ${competitions.length}` },
+        { id: "Courses", value: courses.length, color: "#3b82f6", label: `Courses = ${courses.length}` },
+        { id: "Discussions", value: discussions.length, color: "#f59e0b", label: `Discussions = ${discussions.length}` },
+      ],
+    },
+  ]}
+  width={600}
+  height={200}
+/>
+
+</div>
+</div>
             </div>
 
             {modalOpen && (
