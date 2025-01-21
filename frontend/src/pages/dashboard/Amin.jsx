@@ -27,7 +27,9 @@ import SchoolIcon from '@mui/icons-material/School';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonIcon from '@mui/icons-material/Person';
-import MyDailyActivitiesChart from './Chart';
+import UserStatsCard from './Chart';
+import TeamProgressCard from './Chart';
+import getMainChartOptions from './Chart';
 function AdminDashboard() {
     const [users, setUsers] = useState([]);
     const [competitions, setCompetitions] = useState([]);
@@ -587,6 +589,8 @@ function AdminDashboard() {
  
                 {addCourseModal}
                 {approveCompetitionsModal}
+                
+{/* <TeamProgressCard/> */}
   {/* <MyDailyActivitiesChart/> */}
                 {/* Chart Component */}
                 <div className="col-span-1 md:col-span-2 p-4 bg-white shadow-md rounded-lg h-60">
@@ -618,6 +622,8 @@ function AdminDashboard() {
                     handleEditCourse={handleEditCourse}
                 />
             )}
+      
+
         </div>
     );
 }

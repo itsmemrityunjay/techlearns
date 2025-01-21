@@ -6,6 +6,7 @@ import MainHero from '../MainHero';
 import { ThreeDots } from 'react-loader-spinner';
 import TableOfContents from './TableofContent';
 import './CourseDetail.css';
+import Footer from '../comp/footer';
 
 const CourseDetail = () => {
     const { courseId } = useParams();
@@ -69,9 +70,9 @@ const CourseDetail = () => {
                         <div className="course-content grid grid-cols-1 gap-6 scrollbar-hidden scrollbar">
                             {sections.length > 0 ? (
                                 sections.map((section, index) => (
-                                    <div key={index} id={`section-${index}`} className="bg-white rounded-lg shadow-md p-4  transition-shadow duration-300">
+                                    <div key={index} id={`section-${index}`} className="bg-white rounded-lg shadow-sm p-4  transition-shadow duration-300">
                                         {section.type === 'subHeading' && (
-                                            <h3 className="text-2xl font-bold mb-2 mt-5 text-gray-800">
+                                            <h3 className="text-2xl font-bold mb-2 mt-5  text-gray-800">
                                                 {section.value}
                                             </h3>
                                         )}
@@ -79,8 +80,8 @@ const CourseDetail = () => {
                                             <div className="mb-4 text-lg text-gray-800" dangerouslySetInnerHTML={{ __html: section.value }} />
                                         )}
                                         {section.type === 'code' && (
-                                            <pre className="bg-gray-200 p-4 rounded-md overflow-x-auto">
-                                                <code className="text-sm text-gray-800">{section.value}</code>
+                                            <pre className="bg-blue-100 p-4 rounded-md overflow-x-auto">
+                                                <code className="text-lg text-green-900">{section.value}</code>
                                             </pre>
                                         )}
                                         {section.type === 'unorderedList' && (
@@ -91,7 +92,7 @@ const CourseDetail = () => {
                                             </ul>
                                         )}
                                         {section.type === 'orderedList' && (
-                                            <ol className="list-decimal list-outside pl-4 mb-4 text-lg text-gray-800">
+                                            <ol className="list-decimal list-outside pl-4 mb-4 text-lg text-orange-800">
                                                 {Array.isArray(section.value) ? section.value.map((item, itemIndex) => (
                                                     <li key={itemIndex}>{item}</li>
                                                 )) : null}
@@ -137,6 +138,7 @@ const CourseDetail = () => {
                     </button>
                 </div>
             )}
+            <Footer/>
         </div>
     );
 };

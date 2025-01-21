@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
           children // Render the specific page content when loaded
         )}
         <div className="contaier mx-12">
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </main>
     </div>

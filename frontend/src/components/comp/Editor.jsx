@@ -1,40 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Editor } from '@monaco-editor/react';
 import axios from 'axios';
-import { getDatabase, ref, set, get, child } from "firebase/database"; // Firebase DB for storing notebooks
-import { FaJs, FaPython, FaCode } from "react-icons/fa";
+import Select from "react-select";
+import { FaPlay, FaSave, FaFolderOpen, FaCog,FaJs, FaPython, FaCode } from 'react-icons/fa';
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import { getDatabase, ref, set, get, child } from 'firebase/database';
 
 const Editors = ({ userId }) => {
-    const [code, setCode] = useState('// Write your code here');
+    const handleChange = (selectedOption) => {
+        console.log(selectedOption.value); // Set this to update your state
+    };
+    const [code, setCode] = useState('');
     const [output, setOutput] = useState('');
-    const [language, setLanguage] = useState('javascript'); // default language
-    const [notebooks, setNotebooks] = useState([]); // for listing user's notebooks
-    const [isEditing, setIsEditing] = useState(false);
-    const [selectedNotebook, setSelectedNotebook] = useState(null); // selected notebook for editing
-    const [inputFile, setInputFile] = useState(''); // input for code execution
+    const [language, setLanguage] = useState('javascript');
+    const [inputFile, setInputFile] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [theme, setTheme] = useState('vs-dark');
+    const [isTyping, setIsTyping] = useState(false);
+    const [typewriterIndex, setTypewriterIndex] = useState(0);
 
     const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
-    const API_KEY = '292d6006e0msh45dec22d646b1fcp1772ebjsne4e23b07d21f'; // Your API key from RapidAPI
-
-    useEffect(() => {
-        fetchNotebooks(); // Fetch user's notebooks on load
-    }, []);
+    const API_KEY = '292d6006e0msh45dec22d646b1fcp1772ebjsne4e23b07d21f';
 
     const handleRun = async () => {
+        setLoading(true);
+
         const languageMapping = {
             javascript: 63,
             python: 71,
-            cpp: 54
+            cpp: 54,
         };
-        const languageId = languageMapping[language];
 
         try {
             const response = await axios.post(
                 `${JUDGE0_API_URL}?base64_encoded=false&wait=true`,
                 {
                     source_code: code,
-                    language_id: languageId,
-                    stdin: inputFile, // Pass the input file content as stdin
+                    language_id: languageMapping[language],
+                    stdin: inputFile,
                 },
                 {
                     headers: {
@@ -44,184 +47,240 @@ const Editors = ({ userId }) => {
                 }
             );
             const result = response.data;
-            setOutput(result.stdout || result.stderr || 'Error running code');
+            setOutput(result.stdout || result.stderr || 'Error occurred.');
         } catch (error) {
-            setOutput('Error connecting to the compiler API.');
-            console.error(error);
+            setOutput('Error: Unable to process the code.');
+        } finally {
+            setLoading(false);
+        }
+    };
+    const options = [
+        { value: "javascript", label: <><FaJs /> JavaScript</> },
+        { value: "python", label: <><FaPython /> Python</> },
+        { value: "cpp", label: <><FaCode /> C++</> },
+    ];
+    const handleSave = async () => {
+        if (!userId) {
+            alert('Please log in to save your code.');
+            return;
+        }
+        try {
+            const db = getDatabase();
+            await set(ref(db, 'users/' + userId + '/code'), {
+                code,
+                language,
+            });
+            alert('Code saved successfully!');
+        } catch (error) {
+            alert('Error saving the code.');
         }
     };
 
-    // Fetch user notebooks from the database
-    const fetchNotebooks = async () => {
-        const db = getDatabase();
-        const dbRef = ref(db);
-
+    const handleLoad = async () => {
+        if (!userId) {
+            alert('Please log in to load your code.');
+            return;
+        }
         try {
-            const snapshot = await get(child(dbRef, `notebooks/${userId}`));
+            const db = getDatabase();
+            const snapshot = await get(child(ref(db), 'users/' + userId + '/code'));
             if (snapshot.exists()) {
-                setNotebooks(snapshot.val());
+                const savedCode = snapshot.val();
+                setCode(savedCode.code);
+                setLanguage(savedCode.language);
+                alert('Code loaded successfully!');
             } else {
-                setNotebooks([]);
+                alert('No saved code found.');
             }
         } catch (error) {
-            console.error("Error fetching notebooks:", error);
+            alert('Error loading the code.');
+        }
+    };
+    const customStyles = {
+        control: (base, state) => ({
+          ...base,
+          borderColor: state.isFocused ? "yellow" : "#E5E7EB",
+          boxShadow: state.isFocused ? "0 0 0 2px rgba(99, 102, 241, 0.5)" : "none",
+          "&:hover": {
+            borderColor: "#4F46E5",
+          },
+         
+       
+        }),
+        option: (base, state) => ({
+          ...base,
+          backgroundColor: state.isFocused ? "#4F46E5" : "#FFFFFF",
+          color: state.isFocused ? "#FFFFFF" : "#000000",
+          "&:hover": {
+            backgroundColor: "#4F46E5",
+            color: "#FFFFFF",
+          },
+          
+        }),
+        menu: (base) => ({
+          ...base,
+          borderRadius: "0.5rem",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      
+        }),
+      };
+    const handleDelete = () => {
+        setCode('');
+        setOutput('');
+    };
+
+    const handleThemeChange = () => {
+        setTheme(theme === 'vs-dark' ? 'light' : 'vs-dark');
+    };
+
+    // Typewriter effect function
+    const typeWriterEffect = (text, index = 0) => {
+        if (index < text.length) {
+            setCode((prevCode) => prevCode + text.charAt(index));
+            setTypewriterIndex(index + 1);
+        } else {
+            setIsTyping(false); // Stop typing when done
         }
     };
 
-    // Load notebook content into the editor
-    const handleNotebookLoad = (notebook) => {
-        setSelectedNotebook(notebook);
-        setCode(notebook.code);
-        setLanguage(notebook.language);
-        setIsEditing(true);
+    const startTypewriter = (text) => {
+        setCode('');
+        setIsTyping(true);
+        let index = 0;
+        setTypewriterIndex(index);
+        const typingInterval = setInterval(() => {
+            typeWriterEffect(text, index);
+            index++;
+            if (index >= text.length) {
+                clearInterval(typingInterval); // Stop the interval when done
+            }
+        }, 100); // Adjust typing speed here (ms per character)
     };
 
-    // Save or Update notebook in the database
-    const handleSave = () => {
-        const db = getDatabase();
-        const notebookData = {
-            code,
-            language,
-        };
+    // Example of initializing typewriter effect with a default code (optional)
+    useEffect(() => {
+        const sampleCode = `// Sample JavaScript Code
+function greet(name) {
+  return 'Hello, ' + name;
+}
 
-        const notebookId = selectedNotebook?.id || Date.now().toString(); // use existing id if editing
-        set(ref(db, `notebooks/${userId}/${notebookId}`), notebookData)
-            .then(() => {
-                console.log("Notebook saved successfully!");
-                setIsEditing(false);
-                fetchNotebooks(); // refresh the notebook list
-            })
-            .catch((error) => {
-                console.error("Error saving notebook:", error);
-            });
-    };
-
-    // Handle input file upload
-    const handleInputUpload = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            setInputFile(reader.result); // Set the file content as input
-        };
-        reader.readAsText(file);
-    };
+console.log(greet('World'));`;
+        if (!isTyping && !code) {
+            startTypewriter(sampleCode);
+        }
+    }, [isTyping, code]);
 
     return (
-        <div className="flex flex-col w-full h-screen">
-            {/* Top bar */}
-            <div className="flex bg-gray-100 p-4 border-b border-gray-300">
-                <div className="relative">
-                <button className="mr-4 px-4 py-2 text-sm font-medium text-white bg-black hover:bg-gray-800 rounded-md shadow-sm">
-    File
-</button>
+        <div className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col">
+            {/* Header Section */}
+            <header className="flex justify-between items-center px-6 py-4 bg-yellow-400 shadow-lg">
 
-                    {/* Dropdown for notebooks */}
-                    <div className="absolute hidden group-hover:block bg-white shadow-md p-2 mt-2 border">
-                        <h3 className="text-md font-semibold">Saved Notebooks</h3>
-                        {notebooks.length ? (
-                            notebooks.map((nb, index) => (
-                                <button
-                                    key={index}
-                                    className="block px-4 py-2"
-                                    onClick={() => handleNotebookLoad(nb)}
-                                >
-                                    {nb.id || `Notebook ${index + 1}`}
-                                </button>
-                            ))
-                        ) : (
-                            <p className="px-4 py-2">No saved notebooks</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* Edit/Save Button */}
-                <button
-                    onClick={isEditing ? handleSave : () => setIsEditing(true)}
-                    className="mr-4 px-4 py-2 text-sm font-medium bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                    {isEditing ? 'Save' : 'Edit'}
-                </button>
-
-                {/* View Menu */}
-                <button className="mr-4 px-4 py-2 text-sm font-medium bg-yellow-500 dark:bg-yellow-700 dark:hover:bg-yellow-600 hover:bg-gray-yellow rounded-md shadow-sm">
-                        View
-                    </button>
-
-                {/* Run Button */}
-                <button
-                    onClick={handleRun}
-                    className="px-4 py-2 text-sm font-medium bg-green-500 text-white rounded-md hover:bg-green-600"
-                >
-                    Run
-                </button>
-
-               
-            </div>
-
-            {/* Main layout */}
-            <div className="flex flex-col md:flex-row h-full">
-                {/* Code Editor */}
-                <div className="flex flex-col flex-1 p-4 border-b md:border-r border-gray-300">
-                    <div className="mb-4">
-                        <label htmlFor="language" className="block mb-2 font-medium">Choose Language:</label>
-                        <select
-                            id="language"
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
-                            className="p-2 border border-gray-300 rounded"
-                        >
-                            <option value="javascript">JavaScript</option>
-                            <option value="python">Python</option>
-                            <option value="cpp">C++</option>
-                        </select>
-                    </div>
-
-                    <Editor
-                        height="300px" // Adjust the height for smaller screens
-                        language={language}
-                        value={code}
-                        onChange={(value) => setCode(value)}
-                        className="border border-gray-300 rounded"
-                    />
-
+                <h1 className="text-2xl font-bold tracking-wide">💻 Code Editor</h1>
+                <div className="flex space-x-4">
                     <button
                         onClick={handleRun}
-                        className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-blue-600"
+                        className="flex items-center px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600 shadow-md transition-all duration-300"
                     >
-                        Run Code
+                        <FaPlay className="mr-2" /> Run
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        className="flex items-center px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 shadow-md transition-all duration-300"
+                    >
+                        <FaSave className="mr-2" /> Save
+                    </button>
+                    <button
+                        onClick={handleLoad}
+                        className="flex items-center px-4 py-2 bg-yellow-500 rounded-lg hover:bg-yellow-600 shadow-md transition-all duration-300"
+                    >
+                        <FaFolderOpen className="mr-2" /> Load
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        className="flex items-center px-4 py-2 bg-red-500 rounded-lg hover:bg-red-600 shadow-md transition-all duration-300"
+                    >
+                        <RiDeleteBin5Line className="mr-2" /> Clear
+                    </button>
+                    <button
+                        onClick={handleThemeChange}
+                        className="flex items-center px-4 py-2 bg-gray-500 rounded-lg hover:bg-gray-600 shadow-md transition-all duration-300"
+                    >
+                        <FaCog className="mr-2" /> Theme
                     </button>
                 </div>
+            </header>
 
-                {/* Input Upload Section */}
-                <div className="flex flex-col w-full md:w-1/4 p-6 h-auto bg-white shadow-md rounded-lg border border-gray-200">
-            <h3 className="text-lg font-semibold mb-4 text-gray-700 border-b pb-2">
-                Upload Your File
-            </h3>
-            <div className="flex flex-col items-center">
-                <label
-                    htmlFor="file-upload"
-                    className="cursor-pointer bg-yellow-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >
-                    Choose File
-                </label>
-                <input
-                    id="file-upload"
-                    type="file"
-                    onChange={handleInputUpload}
-                    className="hidden"
-                    accept=".txt"
-                />
-                <p className="mt-2 text-sm text-gray-500">
-                    Supported format: <span className="font-semibold">.txt</span>
-                </p>
-            </div>
-        </div>
+            {/* Main Content */}
+            <div className="flex flex-1 flex-col lg:flex-row">
+                {/* Code Editor Section */}
+                <section className="flex-1 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 className="text-xl font-semibold">Code Editor</h2>
+                            <p className="text-sm text-gray-400">Write your code below</p>
+                        </div>
+                        <div className="flex justify-center items-center  bg-gray-100">
+      <div className="w-64">
+        <Select
+          options={options}
+          onChange={handleChange}
+          styles={customStyles}
+         
+          classNamePrefix="react-select"
+        />
+      </div>
+    </div>
+                    </div>
+                    <div className="h-[400px] bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+                        <Editor
+                            height="100%"
+                            language={language}
+                            value={code}
+                            onChange={(value) => setCode(value)}
+                            theme={theme}
+                        />
+                    </div>
+                </section>
+
+                {/* Input File Section */}
+                <aside className="w-full lg:w-1/4 p-6 bg-gray-900 border-l border-gray-800 shadow-lg">
+                    <h2 className="text-lg font-semibold mb-4">Input</h2>
+                    <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                        <label
+                            htmlFor="file-upload"
+                            className="cursor-pointer px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-black transition-all"
+                        >
+                            Upload Input File
+                        </label>
+                        <input
+                            id="file-upload"
+                            type="file"
+                            className="hidden"
+                            onChange={(e) =>
+                                e.target.files[0]
+                                    .text()
+                                    .then((text) => setInputFile(text))
+                            }
+                        />
+                        <p className="mt-2 text-sm text-gray-400">
+                            Supported format: <span className="text-gray-200">.txt</span>
+                        </p>
+                    </div>
+                </aside>
 
                 {/* Output Section */}
-                <div className="flex flex-col w-full md:w-1/4 p-4 h-auto">
-                    <h3 className="text-lg font-medium mb-2">Output</h3>
-                    <pre className="p-2 bg-gray-100 border border-gray-300 rounded h-full">{output}</pre>
-                </div>
+                <aside className="w-full lg:w-1/4 p-6 bg-gray-900 border-l border-gray-800 shadow-lg">
+                    <h2 className="text-lg font-semibold mb-4">Output</h2>
+                    <div className="bg-gray-800 p-4 rounded-lg shadow-md h-[400px] overflow-auto">
+                        {loading ? (
+                            <div className="text-center text-yellow-400">
+                                Running your code...
+                            </div>
+                        ) : (
+                            <pre className="whitespace-pre-wrap text-sm text-gray-200">{output || 'No output yet.'}</pre>
+                        )}
+                    </div>
+                </aside>
             </div>
         </div>
     );
