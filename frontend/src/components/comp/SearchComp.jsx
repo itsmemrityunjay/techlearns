@@ -254,7 +254,7 @@ const Searchbar = () => {
           </div>
         </div>
         <CourseBanner />
-        {/* <Footer/> */}
+        <Footer/>
       </div>
     </div>
   );

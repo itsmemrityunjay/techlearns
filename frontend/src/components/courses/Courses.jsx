@@ -19,22 +19,61 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Typewriter } from "react-simple-typewriter";
+import {
+  Search,
+  FilterList,
+  List,
+  StarBorder,
+  Flag,
+  Science,
+  People,
+  Celebration,
+  SmartToy,
+  BarChart,
+} from "@mui/icons-material";
+import CourseBanner from "../comp/divider";
 // CourseCard Component
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination,Navigation, Autoplay  } from "swiper/modules"; // Import the Pagination module
+import "swiper/css/navigation";
+import { Navigations } from 'swiper/modules'; // Correct import for Navigation module
+
+
 const CourseCard = ({ title, description, icon, onClick }) => (
+<div
+  onClick={onClick}
+  className="relative flex items-start p-6 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-xl shadow-md transition-all duration-300 cursor-pointer hover:scale-105"
+>
+  {/* Decorative Border */}
   <div
-    onClick={onClick}
-    className="flex items-start p-4 dark:bg-gray-800 dark:text-white text-dark rounded-md mb-4 cursor-pointer hover:shadow-lg transition-shadow"
-  >
-    <div className="text-3xl mr-4">
-      <img src={icon} alt="icon" height={72} width={72} />
-    </div>
-    <div>
-      <h3 className="text-lg font-semibold">{title}</h3>
-      <p className="text-sm">{description}</p>
-    </div>
+    className="absolute inset-0 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-500 to-yellow-800 opacity-0 pointer-events-none"
+  ></div>
+
+  {/* Icon Section */}
+  <div className="flex-shrink-0 bg-yellow-400 dark:bg-yellow-600 text-yellow-600 dark:text-white p-5 rounded-full shadow-md mr-5">
+    <img src={icon} alt="icon" height={48} width={48} className="w-12 h-12" />
   </div>
+
+  {/* Content Section */}
+  <div className="flex flex-col justify-center">
+    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+  </div>
+
+  {/* Action Area (Optional, can be removed if not needed) */}
+  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 p-3 bg-yellow-500 text-white rounded-full opacity-0">
+    <span className="text-sm font-semibold">Learn More</span>
+  </div>
+</div>
+
+
+
+
 );
+
 
 const Courses = () => {
   const allCourse = [];
@@ -70,13 +109,13 @@ const Courses = () => {
 
   const instructors = [
     {
-      name: "Dr. Angela Yu",
-      title: "Developer and Lead Instructor",
-      skills: "Python, Data Science",
-      rating: 4.7,
-      students: "2,984,715",
-      courses: 7,
-      img: "https://img-c.udemycdn.com/user/200_H/31334738_a13c_3.jpg", // Replace with actual image URL
+      name: "Academind by Maximilian Schwarzmüller",
+      title: "React JS, React Hooks",
+      skills: "React JS, React Hooks",
+      rating: 4.6,
+      students: "3,150,276",
+      courses: "48  courses",
+      img: "https://img-c.udemycdn.com/user/200_H/9685726_67e7_4.jpg", // Replace with actual image URL
     },
     {
       name: "Academind by Maximilian Schwarzmüller",
@@ -84,7 +123,7 @@ const Courses = () => {
       skills: "React JS, React Hooks",
       rating: 4.6,
       students: "3,150,276",
-      courses: 48,
+      courses: "48  courses",
       img: "https://img-c.udemycdn.com/user/200_H/9685726_67e7_4.jpg", // Replace with actual image URL
     },
     {
@@ -126,7 +165,7 @@ const Courses = () => {
   const handleButtonClick = () => {
     navigate("/discussion"); // Redirect to discussion page on button click
   };
-
+  
   return (
     <div className="container mx-auto py-4">
       <div className="relative inline-block text-left ">
@@ -163,95 +202,87 @@ const Courses = () => {
             />
           </div>
         </div>
-        <div className="relative bg-gradient-to-br rounded-xl from-white via-teal-50 to-teal-40 py-12">
-          {/* Left Icon */}
-          <div className="absolute top-16 left-6 text-teal-400">
-            <FontAwesomeIcon icon={faPaperPlane} size="3x" />
-          </div>
+     
+        <div className="relative w-full max-w-8xl rounded-3xl overflow-hidden py-16 px-4 sm:px-8 lg:px-16">
+      {/* Icons */}
+      <div className="absolute top-12 left-8 text-yellow-400">
+        <FontAwesomeIcon icon={faPaperPlane} size="4x" className="animate-bounce" />
+      </div>
+      <div className="absolute top-12 right-8 text-yellow-400">
+        <FontAwesomeIcon icon={faCloud} size="4x" className="animate-bounce" />
+      </div>
 
-          {/* Right Icon */}
-          <div className="absolute top-16 right-6 text-teal-400">
-            <FontAwesomeIcon icon={faCloud} size="3x" />
-          </div>
+      {/* Content */}
+      <div className="text-center">
+      <span className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-lg uppercase tracking-wide px-6 py-2 rounded-full shadow-lg mb-6">
+  Why Choose Us
+</span>
 
-          {/* Content */}
-          <div className="text-center">
-            {/* Badge */}
-            <div className="inline-block px-6 py-2 mb-6 bg-teal-200 text-teal-800 font-bold text-lg rounded-full uppercase tracking-wide shadow-md">
-              Why Choose Us
-            </div>
+        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+          Dive into Online Courses on{' '}
+          <br className="hidden md:block" />
+          Diverse Subjects
+        </h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Explore a wide range of topics with engaging, interactive lessons designed
+          to help you learn at your own pace.
+        </p>
+      </div>
 
-            {/* Heading */}
-            <h1 className="text-3xl md:text-5xl font-extrabold text-gray-800 leading-snug">
-              Dive into online courses on <br /> diverse subjects
-            </h1>
+      {/* Feature Cards */}
+   {/* Feature Cards */}
+   <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {[
+        {
+          icon: '💻',
+          title: 'Progress Tracking & Certifications',
+          description:
+            'Track your progress with features like completion percentage, module achievements, and certificates.',
+          gradient: 'bg-gradient-to-r from-orange-500 to-orange-300',
+        },
+        {
+          icon: '🌐',
+          title: 'Accessibility & Convenience',
+          description:
+            'Flexible learning anytime, anywhere, making education accessible to everyone.',
+          gradient: 'bg-gradient-to-r from-blue-500 to-blue-300',
+        },
+        {
+          icon: '📚',
+          title: 'Diverse Course Selection',
+          description:
+            'A wide range of courses to choose from, helping you explore and acquire new skills.',
+          gradient: 'bg-gradient-to-r from-yellow-500 to-yellow-300',
+        },
+        {
+          icon: '📊',
+          title: 'Interactive Learning Experience',
+          description:
+            'Enhance your learning with quizzes, exercises, and discussion forums.',
+          gradient: 'bg-gradient-to-r from-green-500 to-green-300',
+        },
+      ].map((feature, index) => (
+        <div 
+          key={index}
+          className="bg-white rounded-3xl shadow-md p-6 hover:shadow-xl transition-all transform hover:scale-105 border-2 border-yellow"
+        >
+          <div
+            className={`${feature.gradient} p-5 rounded-full text-4xl text-white flex items-center justify-center shadow-lg`}
+          >
+            {feature.icon}
           </div>
-
-          {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-8xl justify-center items-center mx-auto mt-12">
-            {/* Card Template */}
-            {[
-              {
-                bg: "bg-orange-100",
-                text: "text-orange-500",
-                title: "Progress Tracking and Certifications",
-                description:
-                  "Track your progress with features like completion percentage, module achievements, and certificates.",
-              },
-              {
-                bg: "bg-blue-100",
-                text: "text-blue-500",
-                title: "Accessibility and Convenience",
-                description:
-                  "Flexible learning, anytime and anywhere, making education accessible to everyone.",
-              },
-              {
-                bg: "bg-yellow-100",
-                text: "text-yellow-500",
-                title: "Diverse Course Selection",
-                description:
-                  "A wide range of courses to choose from, helping you explore and acquire new skills.",
-              },
-              {
-                bg: "bg-green-100",
-                text: "text-green-500",
-                title: "Interactive Learning Experience",
-                description:
-                  "Enhance your learning with quizzes, exercises, and discussion forums.",
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-xl rounded-3xl p-4 mx-12 flex items-start transform transition hover:scale-105 hover:shadow-2xl"
-              >
-                <div className={`${feature.bg} p-5 rounded-xl`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-10 w-10 ${feature.text}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </div>
-                <div className="ml-6">
-                  <h4 className="text-xl font-semibold text-gray-800">
-                    {feature.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 mt-3 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h4 className="text-xl font-semibold text-gray-800 mt-6">
+            {feature.title}
+          </h4>
+          <p className="text-base text-gray-600 mt-2 leading-relaxed">
+            {feature.description}
+          </p>
         </div>
+      ))}
+    </div>
+
+    </div>
+
         {/* Dropdown Trigger */}
       </div>
 
@@ -298,364 +329,414 @@ const Courses = () => {
         </p>
 
         <div
-          className={`grid gap-6 ${view === "flex" ? "grid-cols-1" : "grid-cols-3"
-            }`}
+  className={`grid gap-6 ${
+    view === "flex" ? "grid-cols-1" : "grid-cols-3"
+  }`}
+>
+  {allCourses.map((course) => (
+    <CourseCard
+      key={course.id || course.title}
+      title={course.title}
+      description={course.description}
+      icon={course.icon || "📘"}
+      onClick={() => navigate(`/courses/${course.id || course.title}`)}
+
+      className="relative p-6 bg-white border-2 rounded-xl shadow-md 
+                 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl
+                 hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 group"
+    >
+      {/* Gradient Border */}
+      <div
+        className="absolute inset-0 rounded-xl border-2 
+                   border-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 
+                   opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      ></div>
+
+      {/* Card Content */}
+      <div className="relative z-10 flex flex-col items-start">
+        <div
+          className="text-3xl mb-4 p-4 bg-purple-100 text-purple-600 
+                     rounded-full shadow-md transition-all duration-300 group-hover:scale-110"
         >
-          {allCourses.map((course) => (
-            <CourseCard
-              key={course.id || course.title}
-              title={course.title}
-              description={course.description}
-              icon={course.icon || "📘"}
-              onClick={() => navigate(`/courses/${course.id || course.title}`)}
-              className="relative p-6 bg-yellow border-2 border-gray-300 rounded-lg shadow-md transform transition-all duration-300 
-                 hover:shadow-2xl hover:-translate-y-2 hover:border-transparent hover:bg-gradient-to-r hover:from-blue-100 hover:to-blue-200"
-            />
-          ))}
+          {course.icon}
         </div>
-        <div className="text-black min-h-[500px]  flex items-center justify-center px-2 ">
-          <div className="w-full max-w-8xl">
-            {/* Heading Section */}
-            <div className="border-b border-gray-300 pb-4">
-              <nav className="flex space-x-8 text-sm font-semibold">
-                <button
-                  className="px-6 py-2 text-yellow-600 border-b-2 border-yellow-500 hover:border-yellow-600"
-                  onClick={() => scrollToSection("about")}
-                >
-                  About
-                </button>
-                <button
-                  className="px-6 py-2 text-gray-500 hover:text-yellow-600 border-b-2 border-transparent hover:border-yellow-600"
-                  onClick={() => scrollToSection("modules")}
-                >
-                  Modules
-                </button>
-                <button
-                  className="px-6 py-2 text-gray-500 hover:text-yellow-600 border-b-2 border-transparent hover:border-yellow-600"
-                  onClick={() => scrollToSection("recommendations")}
-                >
-                  Recommendations
-                </button>
-                <button
-                  className="px-6 py-2 text-gray-500 hover:text-yellow-600 border-b-2 border-transparent hover:border-yellow-600"
-                  onClick={() => scrollToSection("testimonials")}
-                >
-                  Testimonials
-                </button>
-                <button
-                  className="px-6 py-2 text-gray-500 hover:text-yellow-600 border-b-2 border-transparent hover:border-yellow-600"
-                  onClick={() => scrollToSection("reviews")}
-                >
-                  Reviews
-                </button>
-              </nav>
-            </div>
+        <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-purple-600">
+          {course.title}
+        </h3>
+        <p className="text-sm text-gray-600 group-hover:text-gray-800">
+          {course.description}
+        </p>
+      </div>
+    </CourseCard>
+  ))}
+</div>
 
-            {/* Spacing and Heading */}
-            <div className="mt-10 text-center">
-              <h1 className="text-xl md:text-3xl font-extrabold text-gray-800">
-                Creative Learning Made Easy
-              </h1>
-            </div>
-
-            {/* Enhanced List Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-              {[
-                "Thousands of creative classes. Beginner to pro.",
-                "Taught by creative pros and industry icons.",
-                "Learning Paths to help you achieve your goals.",
-                "Certificates to celebrate your accomplishments.",
-                "Access to exclusive content for all skill levels.",
-                "Step-by-step tutorials for hands-on learning.",
-              ].map((text, index) => (
-                <div key={index} className="flex items-start">
-                  <span className="text-green-500 text-2xl mr-4">✔</span>
-                  <span className="text-sm md:text-base text-gray-700">
-                    {text}
-                  </span>
+        <div className="p-20">
+        {/* Main Grid Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Left Section */}
+          <div className="space-y-10">
+            {/* Peace of Mind Card */}
+            <div className="flex items-center gap-8">
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
+                  </div>
                 </div>
-              ))}
-            </div>
 
-            {/* Stats Section */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
-              {[
-                { value: "25K+", label: "CLASSES" },
-                { value: "600K+", label: "MEMBERS" },
-                { value: "8K+", label: "TEACHERS" },
-                { value: "4.8 ★★★★☆", label: "COURSES RATING" },
-              ].map((stat, index) => (
-                <div
-                  key={index}
-                  className="bg-[#ffa800] rounded-full py-2 px-1 text-center"
-                >
-                  <h2 className="text-lg md:text-1xl font-bold text-gray-800">
-                    {stat.value}
-                  </h2>
-                  <p className="text-xs md:text-sm mt-2 text-gray-700">
-                    {stat.label}
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">
+                    Take care of your mental well-being effectively.
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="mt-8"></div>
-        <div className="flex items-center"></div>
-        <div className="h-auto dark:bg-gray-900" />
-      </div>
-      <section id="modules" className="mb-10"></section>
-
-      <section id="recommendations" className="mb-10"></section>
-
-      <div className="p-8 bg-gradient-to-r from-#fcf9f591-50 via-gray-50 to-yellow-100 min-h-screen flex flex-col items-center">
-        <section id="testimonials" className="mb-10"></section>
-        <h1 className="text-4xl font-extrabold mb-12 text-gray-800 tracking-wide text-left">
-          Learning Focused on Your Goals
-        </h1>
-
-        <div className="flex flex-col lg:flex-row w-full  gap-10">
-          {/* Left Side (Goals Section) */}
-          <div className="flex flex-col gap-6">
-            {/* Card 1 */}
-            <div className="p-6 border-2 border-yellow-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-yellow-50 to-purple-50 transition-all duration-300 hover:scale-105">
-              <h2 className="text-2xl font-bold text-yellow-600 mb-2">
-                Hands-on Training
-              </h2>
-              <p className="text-gray-700">
-                Upskill effectively with AI-powered coding exercises, practice
-                tests, and quizzes.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="p-6 border-2 border-purple-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-purple-50 to-purple-100 transition-all duration-300 hover:scale-105">
-              <h2 className="text-2xl font-bold text-purple-600 mb-2">
-                Certification Prep
-              </h2>
-              <p className="text-gray-700">
-                Prep for industry-recognized certifications by solving
-                real-world challenges and earning badges along the way.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-6 border-2 border-blue-400 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-blue-50 to-blue-100 transition-all duration-300 hover:scale-105">
-              <h2 className="text-2xl font-bold text-blue-600 mb-2">
-                Certification Prep
-              </h2>
-              <p className="text-gray-700">
-                Prep for industry-recognized certifications by solving
-                real-world challenges and earning badges along the way.
-              </p>
-            </div>
-
-            {/* Card 4 */}
-            <div className="p-6 border-2 border-green-400 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-green-50 to-green-100 transition-all duration-300 hover:scale-105 flex items-start justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-green-600 mb-2">
-                  Insights and Analytics
-                </h2>
-                <p className="text-gray-700">
-                  Fast-track goals with advanced insights plus a dedicated
-                  customer success team to help drive effective learning.
-                </p>
               </div>
-              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full ml-4">
-                Enterprise Plan
-              </span>
+
+              <div className="flex flex-col items-end">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+                />
+              </div>
+
+
+            </div>
+
+            {/* Mental Health Card */}
+            <div className="flex items-center gap-8">
+              <div className="flex flex-col items-end">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
+                />
+              </div>
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
+                  </div>
+                </div>
+
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">
+                    Take care of your mental well-being effectively.
+                  </p>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* Right Side (Score Section) */}
-          <div className="p-8 border-2 border-gray-300 rounded-lg shadow-2xl bg-white flex-grow max-w-md hover:shadow-purple-300 hover:border-purple-400 transition-all duration-300 hover:scale-105">
-            <h2 className="text-3xl font-extrabold text-gray-800 mb-6 tracking-wide">
-              Containerization
+
+          {/* Right Section */}
+
+          <div className="flex flex-col items-start justify-start pt-24">
+            <h2 className="text-2xl font-bold text-yellow-500 tracking-[0.3em]">
+              Techlearns
             </h2>
-            <p className="text-gray-600 mb-4 text-lg">30 Questions</p>
 
-            <div className="mb-6">
-              <p className="text-5xl font-extrabold text-yellow-500">
-                Your Score: 159
+            <div className="mt-6 text-left">
+            <h2 className="text-4xl font-bold text-gray-800">
+        <Typewriter
+          words={['Every Story Has Its Purpose']}
+          loop={10} // Number of loops (you can set it to Infinity for continuous typing)
+          cursor
+          cursorStyle="_" // You can customize the cursor style
+          typeSpeed={100} // Speed at which characters are typed (in ms)
+          deleteSpeed={50} // Speed at which characters are deleted
+          delaySpeed={1500} // Delay before starting to type
+        />
+      </h2>
+
+              <p className="text-lg text-gray-600 mt-4">
+                Wondering how many times a day you're in a mindful state? Check your score. The higher the score, the greater your ability to be mindful.
               </p>
-              <div className="mt-4 border-t border-gray-200">
-                <table className="w-full text-sm mt-2">
-                  <tbody>
-                    <tr className="text-yellow-500 font-semibold">
-                      <td>Superior</td>
-                      <td className="text-right">150-200</td>
-                    </tr>
-                    <tr className="text-gray-700">
-                      <td>Established</td>
-                      <td className="text-right">100-149</td>
-                    </tr>
-                    <tr className="text-gray-700">
-                      <td>Developing</td>
-                      <td className="text-right">50-99</td>
-                    </tr>
-                    <tr className="text-gray-700">
-                      <td>Limited</td>
-                      <td className="text-right">0-49</td>
-                    </tr>
-                  </tbody>
-                </table>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+
+      
+        
+      <div className="bg-gray-50 dark:bg-gray-900 min-h-screen py-12 px-6">
+  <div className="max-w-7xl mx-auto">
+    <h1 className="text-4xl font-extrabold text-gray-800 mb-12 text-center tracking-wide">
+      Learning Focused on Your Goals
+    </h1>
+
+    <div className="flex flex-col lg:flex-row gap-12">
+      {/* Left Section: Goals */}
+      <div className="flex flex-col gap-6 flex-grow">
+        {/* Card 1 */}
+        <div className="p-6 border-2 border-yellow-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-yellow-50 to-yellow-100 transition-all duration-300 hover:scale-105">
+          <h2 className="text-2xl font-bold text-yellow-600 mb-2">
+            Hands-on Training
+          </h2>
+          <p className="text-gray-700">
+            Upskill effectively with AI-powered coding exercises, practice tests, and quizzes.
+          </p>
+        </div>
+
+        {/* Card 2 */}
+        <div className="p-6 border-2 border-purple-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-purple-50 to-purple-100 transition-all duration-300 hover:scale-105">
+          <h2 className="text-2xl font-bold text-purple-600 mb-2">
+            Certification Prep
+          </h2>
+          <p className="text-gray-700">
+            Prep for industry-recognized certifications by solving real-world challenges and earning badges along the way.
+          </p>
+        </div>
+
+        {/* Card 3 */}
+        <div className="p-6 border-2 border-blue-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-blue-50 to-blue-100 transition-all duration-300 hover:scale-105">
+          <h2 className="text-2xl font-bold text-blue-600 mb-2">
+            Insights and Analytics
+          </h2>
+          <p className="text-gray-700">
+            Fast-track goals with advanced insights plus a dedicated customer success team to help drive effective learning.
+          </p>
+          <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full mt-4 inline-block">
+            Enterprise Plan
+          </span>
+        </div>
+
+        {/* Card 4 */}
+        <div className="p-6 border-2 border-green-500 rounded-lg shadow-lg bg-white hover:bg-gradient-to-r from-green-50 to-green-100 transition-all duration-300 hover:scale-105">
+          <h2 className="text-2xl font-bold text-green-600 mb-2">
+            Customizable Content
+          </h2>
+          <p className="text-gray-700">
+            Create tailored learning paths for team and organization goals and even host your own content and resources.
+          </p>
+          <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full mt-4 inline-block">
+            Enterprise Plan
+          </span>
+        </div>
+      </div>
+
+      {/* Right Section: Score */}
+      <div className="p-8 border-2 border-gray-200 rounded-lg shadow-2xl bg-white flex-grow max-w-lg hover:shadow-purple-300 hover:border-purple-400 transition-all duration-300 hover:scale-105">
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-6 tracking-wide">
+          Containerization
+        </h2>
+        <p className="text-gray-600 mb-4 text-lg">30 Questions</p>
+
+        <div className="mb-6">
+          <p className="text-5xl font-extrabold text-yellow-500">Your Score: 159</p>
+          <div className="mt-4 border-t border-gray-200">
+            <table className="w-full text-sm mt-2">
+              <tbody>
+                <tr className="text-yellow-500 font-semibold">
+                  <td>Superior</td>
+                  <td className="text-right">150-200</td>
+                </tr>
+                <tr className="text-gray-700">
+                  <td>Established</td>
+                  <td className="text-right">100-149</td>
+                </tr>
+                <tr className="text-gray-700">
+                  <td>Developing</td>
+                  <td className="text-right">50-99</td>
+                </tr>
+                <tr className="text-gray-700">
+                  <td>Limited</td>
+                  <td className="text-right">0-49</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mb-6 text-gray-700 text-center bg-purple-100 p-6 rounded-lg shadow-sm">
+          <p>
+            Your performance was better than{" "}
+            <span className="font-extrabold text-yellow-500">88%</span> of learners who have completed this assessment.
+          </p>
+        </div>
+
+        <div className="mb-6">
+          <a href="#details" className="text-yellow-500 underline hover:text-yellow-600 transition">
+            What do these numbers mean?
+          </a>
+        </div>
+
+        <div className="text-gray-700">
+          <h3 className="font-bold text-xl">Your Answers</h3>
+          <p className="text-gray-600">
+            Review your answers. Learn from these explanations of correct and incorrect response options.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+      <div className="container mx-auto py-16">
+      <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
+        Learners Are Viewing
+      </h2>
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={30}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+        pagination={{
+          clickable: true,
+          bulletClass: "swiper-pagination-bullet custom-bullet",
+        }}
+        navigation={{
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        loop={true}
+        speed={800} // Smooth transition speed in ms
+        modules={[Pagination, Navigation, Autoplay]}
+        className="mySwiper"
+      >
+        {instructors.map((course, index) => (
+          <SwiperSlide key={index}>
+            <div className="bg-white border border-yellow-400 shadow-md hover:shadow-lg rounded-lg overflow-hidden transform transition-all duration-300">
+              {/* Course Image */}
+              <div className="relative">
+                <img
+                  src={course.img}
+                  alt={course.title}
+                  className="w-full h-53 object-cover"
+                />
+                {/* Bestseller Badge */}
+                {course.isBestseller && (
+                  <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    Bestseller
+                  </span>
+                )}
+              </div>
+              {/* Course Info */}
+              <div className="p-5">
+                <h3 className="text-xl font-bold text-gray-800 truncate">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-2">{course.name}</p>
+                <p className="text-gray-500 text-sm">
+                  <strong>Skills:</strong> {course.skills}
+                </p>
+                <p className="text-gray-500 text-sm">
+                  <strong>Students:</strong> {course.students}
+                </p>
+                <p className="text-gray-500 text-sm">
+                  <strong>Courses:</strong> {course.courses}
+                </p>
+                {/* Rating */}
+                <div className="flex items-center mt-4">
+                  <span className="text-yellow-500 text-lg font-bold mr-2">
+                    {course.rating}
+                  </span>
+                  <div className="flex">
+                    {Array.from({ length: Math.round(course.rating) }).map(
+                      (_, i) => (
+                        <svg
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          className="h-5 w-5 text-yellow-400"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 .587l3.668 7.571 8.332 1.209-6.035 5.857 1.425 8.318L12 18.897l-7.39 3.645 1.425-8.318L0 9.367l8.332-1.209z" />
+                        </svg>
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
+          </SwiperSlide>
+        ))}
+        {/* Custom Swiper Navigation */}
+        <div className="swiper-button-prev text-yellow-500 hover:text-yellow-700"></div>
+        <div className="swiper-button-next text-yellow-500 hover:text-yellow-700"></div>
+      </Swiper>
 
-            <div className="mb-6 text-gray-700 text-center bg-purple-100 p-6 rounded-lg shadow-sm">
-              <p>
-                Your performance was better than{" "}
-                <span className="font-extrabold text-yellow-500">88%</span> of
-                Tech learners who have completed this assessment.
-              </p>
-            </div>
+      {/* Custom CSS for Pagination */}
+      <style jsx>{`
+        .custom-bullet {
+          background: #facc15; /* Yellow color */
+          opacity: 1;
+        }
+        .custom-bullet-active {
+          background: #fbbf24; /* Darker yellow */
+        }
+        .swiper-button-next,
+        .swiper-button-prev {
+          font-size: 1.5rem;
+        }
+      `}</style>
+    </div>
 
-            <div className="mb-6">
-              <a
-                href="#"
-                className="text-yellow-500 underline hover:text-yellow-600 transition"
-              >
-                What do these numbers mean?
-              </a>
-            </div>
+<CourseBanner></CourseBanner>
 
-            <div className="text-gray-700">
-              <h3 className="font-bold text-xl">Your Answers</h3>
-              <p className="text-gray-600">
-                Review your answers. Learn from these explanations of correct
-                and incorrect response options.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="px-4 py-8 w-full">
-        {/* Popular Topics */}
-        <div className="mb-8">
-          <section id="reviews" className="mb-10"></section>
-          <h2 className="text-2xl font-bold mb-4">Popular topics</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {[
-              "Python",
-              "Data Science",
-              "JavaScript",
-              "Java",
-              "Unity",
-              "Web Development",
-              "React JS",
-              "Unreal Engine",
-              "Machine Learning",
-              "C# (programming language)",
-            ].map((topic, index) => (
-              <button
-                key={index}
-                className="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-3xl shadow-md hover:bg-[#ffa800] hover:shadow-lg transition duration-300 ease-in-out w-full h-20 flex items-center justify-center text-lg"
-              >
-                {topic}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="py-16 bg-gradient-to-r from-yellow-50 via-white to-yellow-100 sm:px-12 lg:px-0 flex flex-col lg:flex-row items-center justify-between max-w-screen-2xl mx-auto">
+  {/* Left Text Section */}
+  <div className="lg:w-1/2 text-left">
+    {/* Heading */}
+    <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#ffa800] to-yellow-600">
+        Top Trends
+      </span>
+      for the Future of Work
+    </h1>
 
-        {/* Popular Instructors */}
-        <div className="mt-20">
-          <h2 className="text-2xl font-bold mb-4">Popular Instructors</h2>
-          <p className="text-gray-600 mb-6">
-            These real-world experts are highly rated by learners like you.
-          </p>
+    {/* Paragraph */}
+    <p className="text-gray-700 text-lg mb-8 leading-relaxed">
+      Our <span className="font-semibold text-gray-900">2025 Global Learning & Skills Trends Report</span> is out now! Find out how to build the right skills to stay ahead of rapid change in the workplace.
+    </p>
 
-          {/* Slider */}
-          <div className="relative w-full overflow-hidden">
-            {/* Slider Track */}
-            <div
-              className="flex transition-transform duration-500"
-              style={{
-                transform: `translateX(-${currentIndex * 100}%)`,
-              }}
-            >
-              {instructors.map((instructor, index) => (
-                <div
-                  key={index}
-                  className="w-full flex-shrink-0 flex flex-col items-center bg-white p-4"
-                >
-                  <img
-                    src={instructor.img}
-                    alt={instructor.name}
-                    className="w-20 h-20 rounded-full mb-4"
-                  />
-                  <h3 className="font-bold text-lg text-center">
-                    {instructor.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm text-center mb-2">
-                    {instructor.title}
-                  </p>
-                  <p className="text-sm text-center mb-4">
-                    {instructor.skills}
-                  </p>
-                  <p className="text-gray-800 text-sm">
-                    <span className="font-bold">{instructor.rating}</span> ⭐
-                    Instructor Rating
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    {instructor.students} students
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    {instructor.courses} courses
-                  </p>
-                </div>
-              ))}
-            </div>
+    {/* Call-to-Action Button */}
+    <button
+      className="bg-[#ffa800] text-white font-semibold py-3 px-8 rounded-lg hover:bg-yellow-600 hover:scale-105 transition duration-300 shadow-lg"
+      onClick={handleButtonClick}
+    >
+      Let's Discuss →
+    </button>
+  </div>
 
-            {/* Navigation Buttons */}
-            <button
-              onClick={handlePrev}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-yellow-200 hover:bg-yellow-300 text-gray-800 font-bold py-2 px-3 rounded-full shadow transition duration-300 ease-in-out"
-            >
-              &lt;
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-yellow-200 hover:bg-yellow-300 text-gray-800 font-bold py-2 px-3 rounded-full shadow transition duration-300 ease-in-out"
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="py-16 sm:px-12 lg:px-0 flex flex-col lg:flex-row items-center justify-between max-w-screen-2xl mx-auto">
-        {/* Left Text Section */}
-        <div className="lg:w-1/2 text-left">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            Top trends for the <br /> future of work
-          </h1>
-          <p className="text-gray-700 text-lg mb-8 leading-relaxed">
-            Our 2025 Global Learning & Skills
-            <br /> Trends Report is out now! Find out
-            <br />
-            how to build the skills to keep pace
-            <br /> with change.
-          </p>
-          <button
-            className="bg-[#ffa800] text-black font-medium py-3 px-6 rounded-md hover:bg-yellow-500 transition duration-300 shadow-md"
-            onClick={handleButtonClick} // Handle button click
-          >
-            Let's discuss →
-          </button>
-        </div>
+  {/* Right Image Section */}
+  <div className="lg:w-1/2 flex justify-center lg:justify-end relative">
+    <div className="relative w-full max-w-3xl">
+      {/* Main Image */}
+      <img
+        src="https://cms-images.udemycdn.com/content/c4gpjcmcsk/png/UB_Case_Studies_Booz_Allen_image.png?position=c&quality=80&x.app=portals"
+        alt="2025 Global Learning & Skills Trends Report"
+        className="w-full h-auto rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
+      />
 
-        {/* Right Image Section */}
-        <div className="lg:w-1/2 flex justify-center lg:justify-end">
-          <div className="relative w-full max-w-3xl">
-            {/* Main Image */}
-            <img
-              src="https://cms-images.udemycdn.com/content/c4gpjcmcsk/png/UB_Case_Studies_Booz_Allen_image.png?position=c&quality=80&x.app=portals"
-              alt="2025 Global Learning & Skills Trends Report"
-              className="w-full h-auto rounded-lg shadow-lg"
-            />
-            {/* Overlayed Image */}
-          </div>
-        </div>
-      </div>
+      {/* Overlay Effect */}
+      <div className="absolute inset-0 bg-black bg-opacity-20 rounded-lg opacity-0 hover:opacity-100 transition duration-300"></div>
+    </div>
+  </div>
+  
+</div>
+
+
       {/* <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
       
         <div className="max-w-lg">
@@ -729,95 +810,9 @@ const Courses = () => {
           />
         </div>
       </div> */}
-      <div className="p-8 bg-white">
-        {/* Main Grid Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left Section */}
-          <div className="space-y-8">
-            {/* Peace of Mind Card */}
-            <div className="flex items-center gap-8">
-              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-                    <img
-                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-                      alt="Mental Health Icon"
-                      className="w-8 h-8"
-                    />
-                  </div>
-                </div>
-
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-                  <p className="text-sm text-gray-600">
-                    Take care of your mental well-being effectively.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-end">
-                <img
-                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
-                  alt="Meditation Class"
-                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
-                />
-              </div>
-
-
-            </div>
-
-            {/* Mental Health Card */}
-            <div className="flex items-center gap-8">
-              <div className="flex flex-col items-end">
-                <img
-                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg?t=st=1736127108~exp=1736127708~hmac=1d5a2b5171116ed9a59acc4273c4c86dca74cc4cb03146433cd72d66c906ee87"
-                  alt="Meditation Class"
-                  className="w-full max-w-xs h-auto rounded-[90px] shadow-lg object-cover"
-                />
-              </div>
-              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md max-w-sm">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-                    <img
-                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-                      alt="Mental Health Icon"
-                      className="w-8 h-8"
-                    />
-                  </div>
-                </div>
-
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-                  <p className="text-sm text-gray-600">
-                    Take care of your mental well-being effectively.
-                  </p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-
-          {/* Right Section */}
-
-          <div className="flex flex-col items-start justify-start pt-24">
-            <h2 className="text-2xl font-bold text-yellow-500 tracking-[0.3em]">
-              Techlearns
-            </h2>
-
-            <div className="mt-6 text-left">
-              <h2 className="text-4xl font-bold text-gray-800">
-                Every Story Has Its Purpose
-              </h2>
-              <p className="text-lg text-gray-600 mt-4">
-                Wondering how many times a day you're in a mindful state? Check your score. The higher the score, the greater your ability to be mindful.
-              </p>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
+     
+    
+   
     </div>
   );
 };

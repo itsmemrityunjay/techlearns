@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import { getUserData } from '../../database/Firebase';  // Import the getUserData function
-
+import Footer from '../comp/footer';
 const CustomComponent = () => {
     const [user, setUser] = useState(null);  // Store user info
     const [userData, setUserData] = useState({
@@ -83,17 +83,17 @@ const CustomComponent = () => {
                             <p className="font-normal text-base leading-7 text-gray-500">Rank: 12,33,543</p>
                         </div>
                         <button
-                            className="rounded-full py-3.5 px-5 bg-gray-100 flex items-center group transition-all duration-500 hover:bg-indigo-100"
+                            className="rounded-full py-3.5 px-5 bg-blue-100 flex items-center group transition-all duration-500 hover:bg-indigo-200"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
                                     className="stroke-gray-700 transition-all duration-500 group-hover:stroke-indigo-600"
                                     d="M14.1667 11.6666V13.3333C14.1667 14.9046 14.1667 15.6903 13.6785 16.1785C13.1904 16.6666 12.4047 16.6666 10.8333 16.6666H7.50001C5.92866 16.6666 5.14299 16.6666 4.65483 16.1785C4.16668 15.6903 4.16668 14.9047 4.16668 13.3333V11.6666M16.6667 9.16663V13.3333M11.0157 10.434L12.5064 9.44014C14.388 8.18578 15.3287 7.55861 15.3287 6.66663C15.3287 5.77466 14.388 5.14749 12.5064 3.89313L11.0157 2.8993C10.1194 2.3018 9.67131 2.00305 9.16668 2.00305C8.66205 2.00305 8.21393 2.3018 7.31768 2.8993L5.82693 3.89313C3.9454 5.14749 3.00464 5.77466 3.00464 6.66663C3.00464 7.55861 3.9454 8.18578 5.82693 9.44014L7.31768 10.434C8.21393 11.0315 8.66205 11.3302 9.16668 11.3302C9.67131 11.3302 10.1194 11.0315 11.0157 10.434Z"
-                                    stroke="#374151" strokeWidth="1.6" strokeLinecap="round"
+                                    stroke="orange" strokeWidth="1.6" strokeLinecap="round"
                                 />
                             </svg>
                             <span
-                                className="px-2 font-medium text-base leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600"
+                                className="px-2 font-medium text-base leading-7 text-gray-700 transition-all duration-500 "
                             >
                                 Software Engineer
                             </span>
@@ -106,14 +106,14 @@ const CustomComponent = () => {
                             >
                                 <Link to="/edit-profile">Edit Profile</Link>
                             </button>
-                            <button
+                            {/* <button
                                 className="py-3.5 px-5 rounded-full bg-indigo-50 text-indigo-600 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100"
                             >
                                 Settings
-                            </button>
+                            </button> */}
                         </div>
                         <div className="flex flex-col md:flex-row items-center gap-6">
-                            <p className="flex items-center gap-2 font-medium text-lg leading-8 text-gray-400">
+                            <p className="flex items-center gap-2 font-medium text-lg leading-8 primary-text">
                                 Skills
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -123,11 +123,11 @@ const CustomComponent = () => {
                                 </svg>
                             </p>
                             <ul className="flex items-center max-sm:justify-center max-sm:flex-wrap gap-2.5">
-                                <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">HTML</li>
-                                <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">CSS</li>
-                                <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">Dart</li>
-                                <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">C++</li>
-                                <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">UI Design</li>
+                                <li className="py-3.5 px-7 rounded-full bg-orange-100 font-semibold text-base leading-7 text-gray-700">HTML</li>
+                                <li className="py-3.5 px-7 rounded-full bg-green-100 font-semibold text-base leading-7 text-gray-700">CSS</li>
+                                <li className="py-3.5 px-7 rounded-full bg-red-100 font-semibold text-base leading-7 text-gray-700">Dart</li>
+                                <li className="py-3.5 px-7 rounded-full bg-yellow-100 font-semibold text-base leading-7 text-gray-700">C++</li>
+                                <li className="py-3.5 px-7 rounded-full bg-purple-100 font-semibold text-base leading-7 text-gray-700">UI Design</li>
                             </ul>
                         </div>
                     </div>
@@ -135,46 +135,107 @@ const CustomComponent = () => {
             </section>
             {/* Notebooks, Topics, Competitions */}
             <div className="mt-8">
-                <h2 className="text-2xl font-bold mb-4">User Data</h2>
-                <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Notebooks</h3>
-                        <ul>
-                            {userData.notebooks.length > 0 ? (
-                                userData.notebooks.map((notebook, index) => (
-                                    <li key={index} className="text-gray-700">{notebook.title}</li>
-                                ))
-                            ) : (
-                                <li className="text-gray-500">No notebooks created</li>
-                            )}
-                        </ul>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Topics</h3>
-                        <ul>
-                            {userData.topics.length > 0 ? (
-                                userData.topics.map((topic, index) => (
-                                    <li key={index} className="text-gray-700">{topic.title}</li>
-                                ))
-                            ) : (
-                                <li className="text-gray-500">No topics posted</li>
-                            )}
-                        </ul>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Competitions</h3>
-                        <ul>
-                            {userData.competitions.length > 0 ? (
-                                userData.competitions.map((competition, index) => (
-                                    <li key={index} className="text-gray-700">{competition.title}</li>
-                                ))
-                            ) : (
-                                <li className="text-gray-500">No competitions participated</li>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+    <h2 className="text-2xl font-bold mb-4">User Data</h2>
+    <div className="grid grid-cols-3 gap-4">
+        {/* Notebooks Card */}
+        <div className="bg-white p-4 rounded-lg shadow-lg flex items-center">
+            <div className="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center mr-4">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-white"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 16h8m-4-6V4m5 16H7a2 2 0 01-2-2V6a2 2 0 012-2h4a2 2 0 012 2v10m-2 4h4"
+                    />
+                </svg>
             </div>
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Notebooks</h3>
+                <ul>
+                    {userData.notebooks.length > 0 ? (
+                        userData.notebooks.map((notebook, index) => (
+                            <li key={index} className="text-gray-700">{notebook.title}</li>
+                        ))
+                    ) : (
+                        <li className="text-gray-500">No notebooks created</li>
+                    )}
+                </ul>
+            </div>
+        </div>
+
+        {/* Topics Card */}
+        <div className="bg-white p-4 rounded-lg shadow-lg flex items-center">
+            <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center mr-4">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-white"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M17.5 13.5l-5-5m0 0l-5 5m5-5V21"
+                    />
+                </svg>
+            </div>
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Topics</h3>
+                <ul>
+                    {userData.topics.length > 0 ? (
+                        userData.topics.map((topic, index) => (
+                            <li key={index} className="text-gray-700">{topic.title}</li>
+                        ))
+                    ) : (
+                        <li className="text-gray-500">No topics posted</li>
+                    )}
+                </ul>
+            </div>
+        </div>
+
+        {/* Competitions Card */}
+        <div className="bg-white p-4 rounded-lg shadow-lg flex items-center">
+            <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center mr-4">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-white"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 8.25V4m0 0a8.978 8.978 0 018.938 7.75M12 4a8.978 8.978 0 00-8.938 7.75M3.062 12.25c.176 1.004.525 1.958 1.038 2.828L12 20.75l7.9-5.672a8.953 8.953 0 001.038-2.828M21.062 12.25a8.978 8.978 0 01-1.038-2.828M5.05 10.25c.176-.98.497-1.91.95-2.756M18.95 10.25a8.978 8.978 0 00-.95-2.756"
+                    />
+                </svg>
+            </div>
+            <div>
+                <h3 className="text-lg font-semibold mb-2">Competitions</h3>
+                <ul>
+                    {userData.competitions.length > 0 ? (
+                        userData.competitions.map((competition, index) => (
+                            <li key={index} className="text-gray-700">{competition.title}</li>
+                        ))
+                    ) : (
+                        <li className="text-gray-500">No competitions participated</li>
+                    )}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
             {/* Submission Activity */}
             <div className="w-full bg-white shadow-lg rounded-lg p-6 mx-auto mt-8">
@@ -223,6 +284,7 @@ const CustomComponent = () => {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 };
