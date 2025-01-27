@@ -20,6 +20,8 @@ import { FilterList } from "@mui/icons-material";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import bgcompdetail from "../comp/compdetailbg.jpg";
 import Footer from "../comp/footer";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 const DiscussMap = () => {
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
@@ -147,6 +149,25 @@ const DiscussMap = () => {
     }
   };
 
+  // likes and dislikes
+  const [likes, setLikes] = useState({});
+const [dislikes, setDislikes] = useState({});
+
+const handleLike = (id) => {
+  setLikes((prev) => ({
+    ...prev,
+    [id]: (prev[id] || 0) + 1,
+  }));
+};
+
+const handleDislike = (id) => {
+  setDislikes((prev) => ({
+    ...prev,
+    [id]: (prev[id] || 0) + 1,
+  }));
+};
+
+
   return (
     <div className="container mx-auto py-8 lg:w-[97%] ">
       <h1 className="lg:text-2xl sm:text-xl font-bold mb-6">Discussions</h1>
@@ -249,8 +270,7 @@ const DiscussMap = () => {
       {filteredTopics.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 ">
           {filteredTopics.map((topic) => (
-            <div key={topic.id} className="p-4 rounded-3xl border border-purple-600"
-          >
+            <div key={topic.id} className="p-4 rounded-3xl bg-gray-100">
               <div
                 className="cursor-pointer flex justify-between items-center mt-4 ml-4"
                 onClick={() => toggleAccordion(topic.id)}
@@ -295,6 +315,25 @@ const DiscussMap = () => {
                 )}
               </div>
 
+ {/* Like and Dislike Buttons */}
+              {/* <div className="flex items-center space-x-1" style={{marginLeft:"57px"}}>
+  <button
+    onClick={() => handleLike(topic.id)}
+    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
+      likes[topic.id] ? " text-black" : " text-gray-700 "
+    } `}
+  >
+    <ThumbUpIcon className="w-5 h-5 mr-2"/>  {likes[topic.id] || 0}
+  </button>
+  <button
+    onClick={() => handleDislike(topic.id)}
+    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
+      dislikes[topic.id] ? " text-black" : " text-gray-700"
+    }`}
+  >
+      <ThumbDownIcon className="w-5 h-5 mr-2" /> {dislikes[topic.id] || 0}
+  </button>
+</div> */}
               {openAccordion === topic.id && (
                 <div className="mt-1 ml-4">
                   <ReactQuill

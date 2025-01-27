@@ -72,9 +72,11 @@ const CourseDetail = () => {
                                 sections.map((section, index) => (
                                     <div key={index} id={`section-${index}`} className="bg-white rounded-lg shadow-sm p-4  transition-shadow duration-300">
                                         {section.type === 'subHeading' && (
+                                            
                                             <h3 className="text-2xl font-bold mb-2 mt-5  text-gray-800">
                                                 {section.value}
                                             </h3>
+                                            
                                         )}
                                         {section.type === 'content' && (
                                             <div className="mb-4 text-lg text-gray-800" dangerouslySetInnerHTML={{ __html: section.value }} />
