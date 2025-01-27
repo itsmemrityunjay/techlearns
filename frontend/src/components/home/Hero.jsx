@@ -15,7 +15,7 @@ const Hero = () => {
     <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
       {/* Left Content */}
       <div className="max-w-lg">
-        <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+        <h1 className="text-4xl lg:text-6xl font-extrabold text-[--secondary-color] leading-tight mb-6">
           Master New Skills <br /> with{" "}
           <span className="text-yellow-500">
             <Typewriter
@@ -34,7 +34,7 @@ const Hero = () => {
         </p>
         {/* Button */}
         <div className="flex items-center gap-4 mb-8">
-          <button className="bg-black text-white py-2 px-8 rounded-full flex items-center font-semibold shadow-md hover:bg-gray-900" onClick={() => handelGetStarted()}>
+          <button className="bg-[--secondary-color] text-white py-2 px-8 rounded-full flex items-center font-semibold shadow-md hover:bg-[--primary-color]" onClick={() => handelGetStarted()}>
             <span className="mr-2">Get Started</span>
             <span className="bg-white p-3 rounded-full flex items-center justify-center">
               <FontAwesomeIcon icon={faArrowRight} className="text-black" />
