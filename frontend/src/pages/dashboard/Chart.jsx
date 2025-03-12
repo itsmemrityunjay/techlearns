@@ -1,100 +1,50 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { PieChart } from '@mui/x-charts/PieChart';
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { db } from '../../database/Firebase';
+import React, { useEffect } from "react";
 
-export default function PieAnimation() {
-  const [radius, setRadius] = useState(50);
-  const [skipAnimation, setSkipAnimation] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [competitions, setCompetitions] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [discussions, setDiscussions] = useState([]);
-  const [chartData, setChartData] = useState([]);
+const MyDailyActivitiesChart = () => {
+	useEffect(() => {
+		const loadGoogleCharts = () => {
+			const script = document.createElement("script");
+			script.src = "https://www.gstatic.com/charts/loader.js";
+			script.async = true;
+			script.onload = () => {
+				window.google.charts.load("current", { packages: ["corechart"] });
+				window.google.charts.setOnLoadCallback(drawChart);
+			};
+			document.body.appendChild(script);
+		};
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+		const drawChart = () => {
+			const data = window.google.visualization.arrayToDataTable([
+				["Task", "Hours per Day"],
+				["Work", 11],
+				["Eat", 2],
+				["Commute", 2],
+				["Watch TV", 2],
+				["Sleep", 7],
+			]);
 
-  const fetchData = async () => {
-    await Promise.all([fetchUsers(), fetchCompetitions(), fetchCourses(), fetchDiscussions()]);
-    updateChartData();
-  };
+			const options = {
+				title: "My Daily Activities",
+				is3D: true,
+			};
 
-  const fetchUsers = async () => {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    setUsers(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-  };
+			const chart = new window.google.visualization.PieChart(
+				document.getElementById("piechart_3d")
+			);
+			chart.draw(data, options);
+		};
 
-  const fetchCompetitions = async () => {
-    const querySnapshot = await getDocs(collection(db, "competitions"));
-    setCompetitions(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-  };
+		loadGoogleCharts();
+	}, []);
 
-  const fetchCourses = async () => {
-    const querySnapshot = await getDocs(collection(db, "courses"));
-    setCourses(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-  };
+	return (
+		<div className="flex justify-center items-center min-h-screen bg-gray-100">
+			<div
+				id="piechart_3d"
+				className="w-[900px] h-[500px] shadow-lg border rounded-lg bg-white p-4"
+			></div>
+		</div>
+	);
+};
 
-  const fetchDiscussions = async () => {
-    const querySnapshot = await getDocs(collection(db, "discussions"));
-    setDiscussions(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-  };
-
-  const updateChartData = () => {
-    const totalCounts = [
-      { label: "Users", value: users.length, color: "#ef4444" },
-      { label: "Competitions", value: competitions.length, color: "#10b981" },
-      { label: "Courses", value: courses.length, color: "#3b82f6" },
-      { label: "Discussions", value: discussions.length, color: "#f59e0b" },
-    ];
-
-    setChartData(totalCounts);
-  };
-
-  return (
-    <Box sx={{ width: '100%' }}>
-      <PieChart
-        height={300}
-        series={[
-          {
-            data: chartData.map((item) => ({
-              id: item.label,
-              value: item.value,
-              color: item.color,
-            })),
-            innerRadius: radius,
-            arcLabel: (params) => `${params.id}: ${params.value}`,
-            arcLabelMinAngle: 1,
-          },
-        ]}
-        skipAnimation={skipAnimation}
-      />
-      <FormControlLabel
-        checked={skipAnimation}
-        control={
-          <Checkbox onChange={(event) => setSkipAnimation(event.target.checked)} />
-        }
-        label="Skip Animation"
-        labelPlacement="end"
-      />
-      <Typography id="input-radius" gutterBottom>
-        Radius
-      </Typography>
-      <Slider
-        value={radius}
-        onChange={(event, newValue) => setRadius(newValue)}
-        valueLabelDisplay="auto"
-        min={15}
-        max={100}
-        aria-labelledby="input-radius"
-      />
-    </Box>
-  );
-}
+export default MyDailyActivitiesChart;

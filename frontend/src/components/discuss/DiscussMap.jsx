@@ -18,6 +18,10 @@ import { getAuth } from "firebase/auth";
 import UpgradeButton from "./DisComponent";
 import { FilterList } from "@mui/icons-material";
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
+import bgcompdetail from "../comp/compdetailbg.jpg";
+import Footer from "../comp/footer";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 const DiscussMap = () => {
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
@@ -145,6 +149,25 @@ const DiscussMap = () => {
     }
   };
 
+  // likes and dislikes
+  const [likes, setLikes] = useState({});
+const [dislikes, setDislikes] = useState({});
+
+const handleLike = (id) => {
+  setLikes((prev) => ({
+    ...prev,
+    [id]: (prev[id] || 0) + 1,
+  }));
+};
+
+const handleDislike = (id) => {
+  setDislikes((prev) => ({
+    ...prev,
+    [id]: (prev[id] || 0) + 1,
+  }));
+};
+
+
   return (
     <div className="container mx-auto py-8 lg:w-[97%] ">
       <h1 className="lg:text-2xl sm:text-xl font-bold mb-6">Discussions</h1>
@@ -153,7 +176,8 @@ const DiscussMap = () => {
         placeholder="Search topics..."
         value={searchTerm}
         onChange={handleSearch}
-        className="w-full p-2 mb-6 border border-gray-300 rounded h-12"
+        className="w-full p-2 mb-6 border border-gray-300 rounded-full h-12 "
+        style={{borderWidth:"2px"}}
       />
 
       <div className="flex items-start justify-between gap-8">
@@ -246,7 +270,7 @@ const DiscussMap = () => {
       {filteredTopics.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 ">
           {filteredTopics.map((topic) => (
-            <div key={topic.id} className="p-4 rounded-3xl default-bg">
+            <div key={topic.id} className="p-4 rounded-3xl bg-gray-100">
               <div
                 className="cursor-pointer flex justify-between items-center mt-4 ml-4"
                 onClick={() => toggleAccordion(topic.id)}
@@ -278,7 +302,7 @@ const DiscussMap = () => {
                         day: "numeric",
                       })}
                     </p>
-                    <h2 className="lg:text-2xl font-bold sm:text-lg mt-2">
+                    <h2 className="lg:text-2xl font-bold sm:text-lg mt-2" style={{color:"#003656"}}>
                       {topic.title}
                     </h2>
                   </div>
@@ -291,6 +315,25 @@ const DiscussMap = () => {
                 )}
               </div>
 
+ {/* Like and Dislike Buttons */}
+              {/* <div className="flex items-center space-x-1" style={{marginLeft:"57px"}}>
+  <button
+    onClick={() => handleLike(topic.id)}
+    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
+      likes[topic.id] ? " text-black" : " text-gray-700 "
+    } `}
+  >
+    <ThumbUpIcon className="w-5 h-5 mr-2"/>  {likes[topic.id] || 0}
+  </button>
+  <button
+    onClick={() => handleDislike(topic.id)}
+    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
+      dislikes[topic.id] ? " text-black" : " text-gray-700"
+    }`}
+  >
+      <ThumbDownIcon className="w-5 h-5 mr-2" /> {dislikes[topic.id] || 0}
+  </button>
+</div> */}
               {openAccordion === topic.id && (
                 <div className="mt-1 ml-4">
                   <ReactQuill
@@ -339,7 +382,7 @@ const DiscussMap = () => {
                           />
                           <button
                             onClick={() => handleAddComment(topic.id)}
-                            className="lg:px-4 mt-2 px-4 py-2 bg-none text-black w-48 h-12 text-md border-gray-300 flex justify-start items-center  text-md rounded-full border hover:bg-gray-100"
+                            className="lg:px-4 mt-2 px-4 py-2 bg-none text-black w-48 h-12 text-md border-gray-300 bg-white flex justify-start items-center  text-md rounded-full border hover:bg-gray-100"
                             style={{ marginTop: "-1px" }}
                           >
                             <span className="inline-flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-purple-100">
@@ -376,7 +419,7 @@ const DiscussMap = () => {
                                     }))
                                    
                                   }
-                                  className="w-full p-2 rounded bg-gray-100 border-l-4"
+                                  className="w-full p-2 rounded  border-l-4"
                                   style={{ borderColor: "blue" }}
                                 />
                                 <button
@@ -421,6 +464,7 @@ const DiscussMap = () => {
         <p className="text-gray-500">No topics found.</p>
       )}
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+      <Footer/>
     </div>
   );
 };

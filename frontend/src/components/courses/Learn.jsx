@@ -39,13 +39,15 @@ const LearnSection = () => {
   {/* hero section */}
                              <div className='mt-12' style={{
                                 backgroundImage:`url(${herocompetition})`,
-                                backgroundSize: "contain", // Ensures the whole image is visible
-                                backgroundRepeat: "no-repeat", // Prevents tiling of the image
+                                backgroundSize: "contain",
+                                backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
                                 height: "450px",
                                 width:'100%',
                                                     
                             }}>
+                                  <h1 className='text-5xl font-bold text-gray-800 mb-4 ml-48 pt-32'>Empower Your Learning!</h1>
+                                  <h4 className='text-gray-600 mb-6 lg:ml-48 sm:w-full sm:mr-8 lg:w-[40%]   '>Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects, from data analysis to machine learning. Build your expertise and turn raw data into actionable insights for real-world applications.</h4>
                             </div>
             <Courses />
             {/* <Guides /> */}

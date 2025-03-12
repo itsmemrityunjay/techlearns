@@ -7,7 +7,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import heroimg from "../../components/comp/mainhero.jpg";
 import { useAuth } from '../../database/AuthContext';
-
+import form1 from "../comp/form1.jpg";
+import { useNavigate } from 'react-router-dom';
 import {
     toast
     , ToastContainer
@@ -43,6 +44,12 @@ const Competitions = () => {
 
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
+    // navigate
+    const navigate=useNavigate();
+   const handleNavigate=()=>{
+    navigate('/host');
+   }
 
     // Handle input changes
     const handleChange = (e) => {
@@ -214,7 +221,7 @@ const Competitions = () => {
                         <div className="flex space-x-4 ml-6">
                             <button
                                 className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200 w-50 h-12"
-                                onClick={() => setShowModal(true)}
+                                onClick={handleNavigate}
                             >
                                 Host a Competition
                             </button>
@@ -241,9 +248,10 @@ const Competitions = () => {
             {/* Modal for hosting competition */}
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
-                    <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-6xl relative overflow-y-auto h-[90vh]">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Host a Competition</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="bg-white p-8 rounded-1/2 shadow-lg w-full max-w-6xl relative overflow-y-auto h-[80vh]" style={{borderRadius:"20px"}}>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4 ml-24" style={{fontFamily:"roboto"}}>Host a Competition</h2>
+                        <div className="flex">
+                        <form onSubmit={handleSubmit} className="space-y-4  w-1/2 ml-24 overflow-y-scroll">
 
                             {/* Competition Image */}
                             <div className="mb-4">
@@ -253,7 +261,7 @@ const Competitions = () => {
                                         type="file"
                                         accept="image/*"
                                         onChange={(e) => setIconFile(e.target.files[0])}
-                                        className="hidden"
+                                        className="hidden "
                                         id="competitionImage"
                                     />
                                     <label
@@ -279,7 +287,7 @@ const Competitions = () => {
                                     name="type"
                                     value={formData.type}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 >
                                     <option value="">Select Competition Type</option>
@@ -302,7 +310,7 @@ const Competitions = () => {
                                     name="title"
                                     value={formData.title}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 />
                             </div>
@@ -315,7 +323,7 @@ const Competitions = () => {
                                     name="subtitle"
                                     value={formData.subtitle}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                 />
                             </div>
 
@@ -326,7 +334,7 @@ const Competitions = () => {
                                     name="privacy"
                                     value={formData.privacy}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3border border-purple-400 rounded-xl w-3/4"
                                 >
                                     <option value="public">Public</option>
                                     <option value="private">Private</option>
@@ -340,7 +348,7 @@ const Competitions = () => {
                                     name="whoCanJoin"
                                     value={formData.whoCanJoin}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className=" p-3 border border-purple-400 rounded-xl w-3/4"
                                 >
                                     <option value="everyone">Everyone</option>
                                     <option value="invitation-only">Invitation Only</option>
@@ -354,7 +362,7 @@ const Competitions = () => {
                                     name="eligibility"
                                     value={formData.eligibility}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className=" p-3 border border-purple-400 rounded-xl w-3/4"
                                     placeholder="Describe who is eligible to participate."
                                 ></textarea>
                             </div>
@@ -367,7 +375,7 @@ const Competitions = () => {
                                     name="prizePool"
                                     value={formData.prizePool}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className=" p-3 border border-purple-400 rounded-xl w-3/4"
                                     placeholder="Enter prize pool details."
                                 />
                             </div>
@@ -391,7 +399,7 @@ const Competitions = () => {
                                     name="evaluationCriteria"
                                     value={formData.evaluationCriteria}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     placeholder="Describe how submissions will be evaluated."
                                 ></textarea>
                             </div>
@@ -429,7 +437,7 @@ const Competitions = () => {
                                     name="startDate"
                                     value={formData.startDate}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 />
                             </div>
@@ -442,7 +450,7 @@ const Competitions = () => {
                                     name="startTime"
                                     value={formData.startTime}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 />
                             </div>
@@ -455,7 +463,7 @@ const Competitions = () => {
                                     name="endDate"
                                     value={formData.endDate}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 />
                             </div>
@@ -468,7 +476,7 @@ const Competitions = () => {
                                     name="endTime"
                                     value={formData.endTime}
                                     onChange={handleChange}
-                                    className="w-full p-3 border-0 rounded-lg shadow-lg focus:ring-0 hover:shadow-2xl transition duration-200"
+                                    className="p-3 border border-purple-400 rounded-xl w-3/4"
                                     required
                                 />
                             </div>
@@ -478,22 +486,26 @@ const Competitions = () => {
                             {errorMessage && <p className="text-red-600">{errorMessage}</p>}
 
                             {/* Form Buttons */}
-                            <div className="flex justify-end space-x-4">
+                            <div className="flex justify-end space-x-4 mr-32">
                                 <button
                                     type="button"
-                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 flex items-center justify-center w-32 h-16 rounded-full"
+                                    className=" bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 flex items-center justify-center w-32 h-12 rounded-full"
                                     onClick={() => setShowModal(false)}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-[--secondary-color] hover:bg-[--primary-color] text-white px-4 py-2 shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center w-32 h-16 rounded-full"
+                                    className="bg-[--secondary-color] hover:bg-[--primary-color] text-white px-4 py-2 shadow-lg hover:shadow-xl transition duration-200 flex items-center justify-center w-32 h-12 rounded-full"
                                 >
                                     Submit
                                 </button>
                             </div>
                         </form>
+                        <div className='mt-[-30px] w-1/2 overflow-y-auto'>
+                            <img className='w-11/12 rounded-lg' src={form1} alt="" />
+                        </div>
+                        </div>
                     </div>
                 </div>
             )}
