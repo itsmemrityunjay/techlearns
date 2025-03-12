@@ -26,7 +26,9 @@ import CompDetail from "./components/comp/CompDetail";
 import EditProfile from "./pages/dashboard/EditProfile";
 import CourseDetailAdmin from "./components/courses/CourseDetailAdmin";
 import NotFound from "./pages/NotFound";
-
+import HostComp from "../src/components/comp/HostComp";
+import DiscussForm from "./components/discuss/DiscussForm";
+import Manageuser from "./pages/dashboard/Manageuser";
 function App() {
   return (
     <>
@@ -104,6 +106,7 @@ function App() {
                 </Layout>
               }
             />
+            
             <Route
               path="/courses/:courseId"
               element={
@@ -137,6 +140,30 @@ function App() {
               element={
                 <Layout>
                   <Amin />
+                </Layout>
+              }
+            />
+            <Route
+              path="/host"
+              element={
+                <Layout>
+                  <HostComp />
+                </Layout>
+              }
+            />
+                <Route
+              path="/manageuser"
+              element={
+                <Layout>
+                  <Manageuser />
+                </Layout>
+              }
+            />
+              <Route
+              path="/discussForm"
+              element={
+                <Layout>
+                  <DiscussForm />
                 </Layout>
               }
             />

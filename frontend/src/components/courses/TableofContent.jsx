@@ -35,23 +35,23 @@ const TableOfContents = ({ sections }) => {
     }, [sections]);
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6 mt-16 ml-8 transition-all transform hover:shadow-2xl">
+        <div className="bg-white rounded-lg shadow-lg p-6 mt-16 ml-8 transition-all transform hover:shadow-xl">
             <h2 className="text-2xl font-semibold text-gray-700 mb-4">Table of Contents</h2>
             <ul className="space-y-3">
                 {sections.map((section, index) => {
                     if (section.type === 'subHeading') {
                         const isActive = activeSection === index;
                         return (
-                            <li key={index} className="transition transform duration-200 hover:scale-105">
+                            <li key={index} className="relative transition transform duration-200 hover:bg-[var(--secondary-color)] hover:text-white rounded-lg p-2">
                                 <a
                                     href={`#section-${index}`}
                                     className={`block text-lg font-medium ${isActive ? 'text-indigo-600' : 'text-gray-600'
-                                        } ${isActive ? 'font-bold' : 'hover:text-indigo-400'}`}
+                                        } ${isActive ? 'font-bold' : 'hover:text-white'}`}
                                 >
                                     {section.value}
                                 </a>
                                 {isActive && (
-                                    <div className="h-1 w-full bg-indigo-600 mt-1 rounded transition-all duration-300" />
+                                    <div className="h-1 w-full mt-1 rounded transition-all duration-300" />
                                 )}
                             </li>
                         );

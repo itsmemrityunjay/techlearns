@@ -133,11 +133,11 @@ function CompDetail() {
               {/* Content */}
               <div className="relative flex flex-col justify-center items-center gap-y-6 text-white h-full">
                 {/* Title and Subtitle */}
-                <div className="text-center">
+                <div className="flex flex-col items-center justify-center text-center">
                   <h1 className="font-extrabold text-2xl md:text-3xl tracking-wide mb-2">
                     {compData.title}
                   </h1>
-                  <p className="text-gray-300 text-sm md:text-base">
+                  <p className="text-gray-300 text-sm md:text-base lg:w-2/3">
                     {compData.subtitle || compData.description}
                   </p>
                 </div>
@@ -161,7 +161,7 @@ function CompDetail() {
             </div>
 
             {/* Right Section (Competition Details) */}
-            <div className="p-6 rounded-lg bg-white mb-5 mt-12 sm:mt-8 md:mt-12 w-full">
+            <div className="p-6 rounded-lg bg-white mb-5 mt-12 sm:mt-8 md:mt-12 w-full shadow-md">
               {/* Flex container for rows */}
               <div className="flex lg:flex-nowrap flex-wrap gap-6 mt-4 ">
                 {/* Box 1 */}
@@ -307,6 +307,7 @@ function CompDetail() {
           <DynamicTimeline />
           {/* divider competition */}
           <div
+          className="text-white pt-48 mt-[-80px]"
             style={{
               backgroundImage: `url(${divider2})`,
               backgroundSize: "contain",
@@ -316,13 +317,14 @@ function CompDetail() {
               width: "100%",
             }}
           >
-           
+           <h1 className="text-5xl mb-2 ml-24">Take the Challenge</h1>
+           <h4 className="text-3xl ml-24  pb-2">Become a PRO!</h4>
           </div>
 
           {/* FAQ Section */}
           <div className="bg-transparent p-6 mb-4">
-            <div className="flex justify-center items-center w-full">
-              <img src={faqimg} alt="FAQ Image" className="w-126 h-auto" />
+            <div className="flex justify-center items-center w-full ">
+              <img src={faqimg} alt="FAQ Image" className="w-126 h-auto mt-[-100px]" />
             </div>
             <div className="text-3xl font-bold mb-4 text-purple-950 text-center">
               Frequently Asked Questions
@@ -359,6 +361,7 @@ function CompDetail() {
             </div>
           )}
           <Divider />
+          <Footer/>
         </div>
       </div>
     </div>
