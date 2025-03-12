@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Link } from 'react-router-dom';
+import { db } from "../../database/Firebase";
+import { collection, getDocs } from "firebase/firestore";
 import { getUserData } from '../../database/Firebase';  // Import the getUserData function
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import { use } from 'react';
 
 const CustomComponent = () => {
     const [user, setUser] = useState(null);  // Store user info
+    const [notebooks, setNotebooks] = useState([]);  // Store user's notebooks
     const [userData, setUserData] = useState({
         notebooks: [],
         topics: [],
         competitions: [],
+        email: '',
     });  // Store user's notebooks, topics, competitions
 
     // Fetch the authenticated user's data
@@ -20,9 +28,10 @@ const CustomComponent = () => {
                 const fetchedUserData = await getUserData(loggedInUser.uid);  // Fetch additional user data from Firestore
                 setUserData({
                     photoURL: fetchedUserData.profileImageUrl,
-                    notebooks: fetchedUserData.notebooks || [],
+
                     topics: fetchedUserData.topics || [],
                     competitions: fetchedUserData.competitions || [],
+                    email: fetchedUserData.email,
                 });
             } else {
                 setUser(null);
@@ -30,6 +39,28 @@ const CustomComponent = () => {
         });
         return () => unsubscribe();  // Clean up the subscription on component unmount
     }, []);
+
+    useEffect(() => {
+        const fetchNotebooks = async () => {
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "notebooks"));
+                const notebooksData = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                if (notebooksData.author === userData.email) {
+                    setNotebooks(notebooksData);
+                }
+            } catch (error) {
+                console.error("Error fetching Notebooks:", error);
+            }
+        };
+        fetchNotebooks();
+    }, []);
+
+
+
 
     const months = [
         { name: 'Oct', days: 31 },
@@ -102,15 +133,14 @@ const CustomComponent = () => {
                     <div className="flex flex-col lg:flex-row max-lg:gap-5 items-center justify-between py-0.5">
                         <div className="flex items-center gap-4">
                             <button
-                                className="py-3.5 px-5 rounded-full bg-indigo-600 text-white font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-indigo-700"
+                                className="py-3.5 px-5 rounded-full text-black font-semibold text-base leading-7  shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-[--secondary-color]"
                             >
                                 <Link to="/edit-profile">Edit Profile</Link>
                             </button>
-                            <button
-                                className="py-3.5 px-5 rounded-full bg-indigo-50 text-indigo-600 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100"
-                            >
-                                Settings
+                            <button onClick={() => console.log(userData)} className="py-3.5 px-5 rounded-full text-white font-semibold text-base leading-7 bg-[#2563EB] shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-[#1E40AF]">
+                                {userData.email}
                             </button>
+
                         </div>
                         <div className="flex flex-col md:flex-row items-center gap-6">
                             <p className="flex items-center gap-2 font-medium text-lg leading-8 text-gray-400">
@@ -137,20 +167,30 @@ const CustomComponent = () => {
             <div className="mt-8">
                 <h2 className="text-2xl font-bold mb-4">User Data</h2>
                 <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Notebooks</h3>
+                    <div className="bg-[#D9F1FF] p-4 rounded-lg shadow-lg">
+                        <div className="flex items-center gap-3 justify-start mb-4">
+                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
+                                <AutoStoriesIcon />
+                            </div>
+                            <h3 className="text-3xl font-semibold">Notebooks</h3>
+                        </div>
                         <ul>
-                            {userData.notebooks.length > 0 ? (
-                                userData.notebooks.map((notebook, index) => (
-                                    <li key={index} className="text-gray-700">{notebook.title}</li>
+                            {notebooks.length > 0 ? (
+                                notebooks.map((notebook, index) => (
+                                    <li key={index} className="text-gray-700 p-2 border-black border-2 bg-white">{notebook.title}</li>
                                 ))
                             ) : (
                                 <li className="text-gray-500">No notebooks created</li>
                             )}
                         </ul>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Topics</h3>
+                    <div className="bg-[#FFD9EC] p-4 rounded-lg shadow-lg">
+                        <div className="flex items-center gap-3 justify-start mb-4">
+                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
+                                <ChatBubbleOutlineIcon />
+                            </div>
+                            <h3 className="text-3xl font-semibold">Topics</h3>
+                        </div>
                         <ul>
                             {userData.topics.length > 0 ? (
                                 userData.topics.map((topic, index) => (
@@ -161,8 +201,14 @@ const CustomComponent = () => {
                             )}
                         </ul>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-2">Competitions</h3>
+                    <div className="bg-[#E6D9FF] p-4 rounded-lg shadow-lg">
+                        <div className="flex items-center gap-3 justify-start mb-4">
+                            <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
+                                <PeopleOutlineIcon />
+                            </div>
+                            <h3 className="text-3xl font-semibold">Competitions</h3>
+                        </div>
+
                         <ul>
                             {userData.competitions.length > 0 ? (
                                 userData.competitions.map((competition, index) => (
