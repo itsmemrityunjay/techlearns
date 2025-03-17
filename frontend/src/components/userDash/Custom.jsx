@@ -267,64 +267,8 @@ const CustomComponent = () => {
             </div>
 
 
-            <h2 className="text-2xl font-bold mb-4">User Data</h2>
-            <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[#D9F1FF] p-4 rounded-lg shadow-lg">
-                    <div className="flex items-center gap-3 justify-start mb-4">
-                        <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-                            <AutoStoriesIcon />
-                        </div>
-                        <h3 className="text-3xl font-semibold">Notebooks</h3>
-                    </div>
-                    <ul>
-                        {notebooks.length > 0 ? (
-                            notebooks.map((notebook, index) => (
-                                <li key={index} className="text-gray-700 p-2 border-black border-2 bg-white">{notebook.title}</li>
-                            ))
-                        ) : (
-                            <li className="text-gray-500">No notebooks created</li>
-                        )}
-                    </ul>
-                </div>
-                <div className="bg-[#FFD9EC] p-4 rounded-lg shadow-lg">
-                    <div className="flex items-center gap-3 justify-start mb-4">
-                        <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-                            <ChatBubbleOutlineIcon />
-                        </div>
-                        <h3 className="text-3xl font-semibold">Topics</h3>
-                    </div>
-                    <ul>
-                        {userData.topics.length > 0 ? (
-                            userData.topics.map((topic, index) => (
-                                <li key={index} className="text-gray-700">{topic.title}</li>
-                            ))
-                        ) : (
-                            <li className="text-gray-500">No topics posted</li>
-                        )}
-                    </ul>
-                </div>
-                <div className="bg-[#E6D9FF] p-4 rounded-lg shadow-lg">
-                    <div className="flex items-center gap-3 justify-start mb-4">
-                        <div className='w-10 h-10 bg-white rounded-full flex items-center justify-center'>
-                            <PeopleOutlineIcon />
-                        </div>
-                        <h3 className="text-3xl font-semibold">Competitions</h3>
-                    </div>
 
-                    <ul>
-                        {userData.competitions.length > 0 ? (
-                            userData.competitions.map((competition, index) => (
-                                <li key={index} className="text-gray-700">{competition.title}</li>
-                            ))
-                        ) : (
-                            <li className="text-gray-500">No competitions participated</li>
-                        )}
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-            {/* Submission Activity */ }
+            {/* Submission Activity */}
             <div className="w-full bg-white shadow-lg rounded-lg p-6 mx-auto mt-8">
                 <div className="flex justify-between items-center mb-4">
                     {/* Submissions Header */}
@@ -372,7 +316,7 @@ const CustomComponent = () => {
                 </div>
             </div>
             <Footer />
-        </div >
+        </div>
     );
 };
 
