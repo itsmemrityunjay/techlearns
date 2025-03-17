@@ -19,7 +19,7 @@ const MainHero = ({ title, description, image }) => {
                     </p>
                 </div>
                 <div className="flex-shrink-0 mr-6">
-                    {/* <img src={image} alt="Course" width="280" height="208" className="w-72 h-auto" /> */}
+                    <img src={image} alt="Course" width="280" height="208" className="w-72 h-auto" />
                 </div>
             </div>
         </div>
