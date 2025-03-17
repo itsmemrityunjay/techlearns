@@ -100,13 +100,13 @@ function App() {
               path="/user"
               element={
                 <Layout>
-                  <ProtectedRoute roles={["user"]}>
+                  <ProtectedRoute roles={["user" || "admin"]}>
                     <User />
                   </ProtectedRoute>
                 </Layout>
               }
             />
-            
+
             <Route
               path="/courses/:courseId"
               element={
@@ -147,11 +147,13 @@ function App() {
               path="/host"
               element={
                 <Layout>
-                  <HostComp />
+                  <ProtectedRoute roles={["user"]}>
+                    <HostComp />
+                  </ProtectedRoute>
                 </Layout>
               }
             />
-                <Route
+            <Route
               path="/manageuser"
               element={
                 <Layout>
@@ -159,7 +161,7 @@ function App() {
                 </Layout>
               }
             />
-              <Route
+            <Route
               path="/discussForm"
               element={
                 <Layout>
