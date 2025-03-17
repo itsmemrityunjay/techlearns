@@ -1,55 +1,37 @@
 import React from 'react';
 import Courses from './Courses.jsx';
-import Guides from './Guides';
-import HeroImg from "../../assets/course.svg"
-import herocompetition from "../comp/herocompetition.jpg";
+// import Guides from './Guides';
+import herocompetition from '../comp/herocompetition.jpg';
+
 const LearnSection = () => {
     return (
         <>
-            {/* <div className="flex justify-center items-center mb-8"> */}
-                {/* <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl bg-white shadow-lg p-6 rounded-lg"> */}
+            {/* Hero Section */}
+            <div
+                className="w-full flex items-center justify-center relative bg-center bg-no-repeat bg-cover"
+                style={{
+                    backgroundImage: `url(${herocompetition})`,
+                    minHeight: '450px', // fallback for smaller devices
+                }}
+            >
+                {/* Optional Overlay for text visibility */}
+                <div className="absolute inset-0 bg-black bg-opacity-30"></div>
 
-                    {/* Left Section - Title and Description */}
-                    {/* <div className="flex-1 mb-6 md:mb-0 mt-14">
-                        <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">
-                            Learn
-                        </h1>
-                        <p className="text-gray-600 mb-6 ml-6">
-                            Gain the skills you need to do independent data science projects.
-                        </p>
-                    </div> */}
+                {/* Content */}
+                <div className="relative flex flex-col items-center justify-center text-center px-6 py-12 md:px-20 w-full h-full">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
+                        Empower Your Learning!
+                    </h1>
+                    <h4 className="text-sm sm:text-base md:text-lg text-gray-200 md:max-w-[50%]">
+                        Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects, from data analysis to machine learning. Build your expertise and turn raw data into actionable insights for real-world applications.
+                    </h4>
+                </div>
+            </div>
 
-                    {/* Right Section - Image */}
-                    {/* <div className="flex-shrink-0 mr-6">
-                        <img
-                            src={HeroImg}
-                            alt="Competitions"
-                            width="480"
-                            height="408"
-                            className="w-96 h-auto"
-                        />
-                    </div> */}
-
-                {/* </div> */}
-            {/* </div> */}
-
-
-
-
-  {/* hero section */}
-                             <div className='mt-12' style={{
-                                backgroundImage:`url(${herocompetition})`,
-                                backgroundSize: "contain",
-                                backgroundRepeat: "no-repeat",
-                                backgroundPosition: "center",
-                                height: "450px",
-                                width:'100%',
-                                                    
-                            }}>
-                                  <h1 className='text-5xl font-bold text-gray-800 mb-4 ml-48 pt-32'>Empower Your Learning!</h1>
-                                  <h4 className='text-gray-600 mb-6 lg:ml-48 sm:w-full sm:mr-8 lg:w-[40%]   '>Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects, from data analysis to machine learning. Build your expertise and turn raw data into actionable insights for real-world applications.</h4>
-                            </div>
+            {/* Courses Section */}
             <Courses />
+
+            {/* Optional Guides Section */}
             {/* <Guides /> */}
         </>
     );
