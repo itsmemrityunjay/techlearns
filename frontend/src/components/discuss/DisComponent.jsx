@@ -2,7 +2,7 @@ import React from "react";
 
 const UpgradeButton = () => {
   return (
-    <div className="w-[65%] flex items-center justify-right bg-[#dfdbf5] p-4 rounded-full shadow-lg gap-4">
+    <div className="w-full md:w-[65%] flex items-center justify-right bg-[#dfdbf5] p-4 rounded-full shadow-lg gap-4">
       {/* Icon Container */}
       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#003656]">
         <svg
