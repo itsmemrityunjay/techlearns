@@ -23,10 +23,10 @@ const DiscussHero = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     // navigate to form
-        const navigate=useNavigate();
-       const handleNavigate=()=>{
+    const navigate = useNavigate();
+    const handleNavigate = () => {
         navigate('/discussForm');
-       }
+    }
 
     // Fetch the current user's display name and photo URL (author image)
     useEffect(() => {
@@ -83,112 +83,132 @@ const DiscussHero = () => {
 
     return (
         <div className='container mx-auto py-8'>
-              {/* hero section */}
-              <div className='mt-12' style={{
-                                backgroundImage:`url(${discuss})`,
-                                backgroundSize: "contain", // Ensures the whole image is visible
-                                backgroundRepeat: "no-repeat", // Prevents tiling of the image
-                                backgroundPosition: "center",
-                                height: "450px",
-                                width:'100%',
-                                                    
-                            }}>         
-                        <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-24 pt-32">Join the Discussion!</h1>
-                        <p className="text-gray-600 mb-6 lg:ml-24 sm:w-full sm:mr-8 lg:w-1/2">
-                            Discuss the TechLearns platform & machine learning topics – this includes sharing feedback, asking questions, and more.{' '}
-                            <a className="text-black-600 underline" href="/docs/competitions" target="_blank" rel="noopener noreferrer">
-                                documentation
-                            </a> or learn about{' '}
-                            <a className="text-black-600 underline" href="/c/about/community" target="_blank" rel="noopener noreferrer">
-                                Community Competitions
-                            </a>.
-                        </p>
-                        <div className="flex space-x-4 lg:ml-24">
-                            <button
-                                className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
-                                onClick={handleNavigate}
-                            >
-                                New Topic
-                            </button>   
-                            </div>        
+            <div className="flex flex-col-reverse bg-none md:bg-[#e9e4f5] rounded-2xl w-full lg:flex-row items-center max-w-7xl mx-auto mt-8 ">
+                <div className=" lg:w-1/2 px-4 sm:px-6 md:px-12 lg:px-24 py-6">
+                    <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4">
+                        Join the Discussion!
+                    </h1>
+
+                    <p className="text-gray-600 mb-4 sm:mb-6 max-w-full sm:max-w-2xl text-sm sm:text-base leading-relaxed">
+                        Discuss the TechLearns platform & machine learning topics – this includes sharing feedback, asking questions, and more.&nbsp;
+                        <a
+                            className="text-black underline"
+                            href="/docs/competitions"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            documentation
+                        </a>
+                        &nbsp;or learn about&nbsp;
+                        <a
+                            className="text-black underline"
+                            href="/c/about/community"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Community Competitions
+                        </a>.
+                    </p>
+
+                    <div className="flex flex-wrap gap-3">
+                        <button
+                            className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 sm:px-6 rounded-full transition duration-200 text-sm sm:text-base"
+                            onClick={handleNavigate}
+                        >
+                            New Topic
+                        </button>
+                    </div>
+                </div>
+
+                {/* Image Section */}
+                <div className="w-full  lg:w-1/2 h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px]">
+                    <img
+                        src={discuss}
+                        alt="Join the Discussion"
+                        className="w-full h-full object-cover rounded-3xl border-spacing-"
+                    />
+                </div>
             </div>
+
+
+
 
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto">
-                    <div className="bg-white p-8 rounded-1/2 shadow-lg w-full max-w-6xl relative overflow-y-auto h-[80vh]" style={{borderRadius:"20px"}}>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-4 ml-24" style={{fontFamily:"roboto"}}>New Topic</h2>
+                    <div className="bg-white p-8 rounded-1/2 shadow-lg w-full max-w-6xl relative overflow-y-auto h-[80vh]" style={{ borderRadius: "20px" }}>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4 ml-24" style={{ fontFamily: "roboto" }}>New Topic</h2>
                         <div className='flex'>
-                        <form onSubmit={handleSubmit} className="space-y-4 w-1/2 ml-24">
-                            <div>
-                                <label className="block text-gray-700">Topic Category</label>
-                                <select
-                                    name="type"
-                                    value={formData.type}
-                                    onChange={handleChange}
-                                    className="secondary-text p-2 border border-purple-400 rounded-xl w-3/4"
-                                    style={{borderWidth:"2px"}}
-                                >
-                                    <option value="general">General Discussion</option>
-                                    <option value="feedback">Feedback</option>
-                                    <option value="question">Question</option>
-                                </select>
+                            <form onSubmit={handleSubmit} className="space-y-4 w-1/2 ml-24">
+                                <div>
+                                    <label className="block text-gray-700">Topic Category</label>
+                                    <select
+                                        name="type"
+                                        value={formData.type}
+                                        onChange={handleChange}
+                                        className="secondary-text p-2 border border-purple-400 rounded-xl w-3/4"
+                                        style={{ borderWidth: "2px" }}
+                                    >
+                                        <option value="general">General Discussion</option>
+                                        <option value="feedback">Feedback</option>
+                                        <option value="question">Question</option>
+                                    </select>
 
-                                <label className="block text-gray-700 mt-4">Topic Title</label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleChange}
-                                    className="w-3/4 p-2 border border-purple-400 rounded-xl "
-                                    style={{borderWidth:"2px"}}
-                                    required
-                                />
-                            </div>
-                            <div className='h-[45vh]'>
-                                <label className="block text-gray-700">Share Your Thoughts</label>
-                                <ReactQuill
-                                    theme="snow"
-                                    value={formData.content}
-                                    onChange={handleContentChange}
-                                    className="border  border-purple-400 rounded-xl w-3/4 h-[55%]"
-                                    style={{borderWidth:"2px"}}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700 lg:mt-[-100px]">Tags (comma-separated)</label>
-                                <input
-                                    type="text"
-                                    name="tags"
-                                    value={formData.tags}
-                                    onChange={handleChange}
-                                    className="w-3/4 p-2 border  border-purple-400 rounded-xl "
-                                    style={{borderWidth:"2px"}}
-                                />
-                            </div>
+                                    <label className="block text-gray-700 mt-4">Topic Title</label>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        value={formData.title}
+                                        onChange={handleChange}
+                                        className="w-3/4 p-2 border border-purple-400 rounded-xl "
+                                        style={{ borderWidth: "2px" }}
+                                        required
+                                    />
+                                </div>
+                                <div className='h-[45vh]'>
+                                    <label className="block text-gray-700">Share Your Thoughts</label>
+                                    <ReactQuill
+                                        theme="snow"
+                                        value={formData.content}
+                                        onChange={handleContentChange}
+                                        className="border  border-purple-400 rounded-xl w-3/4 h-[55%]"
+                                        style={{ borderWidth: "2px" }}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-gray-700 lg:mt-[-100px]">Tags (comma-separated)</label>
+                                    <input
+                                        type="text"
+                                        name="tags"
+                                        value={formData.tags}
+                                        onChange={handleChange}
+                                        className="w-3/4 p-2 border  border-purple-400 rounded-xl "
+                                        style={{ borderWidth: "2px" }}
+                                    />
+                                </div>
 
-                            {successMessage && <p className="text-green-600">{successMessage}</p>}
-                            {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+                                {successMessage && <p className="text-green-600">{successMessage}</p>}
+                                {errorMessage && <p className="text-red-600">{errorMessage}</p>}
 
-                            <div className="flex justify-end space-x-4" style={{marginRight:"130px"}}>
-                                <button
-                                    type="button"
-                                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full"
-                                    onClick={() => setShowModal(false)}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
-                                >
-                                    Publish
-                                </button>
+                                <div className="flex justify-end space-x-4" style={{ marginRight: "130px" }}>
+                                    <button
+                                        type="button"
+                                        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full"
+                                        onClick={() => setShowModal(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-4 rounded-full transition duration-200"
+                                    >
+                                        Publish
+                                    </button>
+                                </div>
+                            </form>
+                            <div className='mt-[-30px] w-1/2'>
+                                <img className='w-11/12 rounded-lg' src={form1} alt="" />
                             </div>
-                        </form>
-                        <div className='mt-[-30px] w-1/2'>
-                            <img className='w-11/12 rounded-lg' src={form1} alt="" />
                         </div>
-                    </div>
                     </div>
                 </div>
             )}

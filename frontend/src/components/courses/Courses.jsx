@@ -441,111 +441,138 @@ const Courses = () => {
           </div>
         </div>
       </div >
-      <div className="container mx-auto py-16">
-        <h2 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
-          Learners Are Viewing
-        </h2>
-        <Swiper
-          slidesPerView={1}
-          spaceBetween={30}
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          pagination={{
-            clickable: true,
-            bulletClass: "swiper-pagination-bullet custom-bullet",
-          }}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          loop={true}
-          speed={800} // Smooth transition speed in ms
-          modules={[Pagination, Navigation, Autoplay]}
-          className="mySwiper"
-        >
-          {instructors.map((course, index) => (
-            <SwiperSlide key={index}>
-              <div className="bg-white border border-yellow-400 shadow-md hover:shadow-lg rounded-lg overflow-hidden transform transition-all duration-300">
-                {/* Course Image */}
-                <div className="relative">
-                  <img
-                    src={course.img}
-                    alt={course.title}
-                    className="w-full h-53 object-cover"
-                  />
-                  {/* Bestseller Badge */}
-                  {course.isBestseller && (
-                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                      Bestseller
-                    </span>
-                  )}
-                </div>
-                {/* Course Info */}
-                <div className="p-5">
-                  <h3 className="text-xl font-bold text-gray-800 truncate">
-                    {course.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-2">{course.name}</p>
-                  <p className="text-gray-500 text-sm">
-                    <strong>Skills:</strong> {course.skills}
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    <strong>Students:</strong> {course.students}
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    <strong>Courses:</strong> {course.courses}
-                  </p>
-                  {/* Rating */}
-                  <div className="flex items-center mt-4">
-                    <span className="text-yellow-500 text-lg font-bold mr-2">
-                      {course.rating}
-                    </span>
-                    <div className="flex">
-                      {Array.from({ length: Math.round(course.rating) }).map(
-                        (_, i) => (
-                          <svg
-                            key={i}
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            className="h-5 w-5 text-yellow-400"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 .587l3.668 7.571 8.332 1.209-6.035 5.857 1.425 8.318L12 18.897l-7.39 3.645 1.425-8.318L0 9.367l8.332-1.209z" />
-                          </svg>
-                        )
-                      )}
-                    </div>
+      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-12">
+        Learners Are Viewing
+      </h2>
+
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={16}
+        breakpoints={{
+          640: {
+            slidesPerView: 1.5,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 24,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        }}
+        pagination={{
+          clickable: true,
+          bulletClass: "swiper-pagination-bullet custom-bullet",
+          bulletActiveClass: "custom-bullet-active",
+        }}
+        navigation={{
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        }}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        loop={true}
+        speed={800}
+        modules={[Pagination, Navigation, Autoplay]}
+        className="mySwiper"
+      >
+        {instructors.map((course, index) => (
+          <SwiperSlide key={index}>
+            <div className="bg-white border border-yellow-400 shadow-md hover:shadow-lg rounded-lg overflow-hidden transform transition-all duration-300">
+              {/* Course Image */}
+              <div className="relative h-56 sm:h-64 md:h-72 lg:h-80 xl:h-96">
+                <img
+                  src={course.img}
+                  alt={course.title}
+                  className="w-full h-full object-cover"
+                />
+                {/* Bestseller Badge */}
+                {course.isBestseller && (
+                  <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    Bestseller
+                  </span>
+                )}
+              </div>
+
+              {/* Course Info */}
+              <div className="p-4 sm:p-5">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-1">{course.name}</p>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  <strong>Skills:</strong> {course.skills}
+                </p>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  <strong>Students:</strong> {course.students}
+                </p>
+                <p className="text-gray-500 text-xs sm:text-sm mb-2">
+                  <strong>Courses:</strong> {course.courses}
+                </p>
+
+                {/* Rating */}
+                <div className="flex items-center mt-2 sm:mt-4">
+                  <span className="text-yellow-500 text-sm sm:text-lg font-bold mr-1">
+                    {course.rating}
+                  </span>
+                  <div className="flex">
+                    {Array.from({ length: Math.round(course.rating) }).map(
+                      (_, i) => (
+                        <svg
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 .587l3.668 7.571 8.332 1.209-6.035 5.857 1.425 8.318L12 18.897l-7.39 3.645 1.425-8.318L0 9.367l8.332-1.209z" />
+                        </svg>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
-            </SwiperSlide>
-          ))}
-          {/* Custom Swiper Navigation */}
-          <div className="swiper-button-prev text-yellow-500 hover:text-yellow-700"></div>
-          <div className="swiper-button-next text-yellow-500 hover:text-yellow-700"></div>
-        </Swiper>
+            </div>
+          </SwiperSlide>
+        ))}
 
-        {/* Custom CSS for Pagination */}
-        <style jsx>{`
+        {/* Custom Navigation Buttons */}
+        <div className="swiper-button-prev hidden md:flex items-center justify-center w-10 h-10 bg-white border border-yellow-400 text-yellow-500 hover:text-yellow-700 hover:bg-yellow-100 rounded-full shadow-md absolute top-1/2 left-2 transform -translate-y-1/2 z-10 cursor-pointer"></div>
+        <div className="swiper-button-next hidden md:flex items-center justify-center w-10 h-10 bg-white border border-yellow-400 text-yellow-500 hover:text-yellow-700 hover:bg-yellow-100 rounded-full shadow-md absolute top-1/2 right-2 transform -translate-y-1/2 z-10 cursor-pointer"></div>
+      </Swiper>
+
+      {/* Custom CSS for Pagination */}
+      <style jsx>{`
         .custom-bullet {
-          background: #facc15; /* Yellow color */
+          background: #facc15; /* Yellow */
           opacity: 1;
+          width: 10px;
+          height: 10px;
+          margin: 0 4px !important;
         }
         .custom-bullet-active {
           background: #fbbf24; /* Darker yellow */
+          width: 12px;
+          height: 12px;
         }
         .swiper-button-next,
         .swiper-button-prev {
           font-size: 1.5rem;
         }
+
+        @media (max-width: 768px) {
+          .swiper-button-next,
+          .swiper-button-prev {
+            display: none !important;
+          }
+        }
       `}</style>
-      </div>
+    </div>
 
       <CourseBanner></CourseBanner>
 

@@ -631,40 +631,47 @@ function AdminDashboard() {
 {/* <TeamProgressCard/> */}
   {/* <MyDailyActivitiesChart/> */}
                 {/* Chart Component */}
-                <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-8 justify-between items-center'>
-                <div className=" p-4 bg-white shadow-md h-64 rounded-lg bg-[#D9F1F]">
-                    <h3 className="font-semibold mb-2">Dashboard Insights</h3>
-                    <Line
-                        data={chartData}
-                        options={{
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                },
-                            },
-                        }}
-                    />
-                </div>
-                <div className=' p-4 bg-white shadow-md h-64 rounded-lg bg-[#D9F1F]'>
-                <PieChart
-  series={[
-    {
-      data: [
-        { id: "Users", value: users.length, color: "#ef4444", label: `Users = ${users.length}` },
-        { id: "Competitions", value: competitions.length, color: "#10b981", label: `Competitions = ${competitions.length}` },
-        { id: "Courses", value: courses.length, color: "#3b82f6", label: `Courses = ${courses.length}` },
-        { id: "Discussions", value: discussions.length, color: "#f59e0b", label: `Discussions = ${discussions.length}` },
-      ],
-    },
-  ]}
-  width={600}
-  height={200}
-/>
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-between items-stretch w-full">
+  
+  {/* Line Chart Section */}
+  <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full">
+    <h3 className="font-semibold mb-4 text-lg">Dashboard Insights</h3>
+    <div className="relative h-[300px]">
+      <Line
+        data={chartData}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        }}
+      />
+    </div>
+  </div>
+
+  {/* Pie Chart Section */}
+  <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full flex justify-center items-center">
+    <PieChart
+      series={[
+        {
+          data: [
+            { id: "Users", value: users.length, color: "#ef4444", label: `Users = ${users.length}` },
+            { id: "Competitions", value: competitions.length, color: "#10b981", label: `Competitions = ${competitions.length}` },
+            { id: "Courses", value: courses.length, color: "#3b82f6", label: `Courses = ${courses.length}` },
+            { id: "Discussions", value: discussions.length, color: "#f59e0b", label: `Discussions = ${discussions.length}` },
+          ],
+        },
+      ]}
+      width={300}
+      height={300}
+    />
+  </div>
 
 </div>
-</div>
+
             </div>
 
             {modalOpen && (
