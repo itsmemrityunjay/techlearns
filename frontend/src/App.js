@@ -100,7 +100,9 @@ function App() {
               path="/user"
               element={
                 <Layout>
-                  <ProtectedRoute roles={["user" || "admin"]}>
+                  <ProtectedRoute
+                    roles={["user" || "admin" || "sub-admin" || ""]}
+                  >
                     <User />
                   </ProtectedRoute>
                 </Layout>

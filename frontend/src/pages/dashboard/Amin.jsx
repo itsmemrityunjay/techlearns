@@ -247,70 +247,70 @@ function AdminDashboard() {
         const querySnapshot = await getDocs(collection(db, "topics"));
         setDiscussions(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
-  
-      // Real-time listener for users collection
-      useEffect(() => {
+
+    // Real-time listener for users collection
+    useEffect(() => {
         const unsubscribeUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
-          const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setUsers(usersData);
-          updateChartData(usersData, competitions, courses, discussions);
+            const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setUsers(usersData);
+            updateChartData(usersData, competitions, courses, discussions);
         });
-    
+
         return () => unsubscribeUsers();
-      }, [competitions, courses, discussions]);
-    
-      // Real-time listener for competitions collection
-      useEffect(() => {
+    }, [competitions, courses, discussions]);
+
+    // Real-time listener for competitions collection
+    useEffect(() => {
         const unsubscribeCompetitions = onSnapshot(collection(db, 'competitions'), (snapshot) => {
-          const competitionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCompetitions(competitionsData);
-          updateChartData(users, competitionsData, courses, discussions);
+            const competitionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCompetitions(competitionsData);
+            updateChartData(users, competitionsData, courses, discussions);
         });
-    
+
         return () => unsubscribeCompetitions();
-      }, [users, courses, discussions]);
-    
-      // Real-time listener for courses collection
-      useEffect(() => {
+    }, [users, courses, discussions]);
+
+    // Real-time listener for courses collection
+    useEffect(() => {
         const unsubscribeCourses = onSnapshot(collection(db, 'courses'), (snapshot) => {
-          const coursesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCourses(coursesData);
-          updateChartData(users, competitions, coursesData, discussions);
+            const coursesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCourses(coursesData);
+            updateChartData(users, competitions, coursesData, discussions);
         });
-    
+
         return () => unsubscribeCourses();
-      }, [users, competitions, discussions]);
-    
-      // Real-time listener for discussions collection
-      useEffect(() => {
+    }, [users, competitions, discussions]);
+
+    // Real-time listener for discussions collection
+    useEffect(() => {
         const unsubscribeDiscussions = onSnapshot(collection(db, 'topics'), (snapshot) => {
-          const discussionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setDiscussions(discussionsData);
-          updateChartData(users, competitions, courses, discussionsData);
+            const discussionsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setDiscussions(discussionsData);
+            updateChartData(users, competitions, courses, discussionsData);
         });
-    
+
         return () => unsubscribeDiscussions();
-      }, [users, competitions, courses]);
-    
-      // Function to update chart data
-      const updateChartData = (usersData, competitionsData, coursesData, discussionsData) => {
+    }, [users, competitions, courses]);
+
+    // Function to update chart data
+    const updateChartData = (usersData, competitionsData, coursesData, discussionsData) => {
         setChartData({
-          labels: ['Users', 'Competitions', 'Courses', 'Discussions'],
-          datasets: [
-            {
-              label: 'Total Counts',
-              data: [
-                usersData.length,
-                competitionsData.length,
-                coursesData.length,
-                discussionsData.length,
-              ],
-              backgroundColor: ['#ef4444', '#10b981', '#3b82f6', '#f59e0b'],
-            },
-          ],
+            labels: ['Users', 'Competitions', 'Courses', 'Discussions'],
+            datasets: [
+                {
+                    label: 'Total Counts',
+                    data: [
+                        usersData.length,
+                        competitionsData.length,
+                        coursesData.length,
+                        discussionsData.length,
+                    ],
+                    backgroundColor: ['#ef4444', '#10b981', '#3b82f6', '#f59e0b'],
+                },
+            ],
         });
-      };
-    
+    };
+
     const navigate = useNavigate();
     const handleCardClick = (item) => {
         setSelectedItem(item);
@@ -540,137 +540,137 @@ function AdminDashboard() {
                     </div>
                 </div>
                 <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-  {/* User Management Card */}
-  <div
-    onClick={() => handleCardClick({ type: "user", data: users })}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-blue-100 text-blue-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <GroupIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">User Management</h2>
-      <p className="text-sm text-gray-500">Manage users, roles, and access</p>
-    </div>
-  </div>
+                    {/* User Management Card */}
+                    <div
+                        onClick={() => handleCardClick({ type: "user", data: users })}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-blue-100 text-blue-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <GroupIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">User Management</h2>
+                            <p className="text-sm text-gray-500">Manage users, roles, and access</p>
+                        </div>
+                    </div>
 
-  {/* Competition Management Card */}
-  <div
-    onClick={() => handleCardClick({ type: "competition", data: competitions })}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-purple-100 text-purple-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <SportsEsportsIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">Competition Management</h2>
-      <p className="text-sm text-gray-500">Approve or reject competitions, view details</p>
-    </div>
-  </div>
+                    {/* Competition Management Card */}
+                    <div
+                        onClick={() => handleCardClick({ type: "competition", data: competitions })}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-purple-100 text-purple-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <SportsEsportsIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Competition Management</h2>
+                            <p className="text-sm text-gray-500">Approve or reject competitions, view details</p>
+                        </div>
+                    </div>
 
-  {/* Course Management Card */}
-  <div
-    onClick={() => handleCardClick({ type: "course", data: courses })}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-green-100 text-green-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <SchoolIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">Course Management</h2>
-      <p className="text-sm text-gray-500">View, edit, or delete course entries</p>
-    </div>
-  </div>
+                    {/* Course Management Card */}
+                    <div
+                        onClick={() => handleCardClick({ type: "course", data: courses })}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-green-100 text-green-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <SchoolIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Course Management</h2>
+                            <p className="text-sm text-gray-500">View, edit, or delete course entries</p>
+                        </div>
+                    </div>
 
-  {/* Add New Course Card */}
-  <div
-    onClick={() => setModalIsOpen(true)}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-yellow-100 text-yellow-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <AddCircleOutlineIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">Add New Course</h2>
-      <p className="text-sm text-gray-500">Create new course entries</p>
-    </div>
-  </div>
+                    {/* Add New Course Card */}
+                    <div
+                        onClick={() => setModalIsOpen(true)}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-yellow-100 text-yellow-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <AddCircleOutlineIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Add New Course</h2>
+                            <p className="text-sm text-gray-500">Create new course entries</p>
+                        </div>
+                    </div>
 
-  {/* Approve Competitions Card */}
-  <div
-    onClick={handleOpenApprovalModal}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-red-100 text-red-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <CheckCircleIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">Approve Competitions</h2>
-      <p className="text-sm text-gray-500">Approve or reject new competitions</p>
-    </div>
-  </div>
+                    {/* Approve Competitions Card */}
+                    <div
+                        onClick={handleOpenApprovalModal}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-red-100 text-red-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <CheckCircleIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Approve Competitions</h2>
+                            <p className="text-sm text-gray-500">Approve or reject new competitions</p>
+                        </div>
+                    </div>
 
-  {/* Manage Your Profile Card */}
-  <div
-    onClick={() => navigate("/edit-profile")}
-    className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
-  >
-    <div className="bg-teal-100 text-teal-500 rounded-full h-14 w-14 flex items-center justify-center">
-      <PersonIcon fontSize="medium" />
-    </div>
-    <div>
-      <h2 className="text-sm font-semibold text-gray-700">Manage Your Profile</h2>
-      <p className="text-sm text-gray-500">View and edit your profile</p>
-    </div>
-  </div>
-</section>
- 
+                    {/* Manage Your Profile Card */}
+                    <div
+                        onClick={() => navigate("/edit-profile")}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-teal-100 text-teal-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <PersonIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Manage Your Profile</h2>
+                            <p className="text-sm text-gray-500">View and edit your profile</p>
+                        </div>
+                    </div>
+                </section>
+
                 {addCourseModal}
                 {approveCompetitionsModal}
-                
-{/* <TeamProgressCard/> */}
-  {/* <MyDailyActivitiesChart/> */}
+
+                {/* <TeamProgressCard/> */}
+                {/* <MyDailyActivitiesChart/> */}
                 {/* Chart Component */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-between items-stretch w-full">
-  
-  {/* Line Chart Section */}
-  <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full">
-    <h3 className="font-semibold mb-4 text-lg">Dashboard Insights</h3>
-    <div className="relative h-[300px]">
-      <Line
-        data={chartData}
-        options={{
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        }}
-      />
-    </div>
-  </div>
 
-  {/* Pie Chart Section */}
-  <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full flex justify-center items-center">
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: "Users", value: users.length, color: "#ef4444", label: `Users = ${users.length}` },
-            { id: "Competitions", value: competitions.length, color: "#10b981", label: `Competitions = ${competitions.length}` },
-            { id: "Courses", value: courses.length, color: "#3b82f6", label: `Courses = ${courses.length}` },
-            { id: "Discussions", value: discussions.length, color: "#f59e0b", label: `Discussions = ${discussions.length}` },
-          ],
-        },
-      ]}
-      width={300}
-      height={300}
-    />
-  </div>
+                    {/* Line Chart Section */}
+                    <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full">
+                        <h3 className="font-semibold mb-4 text-lg">Dashboard Insights</h3>
+                        <div className="relative h-[300px]">
+                            <Line
+                                data={chartData}
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                        },
+                                    },
+                                }}
+                            />
+                        </div>
+                    </div>
 
-</div>
+                    {/* Pie Chart Section */}
+                    <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full flex md:justify-between justify-center items-center">
+                        <PieChart
+                            series={[
+                                {
+                                    data: [
+                                        { id: "Users", value: users.length, color: "#ef4444", label: `Users = ${users.length}` },
+                                        { id: "Competitions", value: competitions.length, color: "#10b981", label: `Competitions = ${competitions.length}` },
+                                        { id: "Courses", value: courses.length, color: "#3b82f6", label: `Courses = ${courses.length}` },
+                                        { id: "Discussions", value: discussions.length, color: "#f59e0b", label: `Discussions = ${discussions.length}` },
+                                    ],
+                                },
+                            ]}
+                            width={350}
+                            height={350}
+                        />
+                    </div>
+
+                </div>
 
             </div>
 
@@ -686,7 +686,7 @@ function AdminDashboard() {
                     handleEditCourse={handleEditCourse}
                 />
             )}
-      
+
 
         </div>
     );

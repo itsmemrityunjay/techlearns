@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from '../database/Firebase';
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
@@ -44,29 +44,39 @@ export default function KaggleSignIn() {
     }, [navigate]);
 
     // Google Sign-In
-    const handleGoogleSignIn = () => {
+    const handleGoogleSignIn = async () => {
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then(async (result) => {
-                navigate('/user');  // Redirect on successful Google sign-in
-                const User = result.user;
-                try {
-                    await addDoc(collection(db, 'users'), {
-                        createdAt: new Date(),
-                        role: "user", // Set as pending for admin approval
-                        email: User.email,
-                    });
-                }
-                catch (dbError) {
-                    console.error('Error saving user data to Firestore:', dbError);
-                    toast.error('Failed to save user data. Please try again.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error with Google sign-in:', error);
-                toast.error('Failed to sign in with Google. Please try again.');
-            });
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const User = result.user;
+
+            // Reference to 'users' collection
+            const usersRef = collection(db, "users");
+
+            // Query Firestore to check if the email already exists
+            const q = query(usersRef, where("email", "==", User.email));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                console.log("User already exists in Firestore. Skipping...");
+            } else {
+                // If user does not exist, add them to Firestore
+                await addDoc(usersRef, {
+                    createdAt: new Date(),
+                    role: "user",  // Set as pending for admin approval
+                    email: User.email,
+                });
+                console.log("New user added to Firestore.");
+            }
+
+            // Redirect to the user page after sign-in
+            navigate("/user");
+        } catch (error) {
+            console.error("Error with Google sign-in:", error);
+            toast.error("Failed to sign in with Google. Please try again.");
+        }
     };
+
 
     // Email and Password Sign-In
     const handleEmailSignIn = (e) => {

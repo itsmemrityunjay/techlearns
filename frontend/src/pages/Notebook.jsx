@@ -48,9 +48,14 @@ const Notebook = () => {
   }, [darkMode]);
 
   // Monitor authentication state
-  onAuthStateChanged(auth, (user) => {
-    setUser(user);
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe(); // Cleanup on unmount
+  }, []);
+
 
   // Handle publishing notebook
   const handlePublish = async () => {
@@ -135,13 +140,23 @@ const Notebook = () => {
                 <FaEdit className="inline mr-2 text-yellow-600" />
                 Content
               </label>
-              <ReactQuill
-                value={editorContent}
-                onChange={setEditorContent}
-                placeholder="Write your notebook content here..."
+              <div
                 className="border rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-white text-gray-800 dark:border-gray-600 focus:outline-none transition-all duration-300 shadow-sm hover:shadow-sm hover:border-yellow-400"
-              />
+                style={{
+                  resize: "vertical",  // Enables resizing like a textarea
+                  overflow: "auto",     // Prevents content overflow
+                  minHeight: "150px",   // Sets a minimum height
+                  maxHeight: "600px"    // Optional: Prevents excessive height
+                }}
+              >
+                <ReactQuill className="border-0"
+                  value={editorContent}
+                  onChange={setEditorContent}
+                  placeholder="Write your notebook content here..."
+                />
+              </div>
             </div>
+
 
             {/* Tags Input */}
             <div className="mb-6">

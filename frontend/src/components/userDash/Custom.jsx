@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 import { db } from "../../database/Firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getUserData } from '../../database/Firebase';  // Import the getUserData function
 import Footer from '../comp/footer'; import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
@@ -22,13 +23,24 @@ const CustomComponent = () => {
     // Fetch the authenticated user's data
     useEffect(() => {
         const auth = getAuth();
+        const storage = getStorage();
+
         const unsubscribe = onAuthStateChanged(auth, async (loggedInUser) => {
             if (loggedInUser) {
                 setUser(loggedInUser);
-                const fetchedUserData = await getUserData(loggedInUser.uid);  // Fetch additional user data from Firestore
-                setUserData({
-                    photoURL: fetchedUserData.profileImageUrl,
+                const fetchedUserData = await getUserData(loggedInUser.uid);
 
+                let profileImageUrl = fetchedUserData.profileImageUrl;
+
+                // Convert gs:// URL to a public URL
+                if (profileImageUrl && profileImageUrl.startsWith("gs://")) {
+                    const storageRef = ref(storage, profileImageUrl.replace("gs://", ""));
+                    profileImageUrl = await getDownloadURL(storageRef);
+                }
+
+                setUserData({
+                    photoURL: profileImageUrl,
+                    notebooks: fetchedUserData.notebooks || [],
                     topics: fetchedUserData.topics || [],
                     competitions: fetchedUserData.competitions || [],
                     email: fetchedUserData.email,
@@ -37,27 +49,34 @@ const CustomComponent = () => {
                 setUser(null);
             }
         });
-        return () => unsubscribe();  // Clean up the subscription on component unmount
+
+        return () => unsubscribe(); // Clean up on unmount
     }, []);
+
 
     useEffect(() => {
         const fetchNotebooks = async () => {
-
             try {
                 const querySnapshot = await getDocs(collection(db, "notebooks"));
                 const notebooksData = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
                 }));
-                if (notebooksData.author === userData.email) {
-                    setNotebooks(notebooksData);
-                }
+
+                // Filter notebooks based on the user's email
+                const userNotebooks = notebooksData.filter(notebook => notebook.author === userData.email);
+
+                setNotebooks(userNotebooks);
             } catch (error) {
                 console.error("Error fetching Notebooks:", error);
             }
         };
-        fetchNotebooks();
-    }, []);
+
+        if (userData.email) {
+            fetchNotebooks();
+        }
+    }, [userData.email]);  // Fetch only when userData.email is available
+
 
 
 
@@ -97,9 +116,9 @@ const CustomComponent = () => {
                     <div className="flex items-center justify-center sm:justify-start relative rounded-lg z-10 mb-5">
                         {user?.photoURL ? (
                             <img
-                                src={user.photoURL}
+                                src={user.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                                 alt="user-avatar-image"
-                                className="border-4 border-solid border-white object-cover"
+                                className="border-4 h-32 w-32 border-solid border-white object-cover"
                             />
                         ) : (
                             <p>Loading...</p>
@@ -311,6 +330,7 @@ const CustomComponent = () => {
                                 {/* Month Label */}
                                 <p className="text-xs text-gray-500">{month.name}</p>
                             </div>
+
                         ))}
                     </div>
                 </div>
