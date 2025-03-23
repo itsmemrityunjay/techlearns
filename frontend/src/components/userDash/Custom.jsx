@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Link } from 'react-router-dom';
-import { db } from "../../database/Firebase";
-import { collection, getDocs } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getUserData } from '../../database/Firebase';  // Import the getUserData function
-import Footer from '../comp/footer'; import AutoStoriesIcon from '@mui/icons-material/AutoStories';
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import { use } from 'react';
+import { collection, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "../../database/Firebase"; // Firebase config
+import { useAuth } from "../../database/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const CustomComponent = () => {
     const [user, setUser] = useState(null);  // Store user info
@@ -104,6 +102,85 @@ const CustomComponent = () => {
         { month: 9, day: 10 }, // Example: September 10th
     ];
 
+
+
+
+    const [courses, setCourses] = useState([]);
+    const [userProgress, setUserProgress] = useState({});
+    const { currentUser } = useAuth();
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const fetchCourses = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "courses"));
+          const coursesData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+  
+          setCourses(coursesData);
+  
+          // Fetch user progress for these courses
+          coursesData.forEach((course) => fetchUserProgress(course.id));
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        }
+      };
+  
+      const fetchUserProgress = async (courseId) => {
+        try {
+          const progressRef = doc(db, "userProgress", `${currentUser.uid}_${courseId}`);
+          const progressSnap = await getDoc(progressRef);
+  
+          setUserProgress((prev) => ({
+            ...prev,
+            [courseId]: progressSnap.exists() ? progressSnap.data() : null,
+          }));
+        } catch (error) {
+          console.error("Error fetching progress:", error);
+        }
+      };
+  
+      fetchCourses();
+    }, [currentUser]);
+  
+    const handleCompleteCourse = async (courseId, courseTitle) => {
+      try {
+        const progressRef = doc(db, "userProgress", `${currentUser.uid}_${courseId}`);
+        const certificateURL = await generateCertificate(courseTitle); // You can replace this with actual certificate generation
+  
+        await setDoc(progressRef, {
+          courseId,
+          userId: currentUser.uid,
+          completed: true,
+          completedAt: new Date(),
+          certificateURL,
+        });
+  
+        alert("Congratulations! You've completed this course.");
+        setUserProgress((prev) => ({
+          ...prev,
+          [courseId]: {
+            completed: true,
+            completedAt: new Date(),
+            certificateURL,
+          },
+        }));
+      } catch (error) {
+        console.error("Error completing course:", error);
+        alert("Something went wrong while marking completion!");
+      }
+    };
+  
+    const generateCertificate = async (courseTitle) => {
+      // ➡️ This is a placeholder URL; you can generate an actual PDF via backend or third-party.
+      // ➡️ You can also store certificate PDFs in Firebase Storage.
+      return `https://dummy-certificate.com/certificate/${courseTitle}-${Date.now()}.pdf`;
+    };
+  
+
+
     return (
         <div className='container mx-auto py-8'>
             <section className="relative pt-40 pb-24">
@@ -137,7 +214,7 @@ const CustomComponent = () => {
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path
-                                    className="stroke-gray-700 transition-all duration-500 group-hover:stroke-indigo-600"
+                                    className="stroke-gray-700 transition-all duration-500"
                                     d="M14.1667 11.6666V13.3333C14.1667 14.9046 14.1667 15.6903 13.6785 16.1785C13.1904 16.6666 12.4047 16.6666 10.8333 16.6666H7.50001C5.92866 16.6666 5.14299 16.6666 4.65483 16.1785C4.16668 15.6903 4.16668 14.9047 4.16668 13.3333V11.6666M16.6667 9.16663V13.3333M11.0157 10.434L12.5064 9.44014C14.388 8.18578 15.3287 7.55861 15.3287 6.66663C15.3287 5.77466 14.388 5.14749 12.5064 3.89313L11.0157 2.8993C10.1194 2.3018 9.67131 2.00305 9.16668 2.00305C8.66205 2.00305 8.21393 2.3018 7.31768 2.8993L5.82693 3.89313C3.9454 5.14749 3.00464 5.77466 3.00464 6.66663C3.00464 7.55861 3.9454 8.18578 5.82693 9.44014L7.31768 10.434C8.21393 11.0315 8.66205 11.3302 9.16668 11.3302C9.67131 11.3302 10.1194 11.0315 11.0157 10.434Z"
                                     stroke="orange" strokeWidth="1.6" strokeLinecap="round"
                                 />
@@ -335,7 +412,64 @@ const CustomComponent = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
+
+
+
+
+            <div className="p-8 bg-white rounded-lg shadow-md max-w-6xl mx-auto mt-12">
+      <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
+        My Courses
+      </h2>
+
+      {courses.length === 0 ? (
+        <p className="text-center text-gray-500">No courses found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => {
+            const progress = userProgress[course.id];
+
+            return (
+              <div
+                key={course.id}
+                className="bg-gray-100 rounded-lg shadow p-4 flex flex-col justify-between"
+              >
+                <h3 className="font-semibold text-lg mb-2">{course.title}</h3>
+                <p className="text-gray-600 text-sm mb-4">{course.description}</p>
+
+                <video controls className="w-full rounded-lg mb-4">
+                  <source src={course.videoURL} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+
+                {progress?.completed ? (
+                  <div className="flex flex-col">
+                    <p className="text-green-600 font-semibold text-center mb-2">
+                      ✅ Course Completed!
+                    </p>
+                    <a
+                      href={progress.certificateURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-green-600 text-white text-center py-2 px-4 rounded hover:bg-green-700 transition"
+                    >
+                      🎓 Download Certificate
+                    </a>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleCompleteCourse(course.id, course.title)}
+                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                  >
+                    Mark as Complete & Get Certificate
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+            
         </div>
     );
 };

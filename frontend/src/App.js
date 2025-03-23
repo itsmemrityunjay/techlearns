@@ -12,14 +12,14 @@ import Notebook from "./pages/Notebook";
 import Admin from "./pages/dashboard/Admin";
 import Discussions from "./pages/Discussions";
 import User from "./pages/dashboard/User";
-import Footer from "./components/home/Footer";
+
 import ProtectedRoute from "./database/ProtectedRoutes";
-import Auth from "./database/Auth";
+
 import Course from "./pages/Course";
 import CourseDetail from "./components/courses/CourseDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Dashboard from "./pages/dashboard/Dashboard";
+
 import { AuthProvider } from "./database/AuthContext";
 import Amin from "./pages/dashboard/Amin";
 import CompDetail from "./components/comp/CompDetail";
@@ -29,6 +29,12 @@ import NotFound from "./pages/NotFound";
 import HostComp from "../src/components/comp/HostComp";
 import DiscussForm from "./components/discuss/DiscussForm";
 import Manageuser from "./pages/dashboard/Manageuser";
+import UploadCourseVideo from "./pages/dashboard/UploadCourseVideo";
+import AssignmentSubmit from "./pages/assignments/AssignmentSubmit";
+import ReviewSubmissions from "./pages/assignments/ReviewSubmissions";
+import LiveStream from "./pages/assignments/LiveStream";
+// import AdminNotifications from "./pages/dashboard/AdminNotifications";
+
 function App() {
   return (
     <>
@@ -145,6 +151,60 @@ function App() {
                 </Layout>
               }
             />
+            <Route
+  path="/courses/upload"
+  element={
+    <Layout>
+      <ProtectedRoute roles={["user" || "admin" || "sub-admin" || ""]}>
+        <UploadCourseVideo />
+      </ProtectedRoute>
+    </Layout>
+  }
+/>
+
+<Route
+  path="/courses/:courseId/assignments/:assignmentId/submit"
+  element={
+    <Layout>
+      <ProtectedRoute roles={["user"]}>
+        <AssignmentSubmit />
+      </ProtectedRoute>
+    </Layout>
+  }
+/>
+
+<Route
+  path="/courses/:courseId/assignments/:assignmentId/submissions"
+  element={
+    <Layout>
+      <ProtectedRoute roles={["admin", "sub-admin"]}>
+        <ReviewSubmissions />
+      </ProtectedRoute>
+    </Layout>
+  }
+/>
+
+<Route
+  path="/amin/notifications"
+  element={
+    <Layout>
+      <ProtectedRoute roles={["admin", "sub-admin"]}>
+        <Amin />
+      </ProtectedRoute>
+    </Layout>
+  }
+/>
+<Route
+  path="/live"
+  element={
+    <Layout>
+      <ProtectedRoute roles={["user"]}>
+        <LiveStream />
+      </ProtectedRoute>
+    </Layout>
+  }
+/>
+
             <Route
               path="/host"
               element={
