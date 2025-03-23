@@ -4,6 +4,12 @@ import {
   Button,
   Divider,
   Chip,
+  Badge,
+  Card,
+  CardHeader,
+  CardContent,
+  CardMedia,
+  Accordion, AccordionSummary, AccordionDetails,
   LinearProgress,
 } from "@mui/material";
 import {
@@ -23,9 +29,11 @@ import herocompetition from "../comp/herocompetition.jpg";
 import divider2 from "../comp/divider2.jpg";
 import DynamicTimeline from "./DynamicTimeline";
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import CalendarDays from '@mui/icons-material/CalendarToday';
+import Clock from '@mui/icons-material/AccessTime';
+import Trophy from '@mui/icons-material/EmojiEvents';
 import PersonIcon from "@mui/icons-material/Person";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Footer from "./footer";
 const faqs = [
   {
@@ -42,7 +50,7 @@ const faqs = [
   },
   {
     question: "What are Notebooks?",
-    answer: `Kaggle Notebooks is a cloud computational environment that enables reproducible and collaborative analysis. Notebooks support scripts in Python and R, Jupyter Notebooks, and RMarkdown reports. You can visit the Notebooks tab to view all of the publicly shared code for the Titanic competition. For more on how to use Notebooks to learn data science, check out our Courses!`,
+    answer: 'Kaggle Notebooks is a cloud computational environment that enables reproducible and collaborative analysis. Notebooks support scripts in Python and R, Jupyter Notebooks, and RMarkdown reports. You can visit the Notebooks tab to view all of the publicly shared code for the Titanic competition. For more on how to use Notebooks to learn data science, check out our Courses!',
   },
   {
     question: "Why did my team disappear from the leaderboard?",
@@ -62,7 +70,7 @@ function CompDetail() {
   const { id } = useParams();
   const [compData, setCompData] = useState(null);
   const [isRegistered, setIsRegistered] = useState(false);
-  const { currentUser } = useAuth(); // Assuming `useAuth` provides the current user's data
+  const { currentUser } = useAuth(); // Assuming useAuth provides the current user's data
 
   useEffect(() => {
     const fetchCompData = async () => {
@@ -108,206 +116,309 @@ function CompDetail() {
     <div className="container mx-auto">
       <div className="flex">
         <div className="flex-grow">
-          <div className=" justify-between items-start">
-            {/* hero section */}
-            {/* <div className='mt-12' style={{
-                                backgroundImage:`url(${herocompetition})`,
-                                backgroundSize: "contain", // Ensures the whole image is visible
-                                backgroundRepeat: "no-repeat", // Prevents tiling of the image
-                                backgroundPosition: "center",
-                                height: "450px",
-                                width:'100%',
-                                                    
-                            }}>
-                            </div> */}
-            {/* Left Section */}
-            <div
-              className="relative bg-cover bg-center rounded-lg shadow-lg p-6 w-full h-[45vh] transition-transform hover:scale-105"
-              style={{
-                backgroundImage: `url(${compData.icon || compData.imageUrl})`,
-              }}
-            >
-              {/* Dark overlay for text visibility */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70 rounded-lg"></div>
+          {/* Hero Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
+            <div className="flex flex-col justify-center">
+              <Badge className="w-fit mb-4" variant="outline">
+                Open for Registration
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">{compData.title}</h1>
+              <p className="text-muted-foreground text-lg mb-6">
+                {compData.subtitle || compData.description}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                {!isRegistered ? (
+                  <Button
+                    size="lg"
+                    sx={{ backgroundColor: "black", color: "white", "&:hover": { backgroundColor: "#333" } }}
+                    variant="contained"
+                    className="w-full sm:w-auto" onClick={handleJoinCompetition}
+                  >
+                    Join Competition
+                  </Button>) : (
+                  <Button
+                    size="lg"
+                    sx={{ backgroundColor: "black", color: "white", "&:hover": { backgroundColor: "#333" } }}
+                    variant="contained"
+                    className="w-full sm:w-auto"
+                  >
+                    Submit
+                  </Button>)}
 
-              {/* Content */}
-              <div className="relative flex flex-col justify-center items-center gap-y-6 text-white h-full">
-                {/* Title and Subtitle */}
-                <div className="flex flex-col items-center justify-center text-center">
-                  <h1 className="font-extrabold text-2xl md:text-3xl tracking-wide mb-2">
-                    {compData.title}
-                  </h1>
-                  <p className="text-gray-300 text-sm md:text-base lg:w-2/3">
-                    {compData.subtitle || compData.description}
-                  </p>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex flex-col items-center space-y-4">
-                  {!isRegistered ? (
-                    <button
-                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200"
-                      onClick={handleJoinCompetition}
-                    >
-                      Join Competition
-                    </button>
-                  ) : (
-                    <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200">
-                      Submit Entry
-                    </button>
-                  )}
-                </div>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                  Learn More
+                </Button>
               </div>
             </div>
+            <div className="relative rounded-3xl flex justify-center items-center overflow-hidden min-h-[200px] max-h-[400px]">
+              <img src={compData.icon || compData.imageUrl} alt={compData.title} fill className="object-cover h-auto w-[100%]" />
+            </div>
+          </div>
 
-            {/* Right Section (Competition Details) */}
-            <div className="p-6 rounded-lg bg-white mb-5 mt-12 sm:mt-8 md:mt-12 w-full shadow-md">
-              {/* Flex container for rows */}
-              <div className="flex lg:flex-nowrap flex-wrap gap-6 mt-4 ">
-                {/* Box 1 */}
-                <div className="flex w-1/2 mb-4">
-                  <div className="h-16 w-16 bg-[#ffead9] rounded-lg mt-1 flex justify-center items-center sm:h-14 sm:w-14">
-                    <PersonIcon
-                      className="text-black"
-                      style={{ fontSize: "28px" }}
-                    />
-                  </div>
-                  <div className="ml-4">
-                    <Typography
-                      variant="h6"
-                      className="font-bold text-black pb-2 lg:text-lg sm:text-sm "
-                    >
-                      Competition Host
+          <div className="flex flex-wrap gap-4 mb-12 justify-between items-center">
+            <div className="flex items-center gap-2 bg-gray-200 p-2 rounded-3xl">
+              <Badge variant="secondary" className="text-base px-3 py-1.5">
+                Status: <span className="font-bold ml-1 text-green-600">Open</span>
+              </Badge>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-muted-foreground" />
+              <span className="text-muted-foreground">
+                Registration closes in: <span className="font-medium">14 days</span>
+              </span>
+            </div>
+          </div>
+
+
+          {/* Host Card Detail */}
+
+          <Card sx={{ mb: 3, p: 2 }} className="rounded-2xl">
+            <CardHeader
+              title={
+                <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+                  <PersonIcon className="h-6 w-6" />
+                  Competition Host
+                </h2>
+              }
+            />
+            <CardContent>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "24px" }}>
+                <div className="flex flex-col sm:flex-col md:flex-row items-center justify-between gap-6 w-full  " style={{ gap: "16px", }}>
+                  <CardMedia
+                    component="img"
+                    image="/placeholder.svg?height=100&width=100"
+                    alt="Host Logo"
+                    sx={{ height: 64, width: 64, borderRadius: 1, objectFit: "cover" }}
+                  />
+                  <div>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      TechInnovate Foundation
                     </Typography>
-                    <Typography className="text-black mt-1 text-sm">
-                      {compData.author}
+                    <Typography variant="body2" color="text.secondary">
+                      Global Technology Nonprofit
+                    </Typography>
+                  </div>
+                  <div className="max-w-3xl">
+                    <Typography variant="body2" color="text.secondary" className="">
+                      TechInnovate Foundation is dedicated to advancing technology for social good. With a focus on AI and
+                      machine learning, they host annual competitions to encourage innovation and solve pressing global
+                      challenges.
                     </Typography>
                   </div>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
 
-                {/* Box 2 */}
-                <div className="flex w-1/2 mb-4">
-                  <div
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      backgroundColor: "#ffd9ec",
-                      borderRadius: "10px",
-                      marginTop: "2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <MonetizationOnIcon
-                      style={{ color: "black", fontSize: "32px" }}
-                    />
+          {/* Prize Pool */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+              <Trophy className="h-6 w-6 text-black" />
+              Prizes & Awards
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="border-2 border-primary/50 bg-primary/5">
+                <CardHeader className="pb-2">
+                  <Badge className="w-fit mb-2 text-black">1st Place</Badge>
+                  <Typography className="text-3xl font-bold">$50,000</Typography>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    <li>Mentorship from industry leaders</li>
+                    <li>Featured in TechInnovate publication</li>
+                    <li>Opportunity to present at AI Summit</li>
+                  </ul>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <Badge className="w-fit mb-2" variant="outline">
+                    2nd Place
+                  </Badge>
+                  <Typography className="text-3xl font-bold">$25,000</Typography>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    <li>Access to TechInnovate resources</li>
+                    <li>Featured in TechInnovate newsletter</li>
+                    <li>Networking opportunities with sponsors</li>
+                  </ul>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <Badge className="w-fit mb-2" variant="outline">
+                    3rd Place
+                  </Badge>
+                  <Typography className="text-3xl font-bold">$10,000</Typography>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    <li>Recognition at awards ceremony</li>
+                    <li>Digital badge for professional profiles</li>
+                    <li>One-year subscription to AI tools suite</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+
+          {/* Eligiblity Criteria */}
+          <Card sx={{ mb: 3, p: 2 }} className="rounded-2xl">
+            <div>
+              <h2 className="text-3xl font-bold mb-6 flex items-center gap-2 text-black">
+                <PersonIcon className="h-6 w-6" />
+                Who Can Join
+              </h2>
+            </div>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Eligibility Criteria</h3>
+                  <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                    <li>Open to individuals and teams of up to 5 members</li>
+                    <li>Participants must be 18 years or older</li>
+                    <li>Open to participants from all countries</li>
+                    <li>No prior experience in AI required, but recommended</li>
+                    <li>Students, professionals, and enthusiasts welcome</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Required Skills</h3>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <Badge variant="secondary">Programming</Badge>
+                    <Badge variant="secondary">Problem Solving</Badge>
+                    <Badge variant="secondary">Data Analysis</Badge>
+                    <Badge variant="secondary">Machine Learning (Basic)</Badge>
+                    <Badge variant="secondary">Teamwork</Badge>
                   </div>
-                  <div className="ml-4">
-                    <Typography
-                      variant="h6"
-                      className="font-bold text-black pb-2"
-                    >
-                      Prizes & Awards
-                    </Typography>
-                    <Typography className="text-black mt-2 sm:mt-4">
-                      {compData.prizePool || compData.prizes}
-                    </Typography>
+                  <p className="text-muted-foreground">
+                    Don't have all the skills? No problem! We encourage diverse teams where members can contribute different
+                    expertise. Learning resources will be provided to all participants.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+
+
+          {/* Timeline */}
+
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-6 flex items-center gap-2 text-black">
+              <CalendarDays className="h-6 w-6 text-black" />
+              Competition Timeline
+            </h2>
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-black bg-border md:left-1/2"></div>
+
+              {/* Timeline events */}
+              <div className="space-y-12">
+                {/* Event 1 */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                  <div className="md:text-right md:pr-12">
+                    <h3 className="font-bold text-lg">Registration Opens</h3>
+                    <p className="text-muted-foreground">March 15, 2025</p>
+                    <p className="mt-2">
+                      Registration begins for all interested participants. Early bird registrants receive access to
+                      exclusive workshops.
+                    </p>
+                  </div>
+                  <div className="hidden md:block"></div>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <span className="bg-black text-white p-4 font-bold rounded-full">1</span>
                   </div>
                 </div>
 
-                {/* Box 3 */}
-                <div className="flex w-1/2 mb-4">
-                  <div
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      backgroundColor: "#e6d9ff",
-                      borderRadius: "10px",
-                      marginTop: "2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <HowToRegIcon
-                      style={{ color: "black", fontSize: "32px" }}
-                    />
+                {/* Event 2 */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                  <div className="hidden md:block"></div>
+                  <div className="md:pl-12">
+                    <h3 className="font-bold text-lg">Kickoff Webinar</h3>
+                    <p className="text-muted-foreground">April 1, 2025</p>
+                    <p className="mt-2">
+                      Official launch event with detailed competition guidelines, Q&A session, and introduction to the
+                      challenge themes.
+                    </p>
                   </div>
-                  <div className="ml-4">
-                    <Typography
-                      variant="h6"
-                      className="font-bold text-black pb-2"
-                    >
-                      Who Can Join
-                    </Typography>
-                    <Typography className="text-black mt-2 sm:mt-4">
-                      {compData.whoCanJoin || "N/A"}
-                    </Typography>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <span className="bg-black text-white p-4 font-bold rounded-full">2</span>
                   </div>
                 </div>
 
-                {/* Box 4 */}
-                <div className="flex w-1/2 mb-4">
-                  <div
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      backgroundColor: "#fff9d9",
-                      borderRadius: "10px",
-                      marginTop: "2px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <AssessmentIcon
-                      style={{ color: "black", fontSize: "32px" }}
-                    />
+                {/* Event 3 */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                  <div className="md:text-right md:pr-12">
+                    <h3 className="font-bold text-lg">Submission Deadline</h3>
+                    <p className="text-muted-foreground">June 15, 2025</p>
+                    <p className="mt-2">
+                      Final deadline for all project submissions. Late entries will not be accepted. Detailed documentation
+                      required.
+                    </p>
                   </div>
-                  <div className="ml-4">
-                    <Typography
-                      variant="h6"
-                      className="font-bold text-black pb-2"
-                    >
-                      Status
-                    </Typography>
-                    <Typography className="text-black mt-4 sm:mt-6">
-                      {compData.status || "N/A"}
-                    </Typography>
+                  <div className="hidden md:block"></div>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <span className="bg-black text-white p-4 font-bold rounded-full">3</span>
+                  </div>
+                </div>
+
+                {/* Event 4 */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                  <div className="hidden md:block"></div>
+                  <div className="md:pl-12">
+                    <h3 className="font-bold text-lg">Judging Period</h3>
+                    <p className="text-muted-foreground">June 16 - July 15, 2025</p>
+                    <p className="mt-2">
+                      Expert panel reviews all submissions. Finalists may be asked to provide additional information or
+                      demonstrations.
+                    </p>
+                  </div>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <span className="bg-black text-white p-4 font-bold rounded-full">6</span>
+                  </div>
+                </div>
+
+                {/* Event 5 */}
+                <div className="relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+                  <div className="md:text-right md:pr-12">
+                    <h3 className="font-bold text-lg">Winners Announcement</h3>
+                    <p className="text-muted-foreground">July 30, 2025</p>
+                    <p className="mt-2">
+                      Winners announced at virtual ceremony. All participants will receive feedback on their submissions.
+                    </p>
+                  </div>
+                  <div className="hidden md:block"></div>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <span className="bg-black text-white p-4 font-bold rounded-full">5</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Overview Section */}
-          {/* <div className="mb-24 mt-12 w-full">
-                        <Typography variant="h6" className="font-bold mb-2 text-center secondary-text">Overview</Typography>
-                        <Typography className="text-gray-600 leading-relaxed text-center secondary-text">{compData.subtitle}</Typography>
-                        <div className="flex justify-between items-center mt-4">
-                            <div>
-                                <Typography variant="subtitle2" className="text-gray-500 font-bold">Start</Typography>
-                                <Typography>{compData.startDate}</Typography>
-                            </div>
-                            <LinearProgress
-                                variant="determinate"
-                                value={compData.progress ?? 0}
-                                className="flex-grow h-2 mx-5"
-                                color="primary"
-                            />
-                            <div>
-                                <Typography variant="subtitle2" className="text-gray-500 font-bold">Close</Typography>
-                                <Typography>{compData.endDate}</Typography>
-                            </div>
-                        </div>
-                    </div> */}
+          {/* CTA */}
+          <div className="bg-white rounded-xl p-8 text-center my-10">
+            <h2 className="text-3xl font-bold mb-4">Ready to Innovate?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
+              Join hundreds of innovators from around the world in this exciting opportunity to showcase your skills, learn
+              from experts, and potentially win substantial prizes.
+            </p>
+            <Button variant="contained" size="large" className="px-8" sx={{ backgroundColor: "black", color: "white", "&:hover": { backgroundColor: "#333" } }}>
+              Join Competition Now
+            </Button>
+          </div>
 
-          {/*  */}
-          <DynamicTimeline />
+
+
+
+
+          {/* <DynamicTimeline /> */}
           {/* divider competition */}
-          <div
-          className="text-white pt-48 mt-[-80px]"
+          {/* <div
+            className="text-white pt-48 mt-[-80px]"
             style={{
               backgroundImage: `url(${divider2})`,
               backgroundSize: "contain",
@@ -317,34 +428,33 @@ function CompDetail() {
               width: "100%",
             }}
           >
-           <h1 className="text-5xl mb-2 ml-24">Take the Challenge</h1>
-           <h4 className="text-3xl ml-24  pb-2">Become a PRO!</h4>
-          </div>
+            <h1 className="text-5xl mb-2 ml-24">Take the Challenge</h1>
+            <h4 className="text-3xl ml-24  pb-2">Become a PRO!</h4>
+          </div> */}
 
           {/* FAQ Section */}
           <div className="bg-transparent p-6 mb-4">
-            <div className="flex justify-center items-center w-full ">
-              <img src={faqimg} alt="FAQ Image" className="w-126 h-auto mt-[-100px]" />
+            <div className="flex justify-center items-center w-full">
+              <img src={faqimg} alt="FAQ Image" className="w-[500px] h-auto mt-[-100px]" />
             </div>
             <div className="text-3xl font-bold mb-4 text-purple-950 text-center">
               Frequently Asked Questions
             </div>
             {faqs.map((faq, index) => (
-              <div
+              <Accordion
                 key={index}
-                className="collapse border border-purple-600 mb-4 hover:text-white hover:bg-purple-100"
+                className="border  mb-4 hover:text-black hover:bg-white"
               >
-                <input type="checkbox" />
-                <div
-                  className="collapse-title text-lg font-semibold text-gray-800 px-4 py-2 ml-8 mt-4 "
-                  style={{}}
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  className="text-lg font-semibold text-gray-800 px-4 py-2"
                 >
                   {faq.question}
-                </div>
-                <div className="collapse-content">
-                  <p className="text-gray-600 ml-8 w-11/12">{faq.answer}</p>
-                </div>
-              </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <p className="text-gray-600 w-11/12">{faq.answer}</p>
+                </AccordionDetails>
+              </Accordion>
             ))}
           </div>
 
@@ -361,7 +471,7 @@ function CompDetail() {
             </div>
           )}
           <Divider />
-          <Footer/>
+          <Footer />
         </div>
       </div>
     </div>
