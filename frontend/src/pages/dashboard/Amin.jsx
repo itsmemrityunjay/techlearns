@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dashboard, Leaderboard, ShoppingCart, Settings, AccountCircle } from '@mui/icons-material';
+import { Dashboard, Leaderboard, ShoppingCart, Settings, AccountCircle, Assignment } from '@mui/icons-material';
 import { Line } from 'react-chartjs-2';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -17,7 +17,6 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
-    doc,
 } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { db, storage } from '../../database/Firebase';
@@ -29,10 +28,20 @@ import SchoolIcon from '@mui/icons-material/School';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PersonIcon from '@mui/icons-material/Person';
-import UserStatsCard from './Chart';
-import TeamProgressCard from './Chart';
-import getMainChartOptions from './Chart';
+import { doc, setDoc } from "firebase/firestore";
+import UploadCourseVideoModal from './UploadCourseVideo';
+import CreateAssignmentModal from './CreateAssignmentModal';
+import AssignmentSubmissionsOverview from './AssignmentSubmissionsOverview';
+import { useParams } from 'react-router-dom';
+
+
 function AdminDashboard() {
+
+    const { courseId } = useParams(); // Get the course ID from route
+    
+    const [selectedCourseId, setSelectedCourseId] = useState("");
+    const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+    const [selectedAssignmentId, setSelectedAssignmentId] = useState("");
     const [users, setUsers] = useState([]);
     const [competitions, setCompetitions] = useState([]);
     const [courses, setCourses] = useState([]);
@@ -357,6 +366,106 @@ function AdminDashboard() {
     }
 
 
+    const [isLive, setIsLive] = useState(false);
+    // const { currentUser } = useAuth();
+  
+    const startLiveStream = async () => {
+        const roomName = "AdminLiveStreamRoom";
+        try {
+          await setDoc(doc(db, "livestream", "current"), {
+            isLive: true,
+            roomName,
+            startedAt: new Date(),
+          });
+          setIsLive(true);
+          alert("Live stream started!");
+        } catch (error) {
+          console.error("Error starting livestream:", error);
+        }
+      };
+    
+      const stopLiveStream = async () => {
+        try {
+          await setDoc(doc(db, "livestream", "current"), {
+            isLive: false,
+            roomName: "",
+          });
+          setIsLive(false);
+          alert("Live stream stopped!");
+        } catch (error) {
+          console.error("Error stopping livestream:", error);
+        }
+      };
+    
+      useEffect(() => {
+        if (isLive) {
+          const domain = "meet.jit.si";
+          const options = {
+            roomName: "AdminLiveStreamRoom",
+            width: "100%",
+            height: 600,
+            parentNode: document.getElementById("admin-jitsi-container"),
+            userInfo: {
+              displayName: currentUser?.email || "Admin",
+            },
+          };
+          const api = new window.JitsiMeetExternalAPI(domain, options);
+    
+          return () => api.dispose();
+        }
+      }, [isLive]);
+
+
+
+
+
+
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "notifications"));
+          const notificationsData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+  
+          setNotifications(notificationsData);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+  
+      fetchNotifications();
+    }, []);
+  
+    const markAsRead = async (notificationId) => {
+      try {
+        await updateDoc(doc(db, "notifications", notificationId), { read: true });
+        setNotifications((prev) =>
+          prev.map((note) =>
+            note.id === notificationId ? { ...note, read: true } : note
+          )
+        );
+      } catch (error) {
+        console.error("Error marking notification as read", error);
+      }
+    };
+  
+
+
+
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    // const currentUser = useAuth().currentUser;
+    
+
+
+    
+
+    
+
+
     const addCourseModal = (
         <Modal
             isOpen={modalIsOpen}
@@ -524,6 +633,11 @@ function AdminDashboard() {
     );
 
 
+
+
+    
+
+
     return (
         <div className="flex flex-col lg:flex-row">
             <div className="flex-1 md:p-6 space-y-6">
@@ -623,10 +737,172 @@ function AdminDashboard() {
                             <p className="text-sm text-gray-500">View and edit your profile</p>
                         </div>
                     </div>
+                    <div
+                        onClick={() => setIsUploadModalOpen(true)}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-red-100 text-red-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <CheckCircleIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Upload Video Course</h2>
+                            <p className="text-sm text-gray-500">Upload new video course</p>
+                        </div>
+                    </div>
+                    {!isLive ? (
+                    <div
+                    onClick={startLiveStream}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="bg-red-100 text-red-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <CheckCircleIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Start Live Class</h2>
+                            <p className="text-sm text-gray-500">Start Live Streaming</p>
+                        </div>
+                    </div>):(
+                    <div
+                    onClick={stopLiveStream}
+                        className="bg-white p-6 rounded-xl shadow-md flex items-center gap-4 cursor-pointer"
+                    >
+                        <div className="text-red-100 bg-red-500 rounded-full h-14 w-14 flex items-center justify-center">
+                            <CheckCircleIcon fontSize="medium" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-gray-700">Stop Live Class</h2>
+                            <p className="text-sm text-gray-500">Stop Live Streaming</p>
+                        </div>
+                    </div>)}
                 </section>
 
                 {addCourseModal}
                 {approveCompetitionsModal}
+
+                <div className="p-8">
+
+
+
+                {!isLive ? (
+        ""
+      ) : (
+        <button
+          onClick={stopLiveStream}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Stop Live Stream
+        </button>
+      )}
+
+      {/* Jitsi container for admin live stream */}
+      {isLive && (
+        <div className="mt-8">
+          <h3 className="text-xl font-semibold mb-2">Hosting Live Class</h3>
+          <div id="admin-jitsi-container" className="w-full h-[600px] bg-black rounded-lg"></div>
+        </div>
+      )}
+    
+      {/* Upload Course Button */}
+      {/* <button
+        onClick={() => setIsUploadModalOpen(true)}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Upload New Course
+      </button> */}
+
+      {/* Upload Course Modal */}
+      {isUploadModalOpen && (
+        <UploadCourseVideoModal
+          isOpen={isUploadModalOpen}
+          onClose={() => setIsUploadModalOpen(false)}
+        />
+      )}
+
+
+<div className="p-8 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-blue-700">Admin Dashboard</h1>
+
+
+
+      <div className="mb-4">
+        <label className="block font-bold mb-2">Select Course</label>
+        <select
+          value={selectedCourseId}
+          onChange={(e) => setSelectedCourseId(e.target.value)}
+          className="border rounded p-2 w-full"
+        >
+          <option value="">-- Select a Course --</option>
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.title}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <button
+  onClick={() => {
+    if (!selectedCourseId) {
+      alert('Select a course first!');
+      return;
+    }
+    setIsAssignmentModalOpen(true);
+  }}
+  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+>
+  Create Assignment
+</button>
+
+<CreateAssignmentModal
+  isOpen={isAssignmentModalOpen}
+  onClose={() => setIsAssignmentModalOpen(false)}
+  courseId={selectedCourseId} // ✅ Send the correct courseId here
+/>
+
+
+      {/* Show submission overview if an assignment has been selected */}
+      {selectedAssignmentId && (
+        <AssignmentSubmissionsOverview assignmentId={selectedAssignmentId} />
+      )}
+    </div>
+
+
+    </div>
+
+
+ 
+
+
+    <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto mt-12">
+      <h2 className="text-xl font-bold text-blue-600 mb-4">Admin Notifications</h2>
+
+      {notifications.length === 0 ? (
+        <p>No notifications available.</p>
+      ) : (
+        notifications.map((note) => (
+          <div
+            key={note.id}
+            className={`border rounded p-4 mb-4 ${
+              note.read ? "bg-gray-100" : "bg-blue-50"
+            }`}
+          >
+            <h3 className="font-semibold">{note.title}</h3>
+            <p className="text-sm text-gray-700">{note.message}</p>
+            <p className="text-xs text-gray-400">{new Date(note.createdAt?.seconds * 1000).toLocaleString()}</p>
+
+            {!note.read && (
+              <button
+                onClick={() => markAsRead(note.id)}
+                className="mt-2 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+              >
+                Mark as Read
+              </button>
+            )}
+          </div>
+        ))
+      )}
+    </div>
+
 
                 {/* <TeamProgressCard/> */}
                 {/* <MyDailyActivitiesChart/> */}
@@ -634,7 +910,7 @@ function AdminDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-between items-stretch w-full">
 
                     {/* Line Chart Section */}
-                    <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full">
+                    <div className="p-4  shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full">
                         <h3 className="font-semibold mb-4 text-lg">Dashboard Insights</h3>
                         <div className="relative h-[300px]">
                             <Line
@@ -653,7 +929,7 @@ function AdminDashboard() {
                     </div>
 
                     {/* Pie Chart Section */}
-                    <div className="p-4 bg-white shadow-md rounded-lg bg-[#D9F1FF] h-[400px] md:h-[400px] w-full flex md:justify-between justify-center items-center">
+                    <div className="p-4 bg-white shadow-md rounded-lg  h-[400px] md:h-[400px] w-full flex md:justify-between justify-center items-center">
                         <PieChart
                             series={[
                                 {
@@ -674,6 +950,9 @@ function AdminDashboard() {
 
             </div>
 
+
+            
+
             {modalOpen && (
                 <ModalMain
                     onClose={closeModal}
@@ -686,6 +965,8 @@ function AdminDashboard() {
                     handleEditCourse={handleEditCourse}
                 />
             )}
+
+
 
 
         </div>
