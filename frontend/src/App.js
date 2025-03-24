@@ -31,7 +31,7 @@ import DiscussForm from "./components/discuss/DiscussForm";
 import Manageuser from "./pages/dashboard/Manageuser";
 import UploadCourseVideo from "./pages/dashboard/UploadCourseVideo";
 import AssignmentSubmit from "./pages/assignments/AssignmentSubmit";
-import ReviewSubmissions from "./pages/assignments/ReviewSubmissions";
+// import ReviewSubmissions from "./pages/assignments/ReviewSubmissions";
 import LiveStream from "./pages/assignments/LiveStream";
 // import AdminNotifications from "./pages/dashboard/AdminNotifications";
 
@@ -173,7 +173,7 @@ function App() {
   }
 />
 
-<Route
+{/* <Route
   path="/courses/:courseId/assignments/:assignmentId/submissions"
   element={
     <Layout>
@@ -182,7 +182,7 @@ function App() {
       </ProtectedRoute>
     </Layout>
   }
-/>
+/> */}
 
 <Route
   path="/amin/notifications"

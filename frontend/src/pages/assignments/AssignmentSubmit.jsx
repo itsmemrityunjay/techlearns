@@ -13,7 +13,7 @@ const AssignmentSubmit = ({ assignment, onClose }) => {
 
   if (!assignment || !assignment.id) {
     return (
-      <Modal isOpen={true} onRequestClose={onClose} className="bg-white mt-40 p-8 rounded-lg max-w-2xl mx-auto shadow-lg">
+    //   <Modal isOpen={true} onRequestClose={onClose} className="bg-white mt-40 p-8 rounded-lg max-w-2xl mx-auto shadow-lg">
         <div className="text-center p-6">
           <p className="text-red-600">Error: Assignment not found.</p>
           <button
@@ -23,7 +23,7 @@ const AssignmentSubmit = ({ assignment, onClose }) => {
             Close
           </button>
         </div>
-      </Modal>
+    //   </Modal>
     );
   }
 
