@@ -5,7 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { FaCertificate, FaRegClock, FaUserAlt } from "react-icons/fa";
 import { MdOutlineArrowForward } from "react-icons/md";
 
+import React, { useState, useEffect } from "react";
+import { db } from "../../database/Firebase"; // Firebase config
+import { collection, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { FaCertificate, FaRegClock, FaUserAlt } from "react-icons/fa";
+import { MdOutlineArrowForward } from "react-icons/md";
+
 const CourseCard = ({ course }) => {
+  const navigate = useNavigate();
   const navigate = useNavigate();
 
   // Redirect to the course detail page when the card is clicked
