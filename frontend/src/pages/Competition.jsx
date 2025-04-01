@@ -11,6 +11,7 @@ const Competition = () => {
             <Searchbar />
             {/* <TechGetStarted />
             <AllCompCard /> */}
+            
         </div>
     )
 }
