@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import React, { useState, useEffect } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import { CgViewGrid, CgViewList } from "react-icons/cg";
-import { db } from "../../database/Firebase"; // Import your Firebase config
-import { collection, getDocs } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import { db } from "../../database/Firebase"; // Import your Firebase config
 import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -13,12 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
 // import { faArrowRight } from "@fortawesome/free-solid-svg-icons";  
 import { Typewriter } from "react-simple-typewriter";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
-// import { faArrowRight } from "@fortawesome/free-solid-svg-icons";  
-import { Typewriter } from "react-simple-typewriter";
 
-import CourseBanner from "../comp/divider";
 import CourseBanner from "../comp/divider";
 // CourseCard Component
 
@@ -31,24 +22,6 @@ import { Navigations } from 'swiper/modules';
 import TeamMemberCard from "../courses/TeamMemberCard";
 
 const CourseCard = ({ title, description, icon, onClick }) => (
-  <div
-    onClick={onClick}
-    className="relative flex items-start p-6 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-xl shadow-md transition-all duration-300 cursor-pointer hover:scale-105"
-  >
-    {/* Decorative Border */}
-    <div
-      className="absolute inset-0 rounded-xl border-2 border-transparent bg-gradient-to-r from-yellow-500 to-yellow-800 opacity-0 pointer-events-none"
-    ></div>
-
-    {/* Icon Section */}
-    <div className="flex-shrink-0 bg-yellow-400 dark:bg-yellow-600 text-yellow-600 dark:text-white p-5 rounded-full shadow-md mr-5">
-      <img src={icon} alt="icon" height={48} width={48} className="w-12 h-12" />
-    </div>
-
-    {/* Content Section */}
-    <div className="flex flex-col justify-center">
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
   <div
     onClick={onClick}
     className="relative flex items-start p-6 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-xl shadow-md transition-all duration-300 cursor-pointer hover:scale-105"
