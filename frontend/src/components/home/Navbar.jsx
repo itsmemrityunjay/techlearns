@@ -1,188 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Menu, AccountCircle, WbSunny, DarkMode, Home, School, Forum, EmojiEvents, Note } from '@mui/icons-material';
+"use client";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { MenuIcon, X, Home, School, Trophy, FileText, MessageSquare, Sun, Moon, User } from "lucide-react";
+import logo from "../../assets/Logo.png";
 
 const Navbar = () => {
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-    const [isScrolled, setIsScrolled] = useState(false);
-    const navigate = useNavigate();
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const navigate = useNavigate();
 
-    // Handle the theme toggle
-    const handleThemeToggle = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.documentElement.setAttribute('data-theme', newTheme);
-    };
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
-    // Initialize theme on mount
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            setTheme(savedTheme);
-        } else {
-            // Optional: Check system preference for dark mode and apply it
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDark) {
-                setTheme('dark');
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        }
-    }, []);
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    // Handle scroll position
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 0);
-        };
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+  const menuItems = [
+    { label: "SIGNIN", icon: <Home />, to: "/signin" },
+    { label: "SIGNUP", icon: <User />, to: "/signup" },
+    { label: "COMPETITION", icon: <Trophy />, to: "/competition" },
+    { label: "COURSE", icon: <School />, to: "/course" },
+    { label: "NOTEBOOK", icon: <FileText />, to: "/notebook" },
+    { label: "DISCUSSION", icon: <MessageSquare />, to: "/discussion" },
+  ];
 
+  return (
+    <div className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? "shadow-lg bg-gray-100 dark:bg-gray-900" : "bg-white dark:bg-black"}`}>
+      <div className="container mx-auto py-4 flex items-center justify-between">
+        <Link to="/" className="text-2xl font-semibold dark:text-white">
+          <img src={logo} alt="Logo" className="h-8 w-auto" />
+        </Link>
 
-
-    return (
-        <div
-            className={`sticky top-0 z-50 transition-shadow duration-300 ${isScrolled
-                ? 'bg-transparent shadow-lg backdrop-blur-md'
-                : 'bg-white backdrop-blur-sm'
-                }`}
-        >
-            <nav className="container mx-auto py-4">
-                <div className="navbar">
-                    <div className="navbar-start">
-                        <div className="dropdown">
-                            <div
-                                tabIndex={0}
-                                role="button"
-                                className="btn btn-ghost btn-circle"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h7"
-                                    />
-                                </svg>
-                            </div>
-                            <ul
-                                tabIndex={0}
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-80 p-2 shadow"
-                            >
-
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/signin" className="x-8 y-4 flex items-center space-x-4">
-                                        <Home /> <span className="text-xl">SIGNIN</span>
-                                    </Link>
-                                </li>
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/signup" className="x-8 y-4 flex items-center space-x-4">
-                                        <School /> <span className="text-xl">SIGNUP</span>
-                                    </Link>
-                                </li>
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/competition" className="x-8 y-4 flex items-center space-x-4">
-                                        <EmojiEvents /> <span className="text-xl">COMPETITION</span>
-                                    </Link>
-                                </li>
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/course" className="x-8 y-4 flex items-center space-x-4">
-                                        <School /> <span className="text-xl">COURSE</span>
-                                    </Link>
-                                </li>
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/notebook" className="x-8 y-4 flex items-center space-x-4">
-                                        <Note /> <span className="text-xl">NOTEBOOK</span>
-                                    </Link>
-                                </li>
-                                <li className=" text-2xl font-medium">
-                                    <Link to="/discussion" className="x-8 y-4 flex items-center space-x-4">
-                                        <Forum /> <span className="text-xl">DISCUSSION</span>
-                                    </Link>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="navbar-center">
-                        <a className="text-2xl">
-                            <span className="primary-text text-4xl font-semibold">
-                                tech
-                            </span>
-                            <span className="secondary-text text-4xl font-semibold">
-                                learns
-                            </span>
-                        </a>
-                    </div>
-                    <div className="navbar-end">
-                        <label className="grid cursor-pointer place-items-center">
-                            {/* <input
-                                type="checkbox"
-                                checked={theme === 'dark'}
-                                onChange={handleThemeToggle}
-                                className="toggle theme-controller bg-base-content col-span-2 col-start-1 row-start-1"
-                            /> */}
-                            {/* <svg
-                                className="stroke-base-100 fill-base-100 col-start-1 row-start-1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <circle cx="12" cy="12" r="5" />
-                                <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
-                            </svg>
-                            <svg
-                                className="stroke-base-100 fill-base-100 col-start-2 row-start-1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                            </svg> */}
-                        </label>
-                        <button
-                            className="btn btn-ghost btn-circle ml-2"
-                            onClick={() => navigate('/user')}
-                        >
-                            <div className="indicator">
-                                <div className="avatar">
-                                    <div className="mask mask-squircle w-10">
-                                        <img
-                                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                                            alt="User avatar"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </nav>
+        <div className="hidden md:flex items-center space-x-6">
+          {menuItems.map((item) => (
+            <Link key={item.label} to={item.to} className="text-lg  text-gray-800 dark:text-gray-200">
+               {item.label}
+            </Link>
+          ))}
         </div>
-    );
+
+        <div className="flex items-center space-x-4">
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+            {theme === "dark" ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300" />}
+          </button>
+          <button onClick={() => navigate("/user")} className="rounded-full border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500">
+            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="User" className="h-10 w-10 object-cover rounded-full" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Navbar;

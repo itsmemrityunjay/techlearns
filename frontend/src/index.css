@@ -34,8 +34,29 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply bg-white text-gray-900 transition-all duration-300;
+  
 
 }
+
+
+
+
+
+/* Dark Mode */
+.dark body {
+  @apply bg-black text-white transition-all duration-300;
+}
+
+/* Fix navbar and menu text in dark mode */
+.dark .menu-item {
+  @apply text-white;
+}
+
+.dark .hover-bg {
+  @apply hover:bg-gray-700;
+}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

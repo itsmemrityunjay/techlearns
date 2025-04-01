@@ -10,7 +10,7 @@ const CourseCard = ({ course }) => {
 
   // Redirect to the course detail page when the card is clicked
   const handleCardClick = () => {
-    navigate(`/courses/${course.id}`);
+    navigate(`/courses/${course.icon}`);
   };
 
   return (
@@ -21,7 +21,7 @@ const CourseCard = ({ course }) => {
       {/* Image Section */}
       <div
         className="h-48 bg-cover bg-center rounded-t-lg"
-        style={{ backgroundImage:` url(${course.image || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7S1meIBhm9Sl8CK8IWQkXc0jRu0ylN6lqLg&s"})` }}
+        style={{ backgroundImage:` url(${course.icon})` }}
       >
         <div className="h-full w-full hover:border-black rounded-t-lg transition-opacity duration-300"></div>
       </div>

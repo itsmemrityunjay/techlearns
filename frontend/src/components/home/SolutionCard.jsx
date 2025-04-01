@@ -21,7 +21,7 @@ const SolutionCard = ({ solution }) => {
             <div
                 className="h-48 bg-cover bg-center rounded-t-lg"
                 style={{
-                    backgroundImage:` url(${solution.avatarUrl || 'https://www.shutterstock.com/shutterstock/photos/1385282687/display_1500/stock-photo-let-s-us-discuss-speech-bubble-isolated-on-the-yellow-background-1385282687.jpg'})`,
+                    backgroundImage:` url(${solution.avatarUrl})`,
                 }}
             >
                 <div className="h-full w-full hover:opacity-50 rounded-t-lg transition-opacity duration-300"></div>
@@ -32,8 +32,8 @@ const SolutionCard = ({ solution }) => {
                 <div className="flex items-center justify-between mb-2">
                     <h3 className="text-xl font-semibold text-gray-800 truncate">{solution.title}</h3>
                     <img
-                        src={solution.avatarUrl || 'https://www.shutterstock.com/shutterstock/photos/1385282687/display_1500/stock-photo-let-s-us-discuss-speech-bubble-isolated-on-the-yellow-background-1385282687.jpg'}
-                        alt={solution.author || 'Anonymous'}
+                        src={solution.avatarUrl }
+                        alt={solution.author }
                         className="w-12 h-12 rounded-full border"
                     />
                 </div>

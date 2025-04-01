@@ -1,17 +1,26 @@
 import React from 'react';
-
+import img from "../..//assets/NIs-2.jpg"
+import img1 from "../../assets/Shital.jpg"
+import img2 from "../../assets/sujal.jpg"
+import img3 from "../../assets/aryan.jpg"
+import img4 from "../../assets/niraj.jpeg"
+import img5 from "../../assets/riya.jpeg"
+import img6 from "../../assets/lalan.jpg"
+import img7 from "../../assets/aman.jpeg"
+import img8 from "../../assets/raj.jpg"
+import img9 from "../../assets/krishna.jpg"
 const TechSection = () => {
     const profiles = [
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/women/1.jpg', borderColor: 'border-green-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/men/2.jpg', borderColor: 'border-blue-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/women/3.jpg', borderColor: 'border-yellow-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/men/4.jpg', borderColor: 'border-orange-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/women/5.jpg', borderColor: 'border-red-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/men/6.jpg', borderColor: 'border-purple-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/women/7.jpg', borderColor: 'border-pink-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/men/8.jpg', borderColor: 'border-indigo-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/women/9.jpg', borderColor: 'border-teal-400' },
-        { imgSrc: 'https://randomuser.me/api/portraits/thumb/men/10.jpg', borderColor: 'border-green-400' },
+        { imgSrc: img, borderColor: 'border-green-400' },
+        { imgSrc: img1, borderColor: 'border-blue-400' },
+        { imgSrc: img2, borderColor: 'border-yellow-400' },
+        { imgSrc: img3, borderColor: 'border-orange-400' },
+        { imgSrc: img4, borderColor: 'border-red-400' },
+        { imgSrc: img5, borderColor: 'border-purple-400' },
+        { imgSrc: img6, borderColor: 'border-pink-400' },
+        { imgSrc: img7, borderColor: 'border-indigo-400' },
+        { imgSrc: img8, borderColor: 'border-teal-400' },
+        { imgSrc: img9, borderColor: 'border-green-400' },
     ];
 
     return (
