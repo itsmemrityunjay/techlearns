@@ -1,29 +1,45 @@
+
 import React from 'react';
-import nb from "../components/comp/nb.jpg";
-const MainHero = ({ title, description, image }) => {
-    return (
-        <div className="flex justify-center items-center bg-white"
-        style={{
-            backgroundImage:` url(${nb})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
+// import Courses from './Courses.jsx';
+// import Guides from './Guides';
+import vaishnavi from "../assets/vaishnavi.jpg";
+
+const LearnSection = ({ title, description, image })=> {
+
+  return (
+    <>
+      {/* Hero Section */}
+      <div className="w-full flex flex-col md:flex-row items-center justify-between max-w-8xl p-4 md:p-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
+        {/* Left Section */}
+        <div className="flex-1 mt-8 md:mt-16 px-4 flex flex-col justify-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+           {title}
+          </h1>
+          <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
+           {description}{''}
+          </p>
+
           
-        }}
-        >
-            <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-8xl shadow-lg p-6 rounded-lg">
-                <div className="flex-1 mb-6 md:mb-0 mt-14 justify-center items-center">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4 ml-6">{title}</h1>
-                    <p className="text-gray-600 mb-6 ml-6">
-                        {description}{' '}
-                    </p>
-                </div>
-                <div className="flex-shrink-0 mr-6">
-                    {/* <img src={image} alt="Course" width="280" height="208" className="w-72 h-auto" /> */}
-                </div>
-            </div>
         </div>
-    );
+
+        {/* Right Section */}
+        <div className="w-full md:w-[45%] mt-8 md:mt-0 flex justify-center items-center">
+          <img
+            src={vaishnavi}
+            alt="Compete Visual"
+            className="w-full h-auto object-contain rounded-lg max-h-[400px]"
+          />
+        </div>
+      </div>
+
+      {/* Courses Section */}
+      
+
+      {/* Optional Guides Section */}
+      {/* <Guides /> */}
+    </>
+  );
 };
 
-export default MainHero;
+export default LearnSection;
+

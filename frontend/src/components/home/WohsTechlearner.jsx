@@ -59,7 +59,7 @@ const UserTypeSection = ({ title, description, imgSrc, keyFeatures, showFeatures
         <ul className="menu menu-sm p-0">
           {keyFeatures.map((feature, index) => (
             <li key={index}>
-              <a href={feature.link} className="py-1 px-0 hover:bg-transparent hover:text-primary">
+              <a href={feature.link} className="py-2 px-0 hover:bg-transparent text-base">
                 <span className="text-primary text-xl">{feature.icon}</span>
                 {feature.label}
               </a>

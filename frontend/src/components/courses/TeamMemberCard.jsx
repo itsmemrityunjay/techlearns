@@ -43,20 +43,20 @@ export default function TeamShowcase() {
   const visibleMembers = () => teamMembers.slice(currentIndex, currentIndex + visibleCards);
 
   return (
-    <div className="w-full box-border container p-4 md:p-8 m-0 mx-auto">
+    <div className="w-full box-border container py-4 m-0 mx-auto">
       <header className="h-20 flex items-center justify-center mb-7 gap-4 md:gap-8">
         <h3 className="text-5xl font-medium text-gray-800 text-center">Team <span className="text-[#47226b]">TeachLearners</span></h3>
       </header>
 
       <div className="relative" ref={containerRef}>
-        <div className="flex flex-wrap  justify-center">
+        <div className="flex md:flex-nowrap sm:flex-wrap flex-wrap gap-x-8 justify-center">
           {visibleMembers().map((member) => (
-            <div key={member.id} className="w-full md:w-1/2 px-2 mb-8 flex justify-center">
-              <div className="flex flex-col lg:flex-row lg:pl-28 overflow-hidden rounded">
+            <div key={member.id} className="w-full md:w-1/2 mb-8 flex justify-start">
+              <div className="flex w-full flex-col lg:flex-row overflow-hidden rounded">
                 <div className="w-full overflow-hidden lg:w-2/4 h-80 flex justify-center items-center">
-                  <img className="object-cover w-2/3 h-full transition-all hover:scale-110 rounded-2xl" src={member.image || "/placeholder.svg"} alt={member.name} />
+                  <img className="object-cover w-full h-full transition-all rounded-2xl" src={member.image || "/placeholder.svg"} alt={member.name} />
                 </div>
-                <div className="relative flex self-center h-80 flex-1 p-8 ml-0 lg:w-80 bg-white border rounded-lg shadow lg:items-center lg:-ml-12">
+                <div className="relative flex self-center h-80 flex-1 p-8 ml-0 lg:w-80 bg-white border rounded-lg lg:items-center lg:-ml-12">
                   <div>
                     <h2 className="mb-2 text-xl font-medium">{member.name}</h2>
                     <p className="mb-4 text-sm">{member.role}</p>

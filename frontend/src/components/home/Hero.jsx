@@ -6,15 +6,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
+import yourImage from '../../assets/Right.png';
+
+// In your component
+
 const Hero = () => {
   const handelGetStarted = () => {
     navigate('/course');
   }
   const navigate = useNavigate();
+  
   return (
-    <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
-      {/* Left Content */}
-      <div className="max-w-lg">
+    <div 
+      className="py-16 px-8 lg:px-32 flex flex-col lg:flex-row items-center justify-between relative"
+      style={{
+        backgroundImage: "url('https://img.freepik.com/free-vector/elegant-round-shape-modern-background-presentation_1017-50072.jpg?t=st=1743590465~exp=1743594065~hmac=a60ca070811383e312651b6fa32fb13b6ad9e30209e3133d3f585355de61c045&w=1380')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Semi-transparent overlay (optional) */}
+      <div className="absolute inset-0 bg-white bg-opacity-70 z-0"></div>
+      
+      {/* Content */}
+      <div className="max-w-lg mt-32 relative z-10">
         <h1 className="text-4xl lg:text-6xl font-extrabold text-[--secondary-color] leading-tight mb-6">
           Master New Skills <br /> with{" "}
           <span className="text-yellow-500">
@@ -29,8 +45,7 @@ const Hero = () => {
           </span>
         </h1>
         <p className="text-gray-600 text-lg mb-8">
-          Are you tired of pulling all-nighters and still struggling to keep
-          up with your coursework?
+          A premier learning platform designed to equip individuals with cutting-edge tech skills, enhance academic performance, and drive professional growth.
         </p>
         {/* Button */}
         <div className="flex items-center gap-4 mb-8">
@@ -77,11 +92,11 @@ const Hero = () => {
         </div>
       </div>
       {/* Right Illustration */}
-      <div className="mt-12 lg:mt-0 lg:ml-16">
+      <div className="mt-12 lg:mt-0 lg:ml-16 relative z-10">
         <img
-          src="https://img.freepik.com/premium-photo/memoji-happy-man-white-background-emoji_826801-6830.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
+          src={yourImage}
           alt="Illustration"
-          className="w-full max-w-md lg:max-w-lg"
+          className="w-full max-w-md lg:max-w-lg "
         />
       </div>
     </div>

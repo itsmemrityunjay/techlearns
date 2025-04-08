@@ -34,6 +34,7 @@ import AssignmentSubmit from "./pages/assignments/AssignmentSubmit";
 // import ReviewSubmissions from "./pages/assignments/ReviewSubmissions";
 import LiveStream from "./pages/assignments/LiveStream";
 // import AdminNotifications from "./pages/dashboard/AdminNotifications";
+import Mentors from "./components/comp/Mentors"; // Assuming you have a Mentors component
 
 function App() {
   return (
@@ -250,6 +251,7 @@ function App() {
               }
             />
             <Route path="*" element={<NotFound />} />
+            <Route path="/mentors" element={<Mentors />} />
 
             {/* Add more routes here */}
           </Routes>

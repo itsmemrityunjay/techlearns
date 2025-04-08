@@ -3,53 +3,111 @@ import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
 import { db } from '../../database/Firebase';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import { MdOutlineArrowForward } from 'react-icons/md';
+import { MdOutlineArrowForward, MdOutlineBookmark, MdBookmark } from 'react-icons/md';
+import { FiEye, FiMessageSquare } from 'react-icons/fi';
 
 const SolutionCard = ({ solution }) => {
     const navigate = useNavigate();
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleCardClick = () => {
         navigate(`/discussion`);
     };
 
+    const toggleBookmark = (e) => {
+        e.stopPropagation();
+        setIsBookmarked(!isBookmarked);
+    };
+
     return (
         <div
             onClick={handleCardClick}
-            className="cursor-pointer border border-gray-200 rounded-lg shadow-lg transition-transform hover:scale-105 duration-300 bg-white group"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="cursor-pointer border border-gray-100 rounded-xl shadow-sm transition-all duration-300 bg-white group hover:shadow-lg hover:border-transparent flex flex-col h-full"
         >
-            {/* Image Section */}
-            <div
-                className="h-48 bg-cover bg-center rounded-t-lg"
-                style={{
-                    backgroundImage:` url(${solution.avatarUrl})`,
-                }}
-            >
-                <div className="h-full w-full hover:opacity-50 rounded-t-lg transition-opacity duration-300"></div>
+            {/* Image Section with Overlay */}
+            <div className="relative h-48 bg-cover bg-center rounded-t-xl overflow-hidden">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center transition-all duration-500 group-hover:scale-105"
+                    style={{ backgroundImage: `url(${solution.avatarUrl})` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-gray-900/20" />
+                
+                {/* Bookmark Button */}
+                <button 
+                    onClick={toggleBookmark}
+                    className="absolute top-3 right-3 p-2 bg-white/90 rounded-full shadow-sm hover:bg-white transition-all"
+                    aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this solution"}
+                >
+                    {isBookmarked ? (
+                        <MdBookmark className="text-yellow-500 text-xl" />
+                    ) : (
+                        <MdOutlineBookmark className="text-gray-600 text-xl" />
+                    )}
+                </button>
+                
+                {/* Author Badge */}
+                <div className="absolute bottom-4 left-4 flex items-center">
+                    <img
+                        src={solution.avatarUrl}
+                        alt={solution.author}
+                        className="w-9 h-9 rounded-full border-2 border-white"
+                    />
+                    <span className="ml-2 text-sm font-medium text-white">
+                        {solution.author || 'Anonymous'}
+                    </span>
+                </div>
             </div>
 
             {/* Content Section */}
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-semibold text-gray-800 truncate">{solution.title}</h3>
-                    <img
-                        src={solution.avatarUrl }
-                        alt={solution.author }
-                        className="w-12 h-12 rounded-full border"
-                    />
+            <div className="p-5 flex-1 flex flex-col">
+                {/* Category Tag */}
+                <div className="flex justify-between items-center mb-3">
+                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                        {solution.category || 'General'}
+                    </span>
+                    <div className="flex items-center space-x-3 text-gray-500 text-xs">
+                        <span className="flex items-center">
+                            <FiEye className="mr-1" /> {solution.views || 0}
+                        </span>
+                        <span className="flex items-center">
+                            <FiMessageSquare className="mr-1" /> {solution.comments?.length || 0}
+                        </span>
+                    </div>
                 </div>
-                <p
-                    className="text-gray-700 line-clamp-3"
+
+                {/* Title */}
+                <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-[--secondary-color] transition-colors">
+                    {solution.title}
+                </h3>
+
+                {/* Content Preview */}
+                <div
+                    className="text-gray-600 mb-4 line-clamp-3 text-sm flex-1"
                     dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(solution.content),
                     }}
                 />
-         <div className="flex flex-col items-start mt-4">
-    <span className="text-sm text-gray-600">By {solution.author || 'Anonymous'}</span>
-    <button className="mt-4 w-auto flex items-center justify-start px-4 py-2 bg-[--secondary-color] text-white font-semibold text-sm rounded-lg shadow-md hover:shadow-lg transition-all duration-300 group hover:bg-[--primary-color]">
-        <span className="group-hover:underline">Read More</span>     <MdOutlineArrowForward className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
-    </button>
-</div>
 
+                {/* Read More Button */}
+                <div className="flex justify-between items-center pt-3 border-t border-gray-100 mt-auto">
+                    <span className="text-xs text-gray-500">
+                        {solution.createdAt?.toDate().toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })}
+                    </span>
+                    <button 
+                        className="flex items-center text-sm font-medium text-[--secondary-color] hover:text-blue-800 transition-colors"
+                        onClick={handleCardClick}
+                    >
+                        Read more
+                        <MdOutlineArrowForward className={`ml-1 transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -57,6 +115,7 @@ const SolutionCard = ({ solution }) => {
 
 const SolutionCards = () => {
     const [solutions, setSolutions] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchTopics = async () => {
         try {
@@ -72,6 +131,8 @@ const SolutionCards = () => {
             setSolutions(topicsData);
         } catch (error) {
             console.error('Error fetching topics:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -79,21 +140,40 @@ const SolutionCards = () => {
         fetchTopics();
     }, []);
 
+    if (loading) {
+        return (
+            <div className="container mx-auto py-12 px-4 sm:px-6">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="bg-gray-100 rounded-xl h-[420px] animate-pulse" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="container mx-auto py-12 px-6">
+        <div className="container mx-auto py-12 px-4 sm:px-6 max-w-7xl">
             {/* Header Section */}
-            <div className="text mb-12">
-                <h1 className="text-4xl font-bold text-gray-800 uppercase">Solution Write-ups</h1>
-                <p className="text-lg text-gray-600 mt-4">
-                    Explore the best solutions from top contributors.
+            <div className="text-center mb-12 px-4">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    Solution <span className="text-yellow-500">Write-ups</span>
+                </h1>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Discover expert solutions and insights from our community of problem solvers.
                 </p>
             </div>
 
             {/* Solutions Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-8">
                 {solutions.map(solution => (
                     <SolutionCard key={solution.id} solution={solution} />
                 ))}
+            </div>
+
+            {/* View All Button */}
+            <div className="text-center mt-12">
+               
             </div>
         </div>
     );

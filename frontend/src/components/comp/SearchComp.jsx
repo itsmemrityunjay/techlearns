@@ -160,51 +160,85 @@ const Searchbar = () => {
       <div className="flex flex-col-reverse lg:flex-row items-start justify-between w-full gap-8">
         {/* Filter Section */}
         {showFilters && (
-          <div className="flex flex-col w-full lg:w-2/3 gap-6">
-            <UpgradeButton />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
-              {filters.map((filter, index) => (
-                <button
-                  key={index}
-                  className={`flex items-center p-4 border rounded-full shadow-sm relative gap-4 transition-all duration-300 ${activeFilter === filter.title
-                    ? "bg-[--primary-color] text-white font-bold border-none"
-                    : "bg-white border-gray-300 hover:bg-gray-100"
-                    }`}
-                  onClick={() => setActiveFilter(filter.title)}
-                >
-                  <div
-                    className={`flex items-center justify-center w-12 h-12 rounded-full ${activeFilter === filter.title
-                      ? "bg-white text-[--primary-color]"
-                      : ""
-                      }`}
-                    style={{
-                      backgroundColor:
-                        index === 0
-                          ? "#D9F1FF"
-                          : index === 1
-                            ? "#FFD9EC"
-                            : index === 2
-                              ? "#E6D9FF"
-                              : index === 3
-                                ? "#FFF9D9"
-                                : "#FFEAD9",
-                    }}
-                  >
-                    {filter.icon}
-                  </div>
-                  <span
-                    className={`${activeFilter === filter.title ? "text-white" : "text-gray-800"}`}
-                    style={{ fontSize: "19px", fontFamily: "raleway" }}
-                  >
-                    {filter.title}
-                  </span>
-                </button>
-              ))}
-            </div>
+         // Parent container
+<div className="relative w-full group">
+  <button 
+    className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
+    onClick={() => {
+      const container = document.querySelector('.scroll-container');
+      container.scrollBy({ left: -200, behavior: 'smooth' });
+    }}
+    style={{ left: '10px' }}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+    </svg>
+  </button>
+
+  <button 
+    className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md z-10 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-0"
+    onClick={() => {
+      const container = document.querySelector('.scroll-container');
+      container.scrollBy({ left: 200, behavior: 'smooth' });
+    }}
+    style={{ right: '10px' }}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+    </svg>
+  </button>
+
+  <div 
+    className="w-full overflow-x-auto scroll-container [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:none]" 
+    style={{ scrollBehavior: 'smooth' }}
+  >
+    <div className="flex flex-nowrap gap-4 pb-2">
+      {filters.map((filter, index) => (
+        <div 
+          key={filter.title}
+          className="flex items-center gap-2 flex-shrink-0 border-2 border-gray-200 hover:border-blue-500 rounded-2xl w-60 cursor-pointer p-2"
+          onClick={() => setActiveFilter(filter.title)}
+        >
+          <div
+            className={`flex items-center justify-center w-12 h-12 rounded-full  ${
+              activeFilter === filter.title 
+                ? "bg-white text-[--primary-color]" 
+                : ""
+            }`}
+            style={{
+              backgroundColor:
+                index === 0
+                  ? "#D9F1FF"
+                  : index === 1
+                    ? "#FFD9EC"
+                    : index === 2
+                      ? "#E6D9FF"
+                      : index === 3
+                        ? "#FFF9D9"
+                        : "#FFEAD9",
+            }}
+          >
+            {filter.icon}
           </div>
+          <span
+            className={`${
+              activeFilter === filter.title 
+                ? "text-white" 
+                : "text-gray-800"
+            } whitespace-nowrap`}
+            style={{ fontSize: "14px", fontFamily: "raleway" }}
+          >
+            {filter.title}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
         )}
   
-        {/* Right Side Image */}
+  
+          
         <div
           className={`w-full lg:w-1/2 flex justify-center lg:justify-end ${showFilters ? "block" : "hidden"}`}
         >

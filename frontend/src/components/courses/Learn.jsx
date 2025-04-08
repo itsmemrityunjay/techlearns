@@ -1,40 +1,50 @@
 import React from 'react';
 import Courses from './Courses.jsx';
 // import Guides from './Guides';
-import herocompetition from '../comp/herocompetition.jpg';
+import vaishnavi from "../../assets/vaishnavi.jpg";
 
 const LearnSection = () => {
-    return (
-        <>
-            {/* Hero Section */}
-            <div
-                className="w-full flex items-center justify-center relative bg-center bg-no-repeat bg-cover"
-                style={{
-                    backgroundImage: `url(${herocompetition})`,
-                    minHeight: '450px', // fallback for smaller devices
-                }}
-            >
-                {/* Optional Overlay for text visibility */}
-                <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+  return (
+    <>
+      {/* Hero Section */}
+      <div className="w-full flex flex-col md:flex-row items-center justify-between max-w-8xl p-4 md:p-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
+        {/* Left Section */}
+        <div className="flex-1 mt-8 md:mt-16 px-4 flex flex-col justify-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+            Empower Your Learning!
+          </h1>
+          <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
+            Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects — from data analysis to machine learning. <br className="hidden md:block" />
+            Build your expertise and turn raw data into actionable insights for real-world applications.
+          </p>
 
-                {/* Content */}
-                <div className="relative flex flex-col items-center justify-center text-center px-6 py-12 md:px-20 w-full h-full">
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
-                        Empower Your Learning!
-                    </h1>
-                    <h4 className="text-sm sm:text-base md:text-lg text-gray-200 md:max-w-[50%]">
-                        Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects, from data analysis to machine learning. Build your expertise and turn raw data into actionable insights for real-world applications.
-                    </h4>
-                </div>
-            </div>
+          <div className="flex flex-wrap gap-4">
+            <button className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-6 rounded-3xl transition duration-200">
+              Join Competition
+            </button>
+            <button className="border border-black hover:bg-[--primary-color] text-black font-semibold py-2 px-6 rounded-3xl transition duration-200">
+              + Host a Competition
+            </button>
+          </div>
+        </div>
 
-            {/* Courses Section */}
-            <Courses />
+        {/* Right Section */}
+        <div className="w-full md:w-[45%] mt-8 md:mt-0 flex justify-center items-center">
+          <img
+            src={vaishnavi}
+            alt="Compete Visual"
+            className="w-full h-auto object-contain rounded-lg max-h-[400px]"
+          />
+        </div>
+      </div>
 
-            {/* Optional Guides Section */}
-            {/* <Guides /> */}
-        </>
-    );
+      {/* Courses Section */}
+      <Courses />
+
+      {/* Optional Guides Section */}
+      {/* <Guides /> */}
+    </>
+  );
 };
 
 export default LearnSection;

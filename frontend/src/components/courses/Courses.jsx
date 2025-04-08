@@ -20,6 +20,8 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css/navigation";
 import { Navigations } from 'swiper/modules';
 import TeamMemberCard from "../courses/TeamMemberCard";
+import Courseslist from "../home/Courses";
+import vaishnavi from "../../assets/vaishnavi.jpg";
 
 const CourseCard = ({ title, description, icon, onClick }) => (
   <div
@@ -148,7 +150,7 @@ const Courses = () => {
   return (
     <div className="container mx-auto py-4">
       <div className="relative inline-block text-left ">
-        <div className="bg-yellow py-12 px-6 md:px-20 text-center">
+        <div className="bg-yellow py-12 md:px-20 text-center">
           {/* Heading */}
           <p className="text-grey-600 text-lg md:text-xl mb-8">
             Trusted by over{" "}
@@ -158,7 +160,7 @@ const Courses = () => {
           <hr className="my-4" />
 
           {/* Logos Section */}
-          <div className="flex flex-wrap items-center justify-center gap-8">
+          <div className="flex flex-wrap items-center justify-between gap-8">
             <img
               src="https://www.sviet.ac.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLogo.8bdb37ea.webp&w=640&q=75"
               alt="SVIET"
@@ -182,32 +184,32 @@ const Courses = () => {
           </div>
         </div>
 
-        <div className="relative w-full max-w-8xl rounded-3xl overflow-hidden py-16 px-4 sm:px-8 lg:px-16">
+        <div className="relative w-full rounded-3xl overflow-hidden py-16 px-4 sm:px-8 lg:px-16">
           {/* Icons */}
-          <div className="absolute top-12 left-8 text-yellow-400">
+          {/* <div className="absolute top-12 left-8 text-yellow-400">
             <FontAwesomeIcon icon={faPaperPlane} size="4x" className="animate-bounce" />
           </div>
           <div className="absolute top-12 right-8 text-yellow-400">
             <FontAwesomeIcon icon={faCloud} size="4x" className="animate-bounce" />
-          </div>
+          </div> */}
 
           {/* Content */}
           <div className="text-center">
-            <span className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-lg uppercase tracking-wide px-6 py-2 rounded-full shadow-lg mb-6">
+            <span className="inline-block bg-black text-white font-bold text-lg uppercase tracking-wide px-6 py-2 rounded-full shadow-lg mb-6">
               Why Choose Us
             </span>
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
-              Dive into Online Courses on{' '}
-              <br className="hidden md:block" />
-              Diverse Subjects
+              Dive into Online Courses
+              
+              
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 mx-auto">
               Explore a wide range of topics with engaging, interactive lessons designed
               to help you learn at your own pace.
             </p>
           </div>
-
+          
           {/* Feature Cards */}
           {/* Feature Cards */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -243,10 +245,16 @@ const Courses = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="bg-white rounded-3xl shadow-md p-6 hover:shadow-xl transition-all transform hover:scale-105 border-2 border-yellow"
+                className="relative bg-white rounded-3xl shadow-md p-6 hover:shadow-lg transition-all  border-2 border-gray-100 hover:border-gray-300"
               >
                 <div
-                  className={`${feature.gradient} p-5 rounded-full text-4xl text-white flex items-center justify-center `}
+              className="w-full h-full -top-2 -left-2 absolute inset-0 opacity-10 z-10"
+              style={{
+                backgroundImage: `radial-gradient(circle at 20% 20%, #ffaa00 10%, transparent 20%)`,
+              }}
+            />
+                <div
+                  className={`${feature.gradient} p-2 rounded-full text-5xl text-white flex items-center justify-start `}
                 >
                   {feature.icon}
                 </div>
@@ -265,61 +273,8 @@ const Courses = () => {
         {/* Dropdown Trigger */}
       </div>
 
-      <div className="h-auto dark:bg-gray-900 mt-12 px-4 sm:px-6 lg:px-12">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-          <div className="flex items-center mb-4 md:mb-0">
-            <section id="recommendations" className="mr-3"></section>
-            <h1 className="text-3xl font-bold dark:text-white mr-2">Courses</h1>
-            <DiAtom className="text-4xl text-black dark:text-white" />
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* List View */}
-            <div className="relative group">
-              <CgViewList
-                className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
-                onClick={() => setView('flex')}
-              />
-              <div className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 left-1/2 transform -translate-x-1/2">
-                View List
-              </div>
-            </div>
-            {/* Grid View */}
-            <div className="relative group">
-              <CgViewGrid
-                className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
-                onClick={() => setView('grid')}
-              />
-              <div className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 left-1/2 transform -translate-x-1/2">
-                View Grid
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Intro Paragraph */}
-        <p className="text-gray-400 mb-6 max-w-4xl text-sm sm:text-base">
-          We pare down complex topics to their key practical components, so you gain usable skills in a few hours. The courses are free, and you can earn certificates!
-        </p>
-
-        {/* Course Cards */}
-        <div
-          className={`grid gap-6 ${view === 'flex' ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'}`}
-        >
-          {allCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              title={course.title}
-              description={course.description}
-              icon={course.icon}
-              onClick={() => navigate(`/courses/${course.id}`)}
-              className="relative p-6 bg-white dark:bg-gray-800 border-2 rounded-xl shadow-md transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 group cursor-pointer"
-            />
-          ))}
-        </div>
-
-        {/* Mental Health & Image Section */}
-        <div className="px-4 py-10 sm:px-8 lg:px-20">
+   {/* Mental Health & Image Section */}
+      <div className="px-4 py-10 sm:px-8 lg:px-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Left Column */}
             <div className="space-y-10">
@@ -401,6 +356,53 @@ const Courses = () => {
           </div>
         </div>
 
+      <div className="h-auto dark:bg-gray-900 mt-12 ">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
+          <div className="flex items-center mb-4 md:mb-0">
+            <section id="recommendations" className="mr-3"></section>
+            <h1 className="text-3xl font-bold dark:text-white mr-2">Courses</h1>
+            <DiAtom className="text-4xl text-black dark:text-white" />
+          </div>
+          <div className="flex items-center space-x-4">
+            {/* List View */}
+            <div className="relative group">
+              <CgViewList
+                className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
+                onClick={() => setView('flex')}
+              />
+              <div className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 left-1/2 transform -translate-x-1/2">
+                View List
+              </div>
+            </div>
+            {/* Grid View */}
+            <div className="relative group">
+              <CgViewGrid
+                className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
+                onClick={() => setView('grid')}
+              />
+              <div className="absolute hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2 bottom-full mb-2 left-1/2 transform -translate-x-1/2">
+                View Grid
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Intro Paragraph */}
+        <p className="text-gray-400 mb-6 max-w-4xl text-sm sm:text-base">
+          We pare down complex topics to their key practical components, so you gain usable skills in a few hours. The courses are free, and you can earn certificates!
+        </p>
+
+        {/* Course Cards */}
+        <div
+          
+        >
+      <Courseslist/>
+        </div>
+
+     
+      
+
         {/* Goals Section */}
         <TeamMemberCard/>
       </div >
@@ -449,83 +451,6 @@ const Courses = () => {
         </div>
 
       </div>
-
-
-      {/* <div className="bg-white py-16 px-8 lg:px-24 flex flex-col lg:flex-row items-center justify-between">
-      
-        <div className="max-w-lg">
-          <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-            Master New Skills <br /> with{" "}
-            <span className="text-yellow-500">
-              <Typewriter
-                words={["Techlearns"]}
-                loop={false}
-                cursor
-                cursorStyle="|"
-                typeSpeed={50}
-                deleteSpeed={50}
-              />
-            </span>
-          </h1>
-          <p className="text-gray-600 text-lg mb-8">
-            Are you tired of pulling all-nighters and still struggling to keep
-            up with your coursework?
-          </p>
-        
-          <div className="flex items-center gap-4 mb-8">
-            <button className="bg-black text-white py-2 px-8 rounded-full flex items-center font-semibold shadow-md hover:bg-gray-900">
-              <span className="mr-2">Get Started</span>
-              <span className="bg-white p-3 rounded-full flex items-center justify-center">
-                <FontAwesomeIcon icon={faArrowRight} className="text-black" />
-              </span>
-            </button>
-            <div className="flex items-center text-gray-700 ml-auto">
-              <img
-                src="https://img.freepik.com/premium-photo/color-user-icon-white-background_961147-8.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-                alt="User avatars"
-                className="w-10 h-10 rounded-full border-2 border-white -ml-3"
-              />
-              <img
-                src="https://img.freepik.com/free-psd/3d-illustration-with-online-avatar_23-2151303097.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-                alt="User avatars"
-                className="w-10 h-10 rounded-full border-2 border-white -ml-3"
-              />
-              <span className="ml-4 text-sm font-medium">
-                42k+ Using this app
-              </span>
-            </div>
-          </div>
-
-      
-          <div className="flex justify-center lg:justify-start gap-8 mt-10 py-5">
-            <img
-              src="https://www.theuniques.in/static/media/theuniquesCommunity.de2335f2609ada2712b0.png"
-              alt="TIME logo"
-              className="h-8"
-            />
-            <img
-              src="https://www.sviet.ac.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLogo.8bdb37ea.webp&w=640&q=75"
-              alt="Forbes logo"
-              className="h-7"
-            />
-            <img
-              src="https://techlearns.in/Logo.png"
-              alt="TechCrunch logo"
-              className="h-8"
-            />
-          </div>
-        </div>
-     
-        <div className="mt-12 lg:mt-0 lg:ml-16">
-          <img
-            src="https://img.freepik.com/premium-photo/memoji-happy-man-white-background-emoji_826801-6830.jpg?ga=GA1.1.15581536.1727159730&semt=ais_hybrid"
-            alt="Illustration"
-            className="w-full max-w-md lg:max-w-lg"
-          />
-        </div>
-      </div> */}
-
-
 
     </div >
   );

@@ -29,32 +29,31 @@ const TechChallenge = () => {
     }, [timeLeft]);
 
     return (
-        <div className="min-h-full bg-gray-50 py-10 px-2 lg:px-20">
+        <div className="min-h-full py-10 px-8 lg:px-32">
             <div className="container mx-auto flex flex-col lg:flex-row justify-center items-center">
                 {/* Left Section */}
                 <div className="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
-                    <div className=" py-8 rounded-lg">
-                        <h1 className="text-2xl font-bold text-gray-900">
-                            Learn cutting edge techniques in Kaggle competitions & courses
+                    <div className=" py-8">
+                        <h1 className="text-4xl font-bold">
+                            Learn cutting edge<br></br> techniques in Techlearns competitions & courses
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">
-                            Kaggle competitions and courses provide a real-world setting to
-                            apply what you learn & connect with other ML practitioners.
+                        TechLearns Academy offers comprehensive courses designed to equip learners with essential technology and digital skills.
                         </p>
                     </div>
 
-                    <div className="mt-8 bg-white p-8 shadow-md rounded-lg grid grid-cols-3 gap-4 text-center">
+                    <div className="mt-4 grid grid-cols-3 gap-3">
                         <div>
-                            <h2 className="text-4xl font-bold text-gray-900">28,000</h2>
-                            <p className="text-gray-600">Competitions</p>
+                            <h2 className="text-3xl font-bold">28,000</h2>
+                            <p className="font-bold py-2">COMPETITIONS</p>
                         </div>
                         <div>
-                            <h2 className="text-4xl font-bold text-gray-900">5,000</h2>
-                            <p className="text-gray-600">Write-ups</p>
+                            <h2 className="text-3xl font-bold text-gray-900">5,000</h2>
+                            <p className="font-bold py-2">NOTEBOOKS</p>
                         </div>
                         <div>
-                            <h2 className="text-4xl font-bold text-gray-900">70+ hours</h2>
-                            <p className="text-gray-600">Courses</p>
+                            <h2 className="text-3xl font-bold text-gray-900">70+ hours</h2>
+                            <p className="font-bold py-2">COURSES</p>
                         </div>
                     </div>
                 </div>

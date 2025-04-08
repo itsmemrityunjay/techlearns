@@ -7,6 +7,92 @@ import { ThreeDots } from 'react-loader-spinner';
 import TableOfContents from './TableofContent';
 import './CourseDetail.css';
 import Footer from '../comp/footer';
+import Editor from '@monaco-editor/react';
+import { SaveIcon, Copy, Code2 } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { updateDoc } from 'firebase/firestore';
+
+const CodeEditor = ({ initialCode, language, onSave }) => {
+  const [code, setCode] = useState(initialCode || '// Write your code here');
+  const [isEditing, setIsEditing] = useState(false);
+
+  return (
+    <div className="mt-6 rounded-lg overflow-hidden border border-gray-200">
+      {/* Header */}
+      <div className="bg-gray-100 px-4 py-2 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Code2 className="w-5 h-5 text-gray-600" />
+          <select 
+            className="text-sm bg-transparent border-none outline-none"
+            defaultValue={language}
+          >
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="cpp">C++</option>
+          </select>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => navigator.clipboard.writeText(code)}
+            className="p-1 hover:bg-gray-200 rounded"
+          >
+            <Copy className="w-4 h-4 text-gray-600" />
+          </button>
+          {isEditing ? (
+            <button
+              onClick={() => {
+                onSave(code);
+                setIsEditing(false);
+              }}
+              className="p-1 hover:bg-gray-200 rounded"
+            >
+              <SaveIcon className="w-4 h-4 text-gray-600" />
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="text-xs px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Edit
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Editor */}
+      <div className="h-[300px] border-t">
+        <Editor
+          height="100%"
+          defaultLanguage={language}
+          value={code}
+          onChange={setCode}
+          theme="vs-dark"
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            readOnly: !isEditing,
+            scrollBeyondLastLine: false,
+            lineNumbers: 'on',
+            renderLineHighlight: 'all',
+            automaticLayout: true,
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
 
 const CourseDetail = () => {
     const { courseId } = useParams();
@@ -15,6 +101,18 @@ const CourseDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isTocVisible, setTocVisible] = useState(false);
+    const handleCodeSave = async (newCode) => {
+        try {
+          await updateDoc(doc(db, 'courses', courseId), {
+            code: newCode
+          });
+          toast.success('Code saved successfully');
+        } catch (error) {
+          console.error('Error saving code:', error);
+          toast.error('Failed to save code');
+        }
+      };
+    
 
     useEffect(() => {
         const fetchCourseDetail = async () => {
@@ -140,8 +238,21 @@ const CourseDetail = () => {
                     </button>
                 </div>
             )}
+    <div className="max-w-4xl mx-auto p-4">
+      {course.code && (
+        <CodeEditor
+          initialCode={course.code}
+          language={course.codeLanguage || 'javascript'}
+          onSave={handleCodeSave}
+        />
+      )}
+    </div>
+
+
+
             <Footer />
         </div>
+
     );
 };
 

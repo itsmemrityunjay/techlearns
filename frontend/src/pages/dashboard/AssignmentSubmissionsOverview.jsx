@@ -1,39 +1,67 @@
-// ✅ Submissions Dashboard for Admin + Real-time Progress Bar
-
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { 
+  collection, 
+  getDocs, 
+  doc, 
+  getDoc, 
+  onSnapshot, 
+  updateDoc, 
+  arrayUnion, 
+  addDoc,
+  query,
+  where
+} from 'firebase/firestore';
 import { db } from '../../database/Firebase';
+import { getAuth } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const AssignmentSubmissionsOverview = ({ assignmentId }) => {
   const [users, setUsers] = useState([]);
   const [assignedUsers, setAssignedUsers] = useState([]);
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const auth = getAuth();
 
   useEffect(() => {
     const fetchOverviewData = async () => {
       try {
+        // Get all users
         const usersSnapshot = await getDocs(collection(db, 'users'));
-        const userList = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const userList = usersSnapshot.docs.map((doc) => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        }));
         setUsers(userList);
 
+        // Get assignment details
         const assignmentDoc = await getDoc(doc(db, 'assignments', assignmentId));
         const assignmentData = assignmentDoc.data();
         const assignedUserIds = assignmentData?.assignedUsers || [];
 
-        const assignedUsersData = userList.filter((user) => assignedUserIds.includes(user.id));
+        // Filter assigned users
+        const assignedUsersData = userList.filter((user) => 
+          assignedUserIds.includes(user.id)
+        );
         setAssignedUsers(assignedUsersData);
 
-        const submissionsRef = collection(db, 'assignments', assignmentId, 'submissions');
-        const unsubscribe = onSnapshot(submissionsRef, (snapshot) => {
-          const submissionsList = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        // Real-time submissions listener
+        const submissionsQuery = query(
+          collection(db, 'submissions'),
+          where('assignmentId', '==', assignmentId)
+        );
+
+        const unsubscribe = onSnapshot(submissionsQuery, (snapshot) => {
+          const submissionsList = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
           setSubmissions(submissionsList);
+          setLoading(false);
         });
 
-        setLoading(false);
         return () => unsubscribe();
       } catch (error) {
-        console.error('Error fetching submission overview:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -41,60 +69,128 @@ const AssignmentSubmissionsOverview = ({ assignmentId }) => {
     fetchOverviewData();
   }, [assignmentId]);
 
-  const checkSubmissionStatus = (userId) => {
-    return submissions.some((sub) => sub.studentId === userId);
+  const assignToUser = async (userId) => {
+    try {
+      // Update assignment document
+      await updateDoc(doc(db, 'assignments', assignmentId), {
+        assignedUsers: arrayUnion(userId)
+      });
+
+      // Add to user's assignments collection
+      await addDoc(collection(db, 'users', userId, 'assignments'), {
+        assignmentId: assignmentId,
+        assignedAt: new Date(),
+        status: 'pending'
+      });
+
+      // Send notification
+      await addDoc(collection(db, 'notifications'), {
+        userId: userId,
+        type: 'assignment',
+        message: 'You have been assigned a new assignment',
+        read: false,
+        createdAt: new Date()
+      });
+
+      toast.success('Assignment assigned successfully');
+    } catch (error) {
+      console.error("Error assigning user:", error);
+      toast.error('Failed to assign user');
+    }
   };
 
-  if (loading) return <div>Loading submissions overview...</div>;
+  const handleSubmission = async (submission) => {
+    try {
+      // Add submission
+      const submissionRef = await addDoc(collection(db, 'submissions'), {
+        assignmentId,
+        userId: auth.currentUser.id,
+        content: submission.content,
+        submittedAt: new Date(),
+        status: 'submitted'
+      });
 
-  const totalAssigned = assignedUsers.length;
-  const totalSubmitted = assignedUsers.filter((user) => checkSubmissionStatus(user.id)).length;
-  const submissionRate = totalAssigned ? ((totalSubmitted / totalAssigned) * 100).toFixed(0) : 0;
+      // Update user's assignment status
+      const userAssignmentQuery = query(
+        collection(db, 'users', auth.currentUser.id, 'assignments'),
+        where('assignmentId', '==', assignmentId)
+      );
+      
+      const userAssignmentDocs = await getDocs(userAssignmentQuery);
+      userAssignmentDocs.forEach(async (doc) => {
+        await updateDoc(doc.ref, {
+          status: 'submitted',
+          submissionId: submissionRef.id
+        });
+      });
+
+      // Notify admin
+      await addDoc(collection(db, 'notifications'), {
+        userId: 'admin',
+        type: 'submission',
+        message: `New submission received for assignment ${assignmentId}`,
+        read: false,
+        createdAt: new Date()
+      });
+
+      toast.success('Assignment submitted successfully');
+    } catch (error) {
+      console.error("Error submitting assignment:", error);
+      toast.error('Failed to submit assignment');
+    }
+  };
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-md max-w-4xl mx-auto mt-12">
-      <h2 className="text-2xl font-bold text-purple-600 mb-6">Assignment Submission Overview</h2>
-
-      {/* Progress bar */}
-      <div className="text-center mb-4">
-        <h3 className="text-lg font-semibold">
-          Submission Progress: {totalSubmitted}/{totalAssigned} Students ({submissionRate}%)
-        </h3>
-        <div className="w-full bg-gray-200 h-4 rounded-full mt-2">
-          <div
-            className="bg-green-600 h-4 rounded-full"
-            style={{ width: `${submissionRate}%` }}
-          ></div>
+    <div className="container mx-auto p-4">
+      {loading ? (
+        <div className="flex justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
-      </div>
+      ) : (
+        <>
+          <h2 className="text-2xl font-bold mb-4">Assignment Submissions Overview</h2>
+          
+          {/* Assigned Users List */}
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold mb-2">Assigned Users</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {assignedUsers.map((user) => (
+                <div key={user.id} className="p-4 border rounded-lg shadow">
+                  <p className="font-medium">{user.name}</p>
+                  <p className="text-sm text-gray-600">{user.email}</p>
+                  <div className="mt-2">
+                    {submissions.find(s => s.userId === user.id) ? (
+                      <span className="text-green-600">Submitted</span>
+                    ) : (
+                      <span className="text-yellow-600">Pending</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-      <table className="w-full table-auto border-collapse mt-6">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2">Student Name</th>
-            <th className="border px-4 py-2">Email</th>
-            <th className="border px-4 py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {assignedUsers.map((user) => {
-            const hasSubmitted = checkSubmissionStatus(user.id);
-            return (
-              <tr key={user.id}>
-                <td className="border px-4 py-2">{user.name}</td>
-                <td className="border px-4 py-2">{user.email}</td>
-                <td
-                  className={`border px-4 py-2 text-center ${
-                    hasSubmitted ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  {hasSubmitted ? '✅ Submitted' : '❌ Not Submitted'}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          {/* Submissions List */}
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Submissions</h3>
+            <div className="space-y-4">
+              {submissions.map((submission) => (
+                <div key={submission.id} className="p-4 border rounded-lg shadow">
+                  <div className="flex justify-between items-center">
+                    <p className="font-medium">
+                      {users.find(u => u.id === submission.userId)?.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(submission.submittedAt?.toDate()).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <p className="mt-2">{submission.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

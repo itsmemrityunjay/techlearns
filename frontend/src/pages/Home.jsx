@@ -12,8 +12,12 @@ import CourseList from '../components/home/Courses';
 import img from "../components/discuss/disimg.jpg";
 import Footer from "../components/comp/footer";
 import FeatureList from '../components/home/FeatureList';
+import LogoMarquee from '../components/home/LogoMarquee';
 // import { Timeline } from '@mui/icons-material';
 // import Timeline from '../components/home/Timeline';
+import CommunitySupport from '../components/home/CommunitySupport'; 
+import MentorsAssign from '../components/home/Mentorsassign';
+import Banner from '../components/home/Banner';
 
 const Home = () => {
     return (
@@ -27,17 +31,22 @@ const Home = () => {
 
             {/* <Sidebar /> */}
             <Hero />
+            <LogoMarquee />
             <WohsTechlearner />
-            <BitcoinData />
-            <CourseList />
-            {/* <CommunitySection /> */}
             <TechChallenge />
+          
+            <CourseList />
+            <BitcoinData />
+            {/* <CommunitySection /> */}
+           
             <SolutionCards />
             {/* <StatisticalTestCard /> */}
             
             <FeatureList/>
-
+            {/* <MentorsAssign /> */}
             {/* <Timeline/> */}
+            <Banner/>
+            <CommunitySupport/>
             <InfoSection />
             <TechSection />
             <Footer />

@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 const LearnAndGrow = () => {
     const navigate = useNavigate();
   return (
-    <section className="pt-[100px] mb-8 w-full">
+    <section className="pt-[100px] bg-white mb-8 w-full">
       <div className="container mx-auto px-4">
         <a
-          href="/mentors"
+          href="/course"
           role="button"
           tabIndex="0"
           className="flex flex-col md:flex-row border border-gray-300 rounded-lg overflow-hidden shadow-sm cursor-pointer"
@@ -57,18 +56,10 @@ const LearnAndGrow = () => {
               ))}
             </ul>
 
-            <motion.button
-  initial={{ opacity: 0, y: 20 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  transition={{ delay: 0.5 }}
-  onClick={() => navigate('/mentors')} // Update this path to match your mentor route
-  className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
->
-  <span>Meet Our Mentors</span>
-  {/* <Users className="w-5 h-5" /> */}
-</motion.button>
+            <button className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
+            onClick={() => navigate(`/course`)}>
+              Explore Courses
+            </button>
           </div>
         </a>
       </div>
