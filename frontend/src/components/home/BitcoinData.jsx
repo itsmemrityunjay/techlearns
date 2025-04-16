@@ -152,12 +152,12 @@ const CompetitionList = () => {
               </div>
 
               {/* Card Content */}
-              <div className="p-4 pt-10">
+              <div className="p-4 pt-2 h-[250px] flex flex-col mx-auto justify-between">
                 {/* Title */}
-                <h3 className="text-lg font-bold text-center text-gray-800 mb-1">{competition.title}</h3>
+                <h3 className="text-lg font-bold text-left text-gray-800 mb-1">{truncateText(competition.title,4)}</h3>
 
                 {/* Subtitle */}
-                <p className="text-gray-600 text-xs text-center mb-4 font-light">
+                <p className="text-gray-600 text-xs text-left mb-4 font-light">
                   {truncateText(competition.subtitle, 10)}
                 </p>
 
@@ -165,36 +165,43 @@ const CompetitionList = () => {
                 <div className="h-px w-full bg-gradient-to-r from-transparent via-customBlue/30 to-transparent mb-4"></div>
 
                 {/* Competition Details - More Compact */}
-                <div className="flex items-center justify-between space-x-4 mb-3 px-2">
+                <div className="flex items-center justify-between space-x-4 mb-3 ">
   {/* Start Date */}
-  <div className="flex flex-col items-center">
-    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mb-1 text-blue-500">
-      <CalendarTodayIcon style={{ fontSize: "16px" }} />
+  <div className="flex items-start">
+    <div className="w-8 h-8 rounded-full mr-2 bg-blue-100 flex items-center justify-center mb-1 text-blue-500">
+      <CalendarTodayIcon style={{ fontSize: "14px" }} />
     </div>
+    <div>
     <span className="text-xs text-gray-500">Start</span>
     <p className="text-xs font-medium text-gray-700">{formatDate(competition.startDate)}</p>
+    </div>
   </div>
 
   {/* End Date */}
-  <div className="flex flex-col items-center">
-    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mb-1 text-red-500">
+  <div className="flex items-start">
+    <div className="w-8 h-8 rounded-full bg-red-100 mr-2 flex items-center justify-center mb-1 text-red-500">
       <CalendarTodayIcon style={{ fontSize: "16px" }} />
     </div>
+    <div>
     <span className="text-xs text-gray-500">End</span>
     <p className="text-xs font-medium text-gray-700">{formatDate(competition.endDate)}</p>
+    </div>
   </div>
 
   {/* Participants */}
-  <div className="flex flex-col items-center">
-    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mb-1 text-green-500">
-      <PeopleIcon style={{ fontSize: "16px" }} />
-    </div>
-    <span className="text-xs text-gray-500">Users</span>
-    <p className="text-xs font-medium text-gray-700">{competition.participants || 0}</p>
-  </div>
+  
 </div>
 
                 {/* Prize Pool - More Compact */}
+                {/* <div className="flex items-start">
+    <div className="w-8 h-8 rounded-full bg-green-100 mr-2 flex items-center justify-center mb-1 text-green-500">
+      <PeopleIcon style={{ fontSize: "16px" }} />
+    </div>
+    <div>
+    <span className="text-xs text-gray-500">Users</span>
+    <p className="text-xs font-medium text-gray-700">{competition.participants || 0}</p>
+    </div>
+  </div> */}
                 <div className="mt-3 pt-2 border-t border-dashed border-gray-200">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">

@@ -87,7 +87,7 @@ const CourseCard = ({ course }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-blue-100 cursor-pointer group"
+      className="relative justify-between my-auto h-[475px] bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-blue-100 cursor-pointer group"
       style={{
         transform: isHovered ? "translateY(-4px)" : "translateY(0)",
         boxShadow: isHovered
@@ -131,7 +131,7 @@ const CourseCard = ({ course }) => {
         </div>
 
         {/* Price Tag */}
-        <div className="absolute bottom-4 left-4 z-10">
+        {/* <div className="absolute bottom-4 left-4 z-10">
           <div
             className={`px-3 py-1.5 rounded-lg font-bold text-sm flex items-center shadow-sm ${
               course.discount > 0
@@ -149,11 +149,11 @@ const CourseCard = ({ course }) => {
               <span className="ml-2 bg-white text-blue-600 text-xs px-1.5 py-0.5 rounded-md">-{course.discount}%</span>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Action Buttons */}
-        <div className="absolute top-4 right-4 flex gap-2 z-20">
-          {/* Bookmark Button */}
+        {/* <div className="absolute top-4 right-4 flex gap-2 z-20">
+          
           <motion.button
             onClick={handleBookmark}
             whileTap={{ scale: 0.9 }}
@@ -166,7 +166,7 @@ const CourseCard = ({ course }) => {
             <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
           </motion.button>
 
-          {/* Like Button */}
+          
           <motion.button
             onClick={handleLike}
             whileTap={{ scale: 0.9 }}
@@ -178,13 +178,13 @@ const CourseCard = ({ course }) => {
           >
             <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
           </motion.button>
-        </div>
+        </div> */}
       </div>
 
       {/* Card Content */}
       <div className="p-5">
         {/* Category and Likes */}
-        <div className="flex justify-between items-center mb-3">
+        {/* <div className="flex justify-between items-center mb-3">
           <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium tracking-wide text-blue-700 bg-blue-50 rounded-full uppercase">
             {course.category || "Development"}
           </span>
@@ -192,7 +192,7 @@ const CourseCard = ({ course }) => {
             <Heart className={`h-3.5 w-3.5 mr-1 ${isLiked ? "text-red-500 fill-red-500" : ""}`} />
             {likeCount}
           </span>
-        </div>
+        </div> */}
 
         {/* Course Title */}
         <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200 leading-tight line-clamp-2">
@@ -205,10 +205,10 @@ const CourseCard = ({ course }) => {
         {/* Progress Bar (for enrolled courses) */}
         {course.enrolled && (
           <div className="mb-4">
-            <div className="flex justify-between text-xs text-gray-500 mb-1">
+            {/* <div className="flex justify-between text-xs text-gray-500 mb-1">
               <span>Your progress</span>
               <span>{Math.round(progress)}% complete</span>
-            </div>
+            </div> */}
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <motion.div
                 className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full"
@@ -255,7 +255,7 @@ const CourseCard = ({ course }) => {
           >
             {course.level}
           </span>
-          {course.certificate && (
+          {/* {course.certificate && (
             <span
               className="inline-flex items-center text-xs px-2.5 py-1 bg-blue-50 text-[#ffaa00] rounded-full border border-blue-200"
               title="Verified certificate upon completion"
@@ -263,7 +263,7 @@ const CourseCard = ({ course }) => {
               <BadgeCheck className="h-3 w-3 mr-1.5" />
               Certificate
             </span>
-          )}
+          )} */}
         </div>
 
         {/* Instructor and CTA */}
@@ -530,7 +530,7 @@ const CourseList = () => {
     <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
       {/* Header Section */}
       <motion.div
-        className="text-center mb-12"
+        className="text-left mb-12"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -550,7 +550,7 @@ const CourseList = () => {
             Knowledge
           </h1>
         </div>
-        <p className="text-gray-600 leading-relaxed max-w-2xl mx-auto">
+        <p className="text-gray-600 leading-relaxed max-w-4xl">
           Professional courses designed to help you achieve your career goals with hands-on projects and expert
           instruction.
         </p>
@@ -666,7 +666,7 @@ const CourseList = () => {
           )}
         </AnimatePresence>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex flex-wrap gap-2">
             <motion.button
               onClick={() => setFilter("all")}
@@ -722,7 +722,7 @@ const CourseList = () => {
               <option value="price-high">Price: High to Low</option>
             </select>
           </div>
-        </div>
+        </div> */}
       </motion.div>
 
       {/* Courses Grid */}
@@ -736,7 +736,7 @@ const CourseList = () => {
 
           {/* Load More Button */}
           {visibleCourses < courses.length && (
-            <div className="text-center mt-12">
+            <div className="text-left mt-12">
               <motion.button
                 onClick={loadMoreCourses}
                 whileHover={{ scale: 1.05 }}

@@ -896,7 +896,7 @@ function AdminDashboard() {
                         )}
                     </div> */}
                 </div>
-                <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto mt-12">
+                {/* <div className="p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto mt-12">
                     <h2 className="text-xl font-bold text-blue-600 mb-4">Admin Notifications</h2>
 
                     {notifications.length === 0 ? (
@@ -923,7 +923,7 @@ function AdminDashboard() {
                             </div>
                         ))
                     )}
-                </div>
+                </div> */}
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-between items-stretch w-full">
 
                     {/* Line Chart Section */}

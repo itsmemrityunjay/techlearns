@@ -33,7 +33,7 @@ const Hero = () => {
       <div className="max-w-lg mt-32 relative z-10">
         <h1 className="text-4xl lg:text-6xl font-extrabold text-[--secondary-color] leading-tight mb-6">
           Master New Skills <br /> with{" "}
-          <span className="text-yellow-500">
+          <span className="text-[#ffaa00]">
             <Typewriter
               words={["Techlearns"]}
               loop={false}

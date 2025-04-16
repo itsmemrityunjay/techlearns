@@ -9,6 +9,7 @@ import { getAuth } from 'firebase/auth';
 import discuss from "../comp/discuss.jpg";
 import form1 from "../comp/form1.jpg";
 import { useNavigate } from 'react-router-dom';
+import vaishnavi from "../../assets/vaishnavi.jpg";
 const DiscussHero = () => {
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -123,9 +124,9 @@ const DiscussHero = () => {
                 {/* Image Section */}
                 <div className="w-full  lg:w-1/2 h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px]">
                     <img
-                        src={discuss}
+                        src={vaishnavi}
                         alt="Join the Discussion"
-                        className="w-full h-full object-cover rounded-3xl border-spacing-"
+                        className="w-full h-full  border-spacing-"
                     />
                 </div>
             </div>

@@ -33,26 +33,26 @@ const TechChallenge = () => {
             <div className="container mx-auto flex flex-col lg:flex-row justify-center items-center">
                 {/* Left Section */}
                 <div className="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
-                    <div className=" py-8">
-                        <h1 className="text-4xl font-bold">
-                            Learn cutting edge<br></br> techniques in Techlearns competitions & courses
+                    <div className=" py-8 flex flex-col justify-between">
+                        <h1 className="text-4xl py-10 font-bold">
+                            Learn cutting edge<br></br> techniques in Techlearns
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">
                         TechLearns Academy offers comprehensive courses designed to equip learners with essential technology and digital skills.
                         </p>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-3 gap-3">
+                    <div className="mt-10 mb-5 grid grid-cols-3 gap-3">
                         <div>
-                            <h2 className="text-3xl font-bold">28,000</h2>
+                            <h2 className="text-3xl font-bold">1,000</h2>
                             <p className="font-bold py-2">COMPETITIONS</p>
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">5,000</h2>
+                            <h2 className="text-3xl font-bold text-gray-900">500</h2>
                             <p className="font-bold py-2">NOTEBOOKS</p>
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">70+ hours</h2>
+                            <h2 className="text-3xl font-bold text-gray-900">5+ hrs</h2>
                             <p className="font-bold py-2">COURSES</p>
                         </div>
                     </div>

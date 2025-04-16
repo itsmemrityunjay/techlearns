@@ -25,7 +25,7 @@ const LearnSection = ({ title, description, image })=> {
         {/* Right Section */}
         <div className="w-full md:w-[45%] mt-8 md:mt-0 flex justify-center items-center">
           <img
-            src={vaishnavi}
+            src={image}
             alt="Compete Visual"
             className="w-full h-auto object-contain rounded-lg max-h-[400px]"
           />

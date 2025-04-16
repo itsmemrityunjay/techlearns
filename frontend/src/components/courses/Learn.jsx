@@ -22,9 +22,7 @@ const LearnSection = () => {
             <button className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-6 rounded-3xl transition duration-200">
               Join Competition
             </button>
-            <button className="border border-black hover:bg-[--primary-color] text-black font-semibold py-2 px-6 rounded-3xl transition duration-200">
-              + Host a Competition
-            </button>
+            
           </div>
         </div>
 

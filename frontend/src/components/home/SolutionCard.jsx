@@ -28,15 +28,15 @@ const SolutionCard = ({ solution }) => {
             className="cursor-pointer border border-gray-100 rounded-xl shadow-sm transition-all duration-300 bg-white group hover:shadow-lg hover:border-transparent flex flex-col h-full"
         >
             {/* Image Section with Overlay */}
-            <div className="relative h-48 bg-cover bg-center rounded-t-xl overflow-hidden">
+            {/* <div className="relative h-48 bg-cover bg-center rounded-t-xl overflow-hidden">
                 <div 
                     className="absolute inset-0 bg-cover bg-center transition-all duration-500 group-hover:scale-105"
                     style={{ backgroundImage: `url(${solution.avatarUrl})` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-gray-900/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-gray-900/20" /> */}
                 
                 {/* Bookmark Button */}
-                <button 
+                {/* <button 
                     onClick={toggleBookmark}
                     className="absolute top-3 right-3 p-2 bg-white/90 rounded-full shadow-sm hover:bg-white transition-all"
                     aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this solution"}
@@ -46,10 +46,10 @@ const SolutionCard = ({ solution }) => {
                     ) : (
                         <MdOutlineBookmark className="text-gray-600 text-xl" />
                     )}
-                </button>
+                </button> */}
                 
                 {/* Author Badge */}
-                <div className="absolute bottom-4 left-4 flex items-center">
+                {/* <div className="absolute bottom-4 left-4 flex items-center">
                     <img
                         src={solution.avatarUrl}
                         alt={solution.author}
@@ -58,14 +58,14 @@ const SolutionCard = ({ solution }) => {
                     <span className="ml-2 text-sm font-medium text-white">
                         {solution.author || 'Anonymous'}
                     </span>
-                </div>
-            </div>
+                </div> */}
+            {/* </div> */}
 
             {/* Content Section */}
             <div className="p-5 flex-1 flex flex-col">
                 {/* Category Tag */}
                 <div className="flex justify-between items-center mb-3">
-                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">
+                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-orange-100 text-black rounded-full">
                         {solution.category || 'General'}
                     </span>
                     <div className="flex items-center space-x-3 text-gray-500 text-xs">
@@ -82,6 +82,7 @@ const SolutionCard = ({ solution }) => {
                 <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-[--secondary-color] transition-colors">
                     {solution.title}
                 </h3>
+                
 
                 {/* Content Preview */}
                 <div
@@ -155,11 +156,11 @@ const SolutionCards = () => {
     return (
         <div className="container mx-auto py-12 px-4 sm:px-6 max-w-7xl">
             {/* Header Section */}
-            <div className="text-center mb-12 px-4">
+            <div className="text-left mb-12 px-4">
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                    Solution <span className="text-yellow-500">Write-ups</span>
+                    Solution <span className="text-[#ffaa00]">Write-ups</span>
                 </h1>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                <p className="text-lg text-gray-600 max-w-2xl">
                     Discover expert solutions and insights from our community of problem solvers.
                 </p>
             </div>

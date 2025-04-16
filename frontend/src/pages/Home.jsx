@@ -46,7 +46,7 @@ const Home = () => {
             {/* <MentorsAssign /> */}
             {/* <Timeline/> */}
             <Banner/>
-            <CommunitySupport/>
+            {/* <CommunitySupport/> */}
             <InfoSection />
             <TechSection />
             <Footer />

@@ -13,7 +13,7 @@ export default function TestimonialSection() {
   ];
 
   return (
-    <div className="bg-[#121212] text-white py-16 px-4 md:px-8 lg:px-16">
+    <div className="bg-white text-black py-16 px-4 md:px-8 lg:px-16">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div 
@@ -22,13 +22,13 @@ export default function TestimonialSection() {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <p className="text-blue-400 mb-2 tracking-wider font-medium">
+          <p className="text-black mb-2 tracking-wider font-medium">
             JOIN THE COMMUNITY
           </p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-2">
             Supported by thousands of
           </h2>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold ">
             developers and designers
           </h2>
         </motion.div>
@@ -44,20 +44,20 @@ export default function TestimonialSection() {
               transition={{ delay: index * 0.1 }}
               className="relative group"
             >
-              <div className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-blue-500/50 transition-all duration-300">
+              <div className="text-center p-6 rounded-2xl  transition-all duration-300">
                 <motion.p 
-                  className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent"
+                  className="text-4xl font-bold mb-2 bg-black "
                   initial={{ scale: 1 }}
                   whileHover={{ scale: 1.1 }}
                 >
                   {stat.value}
                 </motion.p>
-                <p className="text-gray-400 text-sm tracking-wide">
+                <p className="text-black text-sm tracking-wide">
                   {stat.label}
                 </p>
                 
                 {/* Decorative Elements */}
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                <div className="absolute -inset-0.5 bg-black rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               </div>
             </motion.div>
           ))}
