@@ -11,17 +11,7 @@ import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 import "chart.js/auto"
 import GroupIcon from "@mui/icons-material/Group"
-import {
-  collection,
-  onSnapshot,
-  addDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  query,
-  where,
-  orderBy,
-} from "firebase/firestore"
+import { collection, onSnapshot, addDoc, getDocs, updateDoc, deleteDoc, query, where, doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore"
 import { useNavigate } from "react-router-dom"
 import { db, storage } from "../../database/Firebase"
 import ModalMain from "./Modal"
@@ -31,7 +21,6 @@ import SchoolIcon from "@mui/icons-material/School"
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import PersonIcon from "@mui/icons-material/Person"
-import { doc, setDoc } from "firebase/firestore"
 import UploadCourseVideoModal from "./UploadCourseVideo"
 import CreateAssignmentModal from "./CreateAssignmentModal"
 import AssignmentSubmissionsOverview from "./AssignmentSubmissionsOverview"
@@ -120,30 +109,39 @@ function AdminDashboard() {
   const fetchMentorApplications = async () => {
     try {
       setIsLoadingApplications(true)
-      const q = query(
-        collection(db, "mentor-applications"),
-        where("status", "==", activeTab),
-        orderBy("createdAt", "desc"),
-      )
 
-      const querySnapshot = await getDocs(q)
-      const applicationsData = querySnapshot.docs.map((doc) => {
-        const data = doc.data()
-        // Handle potential missing fields and ensure proper date conversion
-        return {
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate?.() || new Date(),
-          // Ensure these fields exist to prevent UI errors
-          name: data.name || "Unknown",
-          email: data.email || "No email provided",
-          expertise: data.expertise || [],
-          experience: data.experience || "No experience provided",
-          bio: data.bio || "No bio provided",
-        }
-      })
+      // Instead of using a complex query that requires an index
+      // First get all mentor applications
+      const mentorAppsRef = collection(db, "mentor-applications")
+      const querySnapshot = await getDocs(mentorAppsRef)
 
-      console.log("Fetched applications:", applicationsData) // Add this for debugging
+      // Then filter them in memory based on status
+      const applicationsData = querySnapshot.docs
+        .map((doc) => {
+          const data = doc.data()
+          // Ensure expertise is always an array
+          let expertise = data.expertise || []
+          if (!Array.isArray(expertise)) {
+            expertise = typeof expertise === "string" ? [expertise] : []
+          }
+
+          return {
+            id: doc.id,
+            ...data,
+            expertise: expertise, // Use our sanitized expertise array
+            createdAt: data.createdAt?.toDate?.() || new Date(),
+            // Ensure these fields exist to prevent UI errors
+            name: data.name || "Unknown",
+            email: data.email || "No email provided",
+            experience: data.experience || "No experience provided",
+            bio: data.bio || "No bio provided",
+          }
+        })
+        .filter((app) => app.status === activeTab)
+        // Sort manually by createdAt
+        .sort((a, b) => b.createdAt - a.createdAt)
+
+      console.log("Fetched applications:", applicationsData)
       setApplications(applicationsData)
     } catch (error) {
       console.error("Error fetching mentor applications:", error)
@@ -152,24 +150,101 @@ function AdminDashboard() {
     }
   }
 
-  // Function to approve mentor application
+  // Add this function to handle mentor creation
+  const createMentorDocument = async (application) => {
+    try {
+      // First check if mentor already exists
+      const mentorQuery = query(
+        collection(db, "mentors"), 
+        where("email", "==", application.email)
+      );
+      const mentorDocs = await getDocs(mentorQuery);
+      
+      if (!mentorDocs.empty) {
+        throw new Error("Mentor already exists");
+      }
+
+      // Create mentor document with all required fields
+      await addDoc(collection(db, "mentors"), {
+        name: application.name,
+        email: application.email,
+        bio: application.bio || "",
+        expertise: application.expertise || [],
+        experience: application.experience || "",
+        profileImage: application.profileImageURL || "",
+        socialLinks: {
+          linkedin: application.linkedin || "",
+          github: application.github || "",
+          twitter: application.twitter || ""
+        },
+        education: application.education || "",
+        location: application.location || "",
+        status: "active",
+        mentorId: application.id, // unique identifier
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        isAvailable: true,
+        rating: 0,
+        totalReviews: 0,
+        specialization: application.specialization || [],
+        languages: application.languages || [],
+        achievements: application.achievements || []
+      });
+
+      // Update user role
+      const userQuery = query(
+        collection(db, "users"), 
+        where("email", "==", application.email)
+      );
+      const userDocs = await getDocs(userQuery);
+      
+      if (!userDocs.empty) {
+        const userDoc = userDocs.docs[0];
+        await updateDoc(doc(db, "users", userDoc.id), {
+          role: "mentor",
+          isMentor: true
+        });
+      }
+
+      // Update application status
+      await updateDoc(doc(db, "mentor-applications", application.id), {
+        status: "approved",
+        updatedAt: serverTimestamp()
+      });
+
+    } catch (error) {
+      console.error("Error in createMentorDocument:", error);
+      throw error;
+    }
+  };
+
+  // Modify the handleApproveApplication function
   const handleApproveApplication = async (id) => {
     try {
-      await updateDoc(doc(db, "mentor-applications", id), {
-        status: "approved",
-        updatedAt: new Date(),
-      })
+      const applicationRef = doc(db, "mentor-applications", id);
+      const applicationSnap = await getDoc(applicationRef);
+      
+      if (applicationSnap.exists()) {
+        const applicationData = { 
+          ...applicationSnap.data(),
+          id: applicationSnap.id 
+        };
+        
+        await createMentorDocument(applicationData);
+        
+        setApplications(prev => 
+          prev.map(app => 
+            app.id === id ? { ...app, status: "approved" } : app
+          )
+        );
 
-      // Remove from current list
-      setApplications((prev) => prev.filter((app) => app.id !== id))
-
-      // Show success message
-      alert("Application approved successfully!")
+        alert("Mentor approved successfully!");
+      }
     } catch (error) {
-      console.error("Error approving application:", error)
-      alert("Failed to approve application. Please try again.")
+      console.error("Error approving mentor:", error);
+      alert(`Failed to approve mentor: ${error.message}`);
     }
-  }
+  };
 
   // Function to reject mentor application
   const handleRejectApplication = async (id) => {
@@ -813,7 +888,6 @@ function AdminDashboard() {
                           <ExternalLink className="h-4 w-4 inline mr-1" />
                           View Details
                         </button>
-
                         {activeTab === "pending" && (
                           <>
                             <button
@@ -847,11 +921,17 @@ function AdminDashboard() {
 
                     <div className="mt-3">
                       <div className="flex flex-wrap gap-1">
-                        {application.expertise?.map((skill, index) => (
-                          <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                            {skill}
+                        {Array.isArray(application.expertise) ? (
+                          application.expertise.map((skill, index) => (
+                            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+                              {skill}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+                            {typeof application.expertise === "string" ? application.expertise : "No expertise listed"}
                           </span>
-                        ))}
+                        )}
                       </div>
                     </div>
                   </div>
@@ -929,11 +1009,19 @@ function AdminDashboard() {
                 <div>
                   <h4 className="font-semibold text-lg">Areas of Expertise</h4>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {selectedApplication.expertise?.map((skill, index) => (
-                      <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                        {skill}
+                    {Array.isArray(selectedApplication.expertise) ? (
+                      selectedApplication.expertise.map((skill, index) => (
+                        <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {typeof selectedApplication.expertise === "string"
+                          ? selectedApplication.expertise
+                          : "No expertise listed"}
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
 

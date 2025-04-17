@@ -6,7 +6,6 @@ import {
   X,
   Briefcase,
   BookOpen,
-  Code,
   User,
   Calendar,
   MapPin,
@@ -15,73 +14,13 @@ import {
   Linkedin,
   Github,
   Twitter,
-  ChevronLeft,
-  ChevronRight,
   Star,
   Upload,
   AlertCircle,
 } from "lucide-react"
-import Image from "../../assets/aryan.jpg"
-import { refEqual, doc, collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { collection, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore"
 import { db, storage } from "../../database/Firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import { Settings } from '@mui/icons-material';
-// Sample data - replace with your actual data source
-const mentorsData = [
-  {
-    id: 1,
-    name: "John Doe",
-    role: "Senior Developer",
-    image: "/placeholder.svg?height=400&width=400",
-    expertise: ["React", "Node.js", "Python"],
-    bio: "10+ years of experience in web development",
-    about:
-      "Passionate about teaching and mentoring junior developers. I specialize in building scalable web applications and helping others grow in their development journey. My approach focuses on practical, hands-on learning with real-world examples.",
-    topics: ["Web Development", "System Design", "Data Structures", "Career Growth"],
-    skills: ["JavaScript", "React", "Node.js", "Python", "MongoDB", "AWS", "Docker"],
-    location: "San Francisco, CA",
-    availability: "Evenings & Weekends",
-    languages: ["English", "Spanish"],
-    rating: 4.9,
-    reviewCount: 127,
-    email: "john.doe@example.com",
-    website: "johndoe.dev",
-    social: {
-      linkedin: "johndoe",
-      github: "johndoe",
-      twitter: "johndoe",
-    },
-    experience: [
-      {
-        company: "Tech Corp",
-        role: "Senior Developer",
-        duration: "2019 - Present",
-        description:
-          "Leading development team and mentoring juniors. Implemented microservices architecture that improved system reliability by 35%.",
-      },
-      {
-        company: "StartUp Inc",
-        role: "Full Stack Developer",
-        duration: "2016 - 2019",
-        description:
-          "Developed full stack applications using React, Node.js, and MongoDB. Reduced page load time by 40% through optimization techniques.",
-      },
-    ],
-    education: [
-      {
-        institution: "University of Technology",
-        degree: "M.S. Computer Science",
-        year: "2014 - 2016",
-      },
-      {
-        institution: "Tech Institute",
-        degree: "B.S. Software Engineering",
-        year: "2010 - 2014",
-      },
-    ],
-  },
-  // ... other mentor data (keeping the same as in your original file)
-]
 
 // Mentor Application Form Component
 const MentorApplicationForm = ({ onClose, onSubmit }) => {
@@ -175,15 +114,12 @@ const MentorApplicationForm = ({ onClose, onSubmit }) => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!validateForm()) return
 
     setIsSubmitting(true)
     setSubmitError("")
-
-
-    
 
     try {
       // In a real application, you would upload the files to storage
@@ -501,18 +437,88 @@ const Mentors = () => {
   }
 
   const [selectedMentor, setSelectedMentor] = useState(null)
-  const [mentors, setMentors] = useState(mentorsData)
+  const [mentors, setMentors] = useState([])
+  const [allMentors, setAllMentors] = useState([]) // Store all mentors for filtering
   const [filter, setFilter] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState("about")
   const [toastMessage, setToastMessage] = useState(null)
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const isMobile = useMobile()
   const modalRef = useRef(null)
 
+  // Fetch mentors from Firestore
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        setIsLoading(true)
+        setError(null)
+
+        const mentorsRef = collection(db, "mentors")
+
+        // Set up real-time listener
+        const unsubscribe = onSnapshot(
+          mentorsRef,
+          (querySnapshot) => {
+            const mentorsData = querySnapshot.docs.map((doc) => {
+              const data = doc.data()
+              return {
+                id: doc.id,
+                name: data.name || "Unknown",
+                role: data.specialization?.[0] || "Mentor",
+                image: data.profileImage || "/placeholder.svg?height=400&width=400",
+                expertise: data.expertise || [],
+                bio: data.bio || "No bio available",
+                about: data.bio || "No bio available",
+                topics: data.specialization || [],
+                skills: data.expertise || [],
+                location: data.location || "Remote",
+                availability: data.isAvailable ? "Available" : "Unavailable",
+                languages: data.languages || ["English"],
+                rating: data.rating || 0,
+                reviewCount: data.totalReviews || 0,
+                email: data.email || "",
+                website: "",
+                social: {
+                  linkedin: data.socialLinks?.linkedin || "",
+                  github: data.socialLinks?.github || "",
+                  twitter: data.socialLinks?.twitter || "",
+                },
+                experience: [],
+                education: [],
+              }
+            })
+
+            console.log("Fetched mentors:", mentorsData)
+            setAllMentors(mentorsData)
+            setMentors(mentorsData)
+            setIsLoading(false)
+          },
+          (err) => {
+            console.error("Error fetching mentors:", err)
+            setError("Failed to load mentors. Please try again later.")
+            setIsLoading(false)
+          },
+        )
+
+        return () => unsubscribe()
+      } catch (error) {
+        console.error("Error setting up mentors listener:", error)
+        setError("Failed to load mentors. Please try again later.")
+        setIsLoading(false)
+      }
+    }
+
+    fetchMentors()
+  }, [])
+
   // Filter mentors based on expertise and search query
   useEffect(() => {
-    let filtered = mentorsData
+    if (allMentors.length === 0) return
+
+    let filtered = [...allMentors]
 
     if (filter !== "all") {
       filtered = filtered.filter((mentor) => mentor.expertise.some((exp) => exp.toLowerCase() === filter.toLowerCase()))
@@ -522,15 +528,15 @@ const Mentors = () => {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(
         (mentor) =>
-          mentor.name.toLowerCase().includes(query) ||
-          mentor.role.toLowerCase().includes(query) ||
-          mentor.expertise.some((exp) => exp.toLowerCase().includes(query)) ||
-          mentor.topics.some((topic) => topic.toLowerCase().includes(query)),
+          mentor.name?.toLowerCase().includes(query) ||
+          mentor.role?.toLowerCase().includes(query) ||
+          mentor.expertise?.some((exp) => exp.toLowerCase().includes(query)) ||
+          mentor.topics?.some((topic) => topic.toLowerCase().includes(query)),
       )
     }
 
     setMentors(filtered)
-  }, [filter, searchQuery])
+  }, [filter, searchQuery, allMentors])
 
   // Handle click outside modal to close
   useEffect(() => {
@@ -546,51 +552,40 @@ const Mentors = () => {
     }
   }, [])
 
-  // Custom toast function
-  const showToast = (title, description) => {
-    setToastMessage({ title, description })
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 3000)
-  }
-
-  // Handle booking a session
-  const handleBookSession = (mentor) => {
-    showToast("Session Requested", `Your request to book a session with ${mentor.name} has been sent.`)
-  }
-
-  // Handle contact mentor
-  const handleContactMentor = (mentor) => {
-    showToast("Message Sent", `Your message to ${mentor.name} has been sent.`)
-  }
-
   // Handle mentor application submission
   const handleApplicationSubmit = async (formData) => {
     try {
       // Upload profile image
-      const profileImageRef = ref(
-        storage,
-        `mentor-applications/profile-images/${Date.now()}-${formData.profileImage.name}`,
-      )
+      const profileImageRef = ref(storage, `mentor-applications/${formData.email}/profile-${Date.now()}`)
       const profileUploadTask = uploadBytesResumable(profileImageRef, formData.profileImage)
 
+      // Wait for upload to complete
+      await new Promise((resolve, reject) => {
+        profileUploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (error) => reject(error),
+          () => resolve(),
+        )
+      })
+
+      const profileImageURL = await getDownloadURL(profileUploadTask.snapshot.ref)
+
       // Upload resume
-      const resumeRef = ref(storage, `mentor-applications/resumes/${Date.now()}-${formData.resume.name}`)
+      const resumeRef = ref(storage, `mentor-applications/${formData.email}/resume-${Date.now()}`)
       const resumeUploadTask = uploadBytesResumable(resumeRef, formData.resume)
 
-      // Wait for uploads to complete
-      const [profileSnapshot, resumeSnapshot] = await Promise.all([
-        new Promise((resolve, reject) => {
-          profileUploadTask.on("state_changed", null, reject, () => resolve(profileUploadTask.snapshot))
-        }),
-        new Promise((resolve, reject) => {
-          resumeUploadTask.on("state_changed", null, reject, () => resolve(resumeUploadTask.snapshot))
-        }),
-      ])
+      // Wait for upload to complete
+      await new Promise((resolve, reject) => {
+        resumeUploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (error) => reject(error),
+          () => resolve(),
+        )
+      })
 
-      // Get download URLs
-      const profileImageURL = await getDownloadURL(profileSnapshot.ref)
-      const resumeURL = await getDownloadURL(resumeSnapshot.ref)
+      const resumeURL = await getDownloadURL(resumeUploadTask.snapshot.ref)
 
       // Save application to Firestore
       await addDoc(collection(db, "mentor-applications"), {
@@ -607,527 +602,472 @@ const Mentors = () => {
         createdAt: serverTimestamp(),
       })
 
-      showToast(
-        "Application Submitted",
-        "Your mentor application has been submitted successfully. We'll review it and get back to you soon.",
-      )
+      // Show success message
+      setToastMessage({
+        type: "success",
+        message: "Application submitted successfully!",
+      })
+
+      setTimeout(() => {
+        setToastMessage(null)
+      }, 3000)
     } catch (error) {
       console.error("Error submitting application:", error)
-      showToast("Submission Failed", "There was an error submitting your application. Please try again.")
+      throw error
     }
   }
 
-  const MentorCard = ({ mentor }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-      className="h-full"
-    >
-      <div className="h-full flex flex-col overflow-hidden border-2 border-gray-200 hover:border-gray-400 transition-all duration-300 rounded-lg shadow-sm">
-        <div className="relative w-full pt-[10%] overflow-hidden bg-gray-100">
-          <img
-            src={Image || "/placeholder.svg"}
-            alt="Loading..."
-            className="object-cover transition-transform duration-500 hover:scale-105"
-          />
-          <div className="absolute top-2 right-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span>{mentor.rating}</span>
-          </div>
-        </div>
+  // Get unique expertise areas for filter
+  const expertiseAreas = Array.from(new Set(allMentors.flatMap((mentor) => mentor.expertise || [])))
 
-        <div className="flex-grow flex flex-col p-5">
-          <div className="space-y-1 mb-3">
-            <h3 className="text-xl font-bold text-gray-900">{mentor.name}</h3>
-            <p className="text-sm font-medium" style={{ color: "var(--primary-color)" }}>
-              {mentor.role}
-            </p>
-          </div>
+  // Show toast message
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null)
+      }, 3000)
 
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-            <MapPin className="w-4 h-4" />
-            <span>{mentor.location}</span>
-          </div>
-
-          <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-grow">{mentor.bio}</p>
-
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {mentor.expertise.slice(0, 3).map((exp, index) => (
-              <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                {exp}
-              </span>
-            ))}
-            {mentor.expertise.length > 3 && (
-              <span className="px-2 py-1 border border-gray-200 text-gray-600 text-xs rounded-full">
-                +{mentor.expertise.length - 3}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="p-5 pt-0">
-          <button
-            onClick={() => setSelectedMentor(mentor)}
-            className="w-full py-2 px-4 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
-            style={{ backgroundColor: "var(--secondary-color)" }}
-          >
-            View Profile
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  )
-
-  const MentorModal = ({ mentor, onClose }) => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-    >
-      <motion.div
-        ref={modalRef}
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-      >
-        <div className="sticky top-0 bg-white z-10 border-b p-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">{mentor.name}</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Close">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="overflow-y-auto">
-          {/* Profile Header */}
-          <div className="relative bg-gradient-to-r from-blue-50 to-blue-100 p-6">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              <div className="w-24 h-24 md:w-32 md:h-32 relative rounded-full overflow-hidden border-4 border-white shadow-xl">
-                <img src={Image || "/placeholder.svg"} alt={mentor.name} className="object-cover w-full h-full" />
-              </div>
-
-              <div className="text-center md:text-left space-y-2 flex-grow">
-                <div>
-                  <h3 className="text-2xl font-bold">{mentor.name}</h3>
-                  <p className=" font-medium" style={{ color: "var(--secondary-color)" }}>
-                    {mentor.role}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap justify-center md:justify-start gap-1.5 my-2">
-                  {mentor.expertise.map((exp, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-blue-100 text-white text-xs rounded-full"
-                      style={{ backgroundColor: "var(--secondary-color)" }}
-                    >
-                      {exp}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center justify-center md:justify-start gap-1 text-sm">
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="ml-1 font-medium">{mentor.rating}</span>
-                  </div>
-                  <span className="text-gray-500">({mentor.reviewCount} reviews)</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 w-full md:w-auto">
-                <button
-                  onClick={() => handleBookSession(mentor)}
-                  className="py-2 px-4 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
-                  style={{ backgroundColor: "var(--secondary-color)" }}
-                >
-                  Book a Session
-                </button>
-                <button
-                  onClick={() => handleContactMentor(mentor)}
-                  className="py-2 px-4 border border-gray-300 hover:bg-gray-50 font-medium rounded-md transition-colors"
-                >
-                  Contact
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-4 text-sm text-gray-500">
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                <span>{mentor.location}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                <span>{mentor.availability}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Globe className="w-4 h-4" />
-                <span>{mentor.languages.join(", ")}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="p-6">
-            <div className="grid grid-cols-4 mb-6 border-b">
-              {["about", "experience", "topics", "contact"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`py-2 px-4 text-center font-medium transition-colors ${
-                    activeTab === tab ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </div>
-
-            {activeTab === "about" && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <User className="w-5 h-5" />
-                    About
-                  </h4>
-                  <p className="text-gray-600">{mentor.about}</p>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <Code className="w-5 h-5" />
-                    Skills
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {mentor.skills.map((skill, index) => (
-                      <span key={index} className="px-2 py-1 border border-gray-200 text-gray-700 text-sm rounded-md">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold mb-3">Education</h4>
-                  <div className="space-y-4">
-                    {mentor.education.map((edu, index) => (
-                      <div key={index} className="border-l-2 border-blue-400 pl-4">
-                        <h5 className="font-semibold">{edu.degree}</h5>
-                        <p className="text-blue-600">{edu.institution}</p>
-                        <p className="text-sm text-gray-500">{edu.year}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "experience" && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <Briefcase className="w-5 h-5" />
-                    Work Experience
-                  </h4>
-                  <div className="space-y-6">
-                    {mentor.experience.map((exp, index) => (
-                      <div key={index} className="border-l-2 border-blue-400 pl-4">
-                        <h5 className="font-semibold">{exp.role}</h5>
-                        <p className="text-blue-600">{exp.company}</p>
-                        <p className="text-sm text-gray-500">{exp.duration}</p>
-                        <p className="text-gray-600 mt-2">{exp.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "topics" && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                    <BookOpen className="w-5 h-5" />
-                    Mentorship Topics
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {mentor.topics.map((topic, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-4">
-                        <h5 className="font-medium">{topic}</h5>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "contact" && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-lg font-semibold mb-3">Contact Information</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-5 h-5 text-gray-500" />
-                      <a href={`mailto:${mentor.email}`} className="text-blue-600 hover:underline">
-                        {mentor.email}
-                      </a>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-5 h-5 text-gray-500" />
-                      <a
-                        href={`https://${mentor.website}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        {mentor.website}
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold mb-3">Social Media</h4>
-                  <div className="flex gap-3">
-                    <a
-                      href={`https://linkedin.com/in/${mentor.social.linkedin}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors"
-                      aria-label="LinkedIn"
-                    >
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                    <a
-                      href={`https://github.com/${mentor.social.github}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors"
-                      aria-label="GitHub"
-                    >
-                      <Github className="w-5 h-5" />
-                    </a>
-                    <a
-                      href={`https://twitter.com/${mentor.social.twitter}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors"
-                      aria-label="Twitter"
-                    >
-                      <Twitter className="w-5 h-5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-
-  // Carousel navigation for mobile
-  const carouselRef = useRef(null)
-
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -300, behavior: "smooth" })
+      return () => clearTimeout(timer)
     }
+  }, [toastMessage])
+
+  // Handle mentor selection
+  const handleMentorSelect = (mentor) => {
+    setSelectedMentor(mentor)
+    setActiveTab("about")
   }
 
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 300, behavior: "smooth" })
-    }
+  // Format rating display
+  const formatRating = (rating) => {
+    return rating.toFixed(1)
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="text-center mb-12 space-y-4">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-bold"
+    <div className="container mx-auto px-4 py-8">
+      {/* Toast Message */}
+      {toastMessage && (
+        <div
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+            toastMessage.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          }`}
         >
-          Meet Our Expert Mentors
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-lg text-gray-500 max-w-2xl mx-auto"
+          {toastMessage.message}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Our Mentors</h1>
+          <p className="text-gray-600 max-w-2xl">
+            Connect with experienced professionals who can guide you through your learning journey and help you achieve
+            your goals.
+          </p>
+        </div>
+        <button
+          onClick={() => setIsApplicationFormOpen(true)}
+          className="mt-4 md:mt-0 px-4 py-2 rounded-md text-white"
+          style={{ backgroundColor: "var(--secondary-color)" }}
         >
-          Connect with industry professionals who are passionate about helping you grow
-        </motion.p>
+          Become a Mentor
+        </button>
       </div>
 
       {/* Search and Filter */}
-      <div className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="relative w-full md:w-auto">
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex-1">
           <input
             type="text"
-            placeholder="Search mentors..."
+            placeholder="Search mentors by name, role, or expertise..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-80 px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-3 border rounded-md"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
         </div>
-
-        {/* Filter by expertise */}
-        <div className="flex overflow-x-auto gap-2 w-full md:w-auto pb-2 md:pb-0" ref={carouselRef}>
-          {isMobile && (
-            <button
-              className="flex-shrink-0 p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-              onClick={scrollLeft}
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-          )}
-
-          <button
-            className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "all"
-                ? "bg--primary-color text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-            style={{ backgroundColor: filter === "all" ? `var(--primary-color)` : "" }}
-            onClick={() => setFilter("all")}
-          >
-            All
-          </button>
-          <button
-            className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "React"
-                ? "bg-[var(--secondary-color)] text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setFilter("React")}
-          >
-            React
-          </button>
-          <button
-            className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "Python"
-                ? "bg-[var(--secondary-color)] text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setFilter("Python")}
-          >
-            Python
-          </button>
-          <button
-            className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "UI Design"
-                ? "bg-[var(--secondary-color)] text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setFilter("UI Design")}
-          >
-            UI Design
-          </button>
-          <button
-            className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "Machine Learning"
-                ? "bg-[var(--secondary-color)] text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-            onClick={() => setFilter("Machine Learning")}
-          >
-            Machine Learning
-          </button>
-
-          {isMobile && (
-            <button
-              className="flex-shrink-0 p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-              onClick={scrollRight}
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          )}
+        <div className="w-full md:w-64">
+          <select value={filter} onChange={(e) => setFilter(e.target.value)} className="w-full p-3 border rounded-md">
+            <option value="all">All Expertise</option>
+            {expertiseAreas.map((area) => (
+              <option key={area} value={area}>
+                {area}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-md mb-8">
+          <h3 className="font-semibold">Error</h3>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && !error && mentors.length === 0 && (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <User className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No mentors found</h3>
+          <p className="text-gray-500 max-w-md mx-auto mb-6">
+            {filter !== "all" || searchQuery
+              ? "Try adjusting your search or filter criteria."
+              : "There are currently no mentors available. Check back later or apply to become a mentor."}
+          </p>
+          {(filter !== "all" || searchQuery) && (
+            <button
+              onClick={() => {
+                setFilter("all")
+                setSearchQuery("")
+              }}
+              className="px-4 py-2 border rounded-md hover:bg-gray-50"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Mentors Grid */}
-      {mentors.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {!isLoading && !error && mentors.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {mentors.map((mentor) => (
-            <MentorCard key={mentor.id} mentor={mentor} />
+            <div
+              key={mentor.id}
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleMentorSelect(mentor)}
+            >
+              <div className="p-6">
+                <div className="flex items-start">
+                  <div className="h-16 w-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                    <img
+                      src={mentor.image || "/placeholder.svg?height=400&width=400"}
+                      alt={mentor.name}
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.target.src = "/placeholder.svg?height=400&width=400"
+                      }}
+                    />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <h3 className="text-lg font-semibold">{mentor.name}</h3>
+                    <p className="text-sm text-gray-600">{mentor.role}</p>
+                    <div className="flex items-center mt-1">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < Math.floor(mentor.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-600 ml-1">
+                        {formatRating(mentor.rating)} ({mentor.reviewCount})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 line-clamp-2">{mentor.bio}</p>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {mentor.expertise.slice(0, 3).map((skill) => (
+                    <span key={skill} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+                      {skill}
+                    </span>
+                  ))}
+                  {mentor.expertise.length > 3 && (
+                    <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+                      +{mentor.expertise.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
           ))}
         </div>
-      ) : (
-        <div className="text-center py-12">
-          <h3 className="text-xl font-medium mb-2">No mentors found</h3>
-          <p className="text-gray-500">Try adjusting your search or filter criteria</p>
-        </div>
       )}
 
-      {/* CTA Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mt-16 bg-blue-50 rounded-2xl p-8 text-center"
-      >
-        <h2 className="text-2xl md:text-3xl font-bold mb-4">Want to become a mentor?</h2>
-        <p className="text-gray-500 mb-6 max-w-2xl mx-auto">
-          Share your expertise and help others grow while expanding your professional network
-        </p>
-        <button
-          onClick={() => setIsApplicationFormOpen(true)}
-          className="px-8 py-3 hover:bg-blue-700 text-white font-medium rounded-md transition-colors text-lg"
-          style={{ backgroundColor: "var(--secondary-color)" }}
-        >
-          Apply to be a Mentor
-        </button>
-      </motion.div>
-
-      {/* Mentor Application Form Modal */}
-      {isApplicationFormOpen && (
-        <MentorApplicationForm onClose={() => setIsApplicationFormOpen(false)} onSubmit={handleApplicationSubmit} />
-      )}
-
-      {/* Mentor Profile Modal */}
+      {/* Mentor Detail Modal */}
       <AnimatePresence>
-        {selectedMentor && <MentorModal mentor={selectedMentor} onClose={() => setSelectedMentor(null)} />}
-      </AnimatePresence>
-
-      {/* Toast */}
-      <AnimatePresence>
-        {toastMessage && (
+        {selectedMentor && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-4 right-4 bg-white border border-gray-200 shadow-lg rounded-lg p-4 max-w-md z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="flex flex-col">
-              <h4 className="font-semibold text-gray-900">{toastMessage.title}</h4>
-              <p className="text-gray-600">{toastMessage.description}</p>
-            </div>
+            <motion.div
+              ref={modalRef}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            >
+              <div className="sticky top-0 bg-white z-10 border-b p-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Mentor Profile</h2>
+                <button
+                  onClick={() => setSelectedMentor(null)}
+                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="md:w-1/3">
+                    <div className="aspect-square rounded-xl overflow-hidden bg-gray-100">
+                      <img
+                        src={selectedMentor.image || "/placeholder.svg?height=400&width=400"}
+                        alt={selectedMentor.name}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.target.src = "/placeholder.svg?height=400&width=400"
+                        }}
+                      />
+                    </div>
+
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <h3 className="text-xl font-bold">{selectedMentor.name}</h3>
+                        <p className="text-gray-600">{selectedMentor.role}</p>
+                      </div>
+
+                      <div className="flex items-center">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < Math.floor(selectedMentor.rating)
+                                  ? "text-yellow-400 fill-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-600 ml-1">
+                          {formatRating(selectedMentor.rating)} ({selectedMentor.reviewCount} reviews)
+                        </span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        <span>{selectedMentor.location}</span>
+                      </div>
+
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        <span>{selectedMentor.availability}</span>
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <h4 className="font-medium mb-2">Contact</h4>
+                        {selectedMentor.email && (
+                          <a
+                            href={`mailto:${selectedMentor.email}`}
+                            className="flex items-center text-gray-600 hover:text-gray-900 mb-2"
+                          >
+                            <Mail className="h-4 w-4 mr-2" />
+                            <span>{selectedMentor.email}</span>
+                          </a>
+                        )}
+                        {selectedMentor.website && (
+                          <a
+                            href={selectedMentor.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center text-gray-600 hover:text-gray-900 mb-2"
+                          >
+                            <Globe className="h-4 w-4 mr-2" />
+                            <span>{selectedMentor.website}</span>
+                          </a>
+                        )}
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <h4 className="font-medium mb-2">Social</h4>
+                        <div className="flex gap-2">
+                          {selectedMentor.social.linkedin && (
+                            <a
+                              href={`https://linkedin.com/in/${selectedMentor.social.linkedin}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                              aria-label="LinkedIn"
+                            >
+                              <Linkedin className="h-5 w-5" />
+                            </a>
+                          )}
+                          {selectedMentor.social.github && (
+                            <a
+                              href={`https://github.com/${selectedMentor.social.github}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                              aria-label="GitHub"
+                            >
+                              <Github className="h-5 w-5" />
+                            </a>
+                          )}
+                          {selectedMentor.social.twitter && (
+                            <a
+                              href={`https://twitter.com/${selectedMentor.social.twitter}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                              aria-label="Twitter"
+                            >
+                              <Twitter className="h-5 w-5" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="md:w-2/3">
+                    <div className="border-b mb-6">
+                      <div className="flex space-x-4">
+                        <button
+                          onClick={() => setActiveTab("about")}
+                          className={`pb-2 px-1 ${
+                            activeTab === "about" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                          }`}
+                        >
+                          About
+                        </button>
+                        <button
+                          onClick={() => setActiveTab("experience")}
+                          className={`pb-2 px-1 ${
+                            activeTab === "experience" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                          }`}
+                        >
+                          Experience
+                        </button>
+                        <button
+                          onClick={() => setActiveTab("education")}
+                          className={`pb-2 px-1 ${
+                            activeTab === "education" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                          }`}
+                        >
+                          Education
+                        </button>
+                      </div>
+                    </div>
+
+                    {activeTab === "about" && (
+                      <div>
+                        <h3 className="text-lg font-medium mb-4">About</h3>
+                        <p className="text-gray-600 mb-6">{selectedMentor.about}</p>
+
+                        <h4 className="font-medium mb-3">Topics</h4>
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {selectedMentor.topics.map((topic) => (
+                            <span key={topic} className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
+
+                        <h4 className="font-medium mb-3">Skills</h4>
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {selectedMentor.skills.map((skill) => (
+                            <span key={skill} className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+
+                        <h4 className="font-medium mb-3">Languages</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedMentor.languages.map((language) => (
+                            <span key={language} className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+                              {language}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "experience" && (
+                      <div>
+                        <h3 className="text-lg font-medium mb-4">Professional Experience</h3>
+                        {selectedMentor.experience && selectedMentor.experience.length > 0 ? (
+                          <div className="space-y-6">
+                            {selectedMentor.experience.map((exp, index) => (
+                              <div key={index} className="border-l-2 border-gray-200 pl-4">
+                                <h4 className="font-medium">{exp.role}</h4>
+                                <div className="flex items-center text-gray-600 mb-2">
+                                  <Briefcase className="h-4 w-4 mr-2" />
+                                  <span>{exp.company}</span>
+                                  <span className="mx-2">•</span>
+                                  <span>{exp.duration}</span>
+                                </div>
+                                <p className="text-gray-600">{exp.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-gray-500">No experience information available.</p>
+                        )}
+                      </div>
+                    )}
+
+                    {activeTab === "education" && (
+                      <div>
+                        <h3 className="text-lg font-medium mb-4">Education</h3>
+                        {selectedMentor.education && selectedMentor.education.length > 0 ? (
+                          <div className="space-y-6">
+                            {selectedMentor.education.map((edu, index) => (
+                              <div key={index} className="border-l-2 border-gray-200 pl-4">
+                                <h4 className="font-medium">{edu.degree}</h4>
+                                <div className="flex items-center text-gray-600 mb-2">
+                                  <BookOpen className="h-4 w-4 mr-2" />
+                                  <span>{edu.institution}</span>
+                                  <span className="mx-2">•</span>
+                                  <span>{edu.year}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-gray-500">No education information available.</p>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="mt-8 pt-6 border-t">
+                      <button
+                        className="w-full py-3 rounded-md text-white font-medium"
+                        style={{ backgroundColor: "var(--secondary-color)" }}
+                      >
+                        Request Mentorship
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Mentor Application Form */}
+      {isApplicationFormOpen && (
+        <MentorApplicationForm onClose={() => setIsApplicationFormOpen(false)} onSubmit={handleApplicationSubmit} />
+      )}
     </div>
   )
 }
