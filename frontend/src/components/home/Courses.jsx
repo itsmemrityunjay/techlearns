@@ -96,12 +96,12 @@ const CourseCard = ({ course }) => {
       }}
     >
       {/* Premium Ribbon */}
-      {course.premium && (
+      {/* {course.premium && (
         <div className="absolute -right-8 top-5 w-32 bg-gradient-to-r from-blue-700 to-blue-600 text-white text-xs font-bold py-1.5 px-4 text-center transform rotate-45 shadow-md z-10 flex items-center justify-center">
           <Zap className="h-3 w-3 mr-1 fill-current" />
           <span>PREMIUM</span>
         </div>
-      )}
+      )} */}
 
       {/* Course Image with Interactive Overlay */}
       <div className="relative h-48 overflow-hidden">
@@ -121,13 +121,13 @@ const CourseCard = ({ course }) => {
         <div
           className={`absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 ${showPreview ? "hidden" : ""}`}
         >
-          <button
+          {/* <button
             onClick={handleQuickView}
             className="flex items-center justify-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-800 hover:bg-white transition-all hover:scale-105"
           >
             <Eye className="h-4 w-4" />
             Quick Preview
-          </button>
+          </button> */}
         </div>
 
         {/* Price Tag */}
@@ -433,17 +433,17 @@ const CourseList = () => {
         })
 
         // Apply basic filtering
-        if (filter !== "all") {
-          fetchedCourses = fetchedCourses.filter((course) =>
-            filter === "premium"
-              ? course.premium
-              : filter === "free"
-                ? course.price === "0.00"
-                : filter === "certificate"
-                  ? course.certificate
-                  : course.category?.toLowerCase() === filter.toLowerCase(),
-          )
-        }
+        // if (filter !== "all") {
+        //   fetchedCourses = fetchedCourses.filter((course) =>
+        //     filter === "premium"
+        //       ? course.premium
+        //       : filter === "free"
+        //         ? course.price === "0.00"
+        //         : filter === "certificate"
+        //           ? course.certificate
+        //           : course.category?.toLowerCase() === filter.toLowerCase(),
+        //   )
+        // }
 
         // Apply advanced filtering
         if (selectedLevels.length > 0) {

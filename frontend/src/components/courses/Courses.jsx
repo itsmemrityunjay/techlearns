@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
 // import { faArrowRight } from "@fortawesome/free-solid-svg-icons";  
 import { Typewriter } from "react-simple-typewriter";
-
+import go from "../../assets/go.png"
 import CourseBanner from "../comp/divider";
 // CourseCard Component
 
@@ -177,7 +177,7 @@ const Courses = () => {
               className="h-7 w-45 object-contain"
             />
             <img
-              src="https://www.caeliusconsulting.com/image/logo.svg"
+              src={go}
               alt="Vimeo"
               className="h-7 w-45 object-contain"
             />
@@ -358,14 +358,14 @@ const Courses = () => {
 
       <div className="h-auto dark:bg-gray-900 mt-12 ">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8">
+        {/* <div className="flex flex-col md:flex-row items-center justify-between mb-8">
           <div className="flex items-center mb-4 md:mb-0">
             <section id="recommendations" className="mr-3"></section>
             <h1 className="text-3xl font-bold dark:text-white mr-2">Courses</h1>
             <DiAtom className="text-4xl text-black dark:text-white" />
           </div>
           <div className="flex items-center space-x-4">
-            {/* List View */}
+           
             <div className="relative group">
               <CgViewList
                 className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
@@ -375,7 +375,7 @@ const Courses = () => {
                 View List
               </div>
             </div>
-            {/* Grid View */}
+         
             <div className="relative group">
               <CgViewGrid
                 className="text-2xl text-black dark:text-white hover:shadow-lg hover:shadow-yellow-500 transition duration-300 cursor-pointer"
@@ -388,12 +388,12 @@ const Courses = () => {
           </div>
         </div>
 
-        {/* Intro Paragraph */}
+        
         <p className="text-gray-400 mb-6 max-w-4xl text-sm sm:text-base">
           We pare down complex topics to their key practical components, so you gain usable skills in a few hours. The courses are free, and you can earn certificates!
-        </p>
+        </p> */}
 
-        {/* Course Cards */}
+      
         <div
           
         >

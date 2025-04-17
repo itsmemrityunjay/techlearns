@@ -7,6 +7,7 @@ import { faPaperPlane, faCloud } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
 import yourImage from '../../assets/Right.png';
+import go from "../../assets/go.png";
 
 // In your component
 
@@ -75,7 +76,7 @@ const Hero = () => {
         {/* Logos Section */}
         <div className="flex justify-center lg:justify-start gap-8 mt-10 py-5">
           <img
-            src="https://www.theuniques.in/static/media/theuniquesCommunity.de2335f2609ada2712b0.png"
+            src="https://www.theuniques.in/assets/theuniquesCommunity-CaNp0pLp.png"
             alt="TIME logo"
             className="h-8"
           />
@@ -85,7 +86,7 @@ const Hero = () => {
             className="h-7"
           />
           <img
-            src="https://techlearns.in/Logo.png"
+            src={go}
             alt="TechCrunch logo"
             className="h-8"
           />
