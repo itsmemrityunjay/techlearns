@@ -18,9 +18,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
+  Upload,
+  AlertCircle,
 } from "lucide-react"
 import Image from "../../assets/aryan.jpg"
-
+import { refEqual, doc, collection, addDoc, serverTimestamp } from "firebase/firestore"
+import { db, storage } from "../../database/Firebase"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { Settings } from '@mui/icons-material';
 // Sample data - replace with your actual data source
 const mentorsData = [
   {
@@ -75,156 +80,402 @@ const mentorsData = [
       },
     ],
   },
-  {
-    id: 2,
-    name: "Sarah Johnson",
-    role: "UX/UI Designer",
-    image: "/placeholder.svg?height=400&width=400",
-    expertise: ["UI Design", "User Research", "Figma"],
-    bio: "Helping companies create beautiful, user-friendly interfaces",
-    about:
-      "I'm passionate about creating intuitive and accessible user experiences. With 8 years in the field, I've helped startups and enterprise companies alike transform their digital products through user-centered design.",
-    topics: ["UI/UX Design", "Design Systems", "User Research", "Accessibility"],
-    skills: ["Figma", "Adobe XD", "Sketch", "HTML/CSS", "Prototyping", "User Testing"],
-    location: "New York, NY",
-    availability: "Weekdays",
-    languages: ["English", "French"],
-    rating: 4.8,
-    reviewCount: 93,
-    email: "sarah.j@example.com",
-    website: "sarahjdesigns.com",
-    social: {
-      linkedin: "sarahjohnson",
-      github: "sarahj",
-      twitter: "sarahjdesigns",
-    },
-    experience: [
-      {
-        company: "Design Studio",
-        role: "Senior UX Designer",
-        duration: "2018 - Present",
-        description:
-          "Lead designer for enterprise clients. Created design systems that improved team efficiency by 50%.",
-      },
-      {
-        company: "Creative Agency",
-        role: "UI Designer",
-        duration: "2015 - 2018",
-        description:
-          "Designed interfaces for mobile and web applications. Increased user engagement by 30% through redesign initiatives.",
-      },
-    ],
-    education: [
-      {
-        institution: "Design Academy",
-        degree: "M.A. Interaction Design",
-        year: "2013 - 2015",
-      },
-      {
-        institution: "Art University",
-        degree: "B.F.A. Graphic Design",
-        year: "2009 - 2013",
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Michael Chen",
-    role: "Data Scientist",
-    image: "/placeholder.svg?height=400&width=400",
-    expertise: ["Machine Learning", "Python", "Data Analysis"],
-    bio: "Turning data into actionable insights and business value",
-    about:
-      "I specialize in applying machine learning and statistical methods to solve complex business problems. My background in both computer science and statistics allows me to bridge the gap between technical implementation and business strategy.",
-    topics: ["Machine Learning", "Data Visualization", "Statistical Analysis", "AI Ethics"],
-    skills: ["Python", "TensorFlow", "PyTorch", "SQL", "R", "Tableau", "Big Data"],
-    location: "Seattle, WA",
-    availability: "Flexible",
-    languages: ["English", "Mandarin"],
-    rating: 4.7,
-    reviewCount: 85,
-    email: "michael.c@example.com",
-    website: "michaelchen.io",
-    social: {
-      linkedin: "michaelchen",
-      github: "mchen",
-      twitter: "michaelchendata",
-    },
-    experience: [
-      {
-        company: "Tech Giant",
-        role: "Senior Data Scientist",
-        duration: "2017 - Present",
-        description:
-          "Developed ML models that improved recommendation accuracy by 25%. Lead a team of 5 data scientists on various projects.",
-      },
-      {
-        company: "Analytics Firm",
-        role: "Data Analyst",
-        duration: "2014 - 2017",
-        description:
-          "Performed data analysis and created dashboards for Fortune 500 clients. Automated reporting processes saving 20 hours per week.",
-      },
-    ],
-    education: [
-      {
-        institution: "Tech University",
-        degree: "Ph.D. Computer Science",
-        year: "2011 - 2014",
-      },
-      {
-        institution: "State University",
-        degree: "B.S. Statistics",
-        year: "2007 - 2011",
-      },
-    ],
-  },
+  // ... other mentor data (keeping the same as in your original file)
 ]
 
-/**
- * @typedef {Object} MentorExperience
- * @property {string} company - Company name
- * @property {string} role - Job role
- * @property {string} duration - Employment duration
- * @property {string} description - Job description
- */
+// Mentor Application Form Component
+const MentorApplicationForm = ({ onClose, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    expertise: [],
+    experience: "",
+    bio: "",
+    availability: "",
+    profileImage: null,
+    resume: null,
+    agreeToTerms: false,
+  })
 
-/**
- * @typedef {Object} MentorEducation
- * @property {string} institution - Educational institution
- * @property {string} degree - Degree earned
- * @property {string} year - Years attended
- */
+  const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+  const [submitSuccess, setSubmitSuccess] = useState(false)
 
-/**
- * @typedef {Object} MentorSocial
- * @property {string} linkedin - LinkedIn username
- * @property {string} github - GitHub username
- * @property {string} twitter - Twitter username
- */
+  const expertiseOptions = [
+    "Web Development",
+    "Mobile Development",
+    "UI/UX Design",
+    "Data Science",
+    "Machine Learning",
+    "Cloud Computing",
+    "DevOps",
+    "Blockchain",
+    "Game Development",
+    "Cybersecurity",
+  ]
 
-/**
- * @typedef {Object} Mentor
- * @property {number} id - Unique identifier
- * @property {string} name - Full name
- * @property {string} role - Professional role
- * @property {string} image - Image URL
- * @property {string[]} expertise - Areas of expertise
- * @property {string} bio - Short biography
- * @property {string} about - Detailed about text
- * @property {string[]} topics - Mentorship topics
- * @property {string[]} skills - Professional skills
- * @property {string} location - Geographic location
- * @property {string} availability - Availability schedule
- * @property {string[]} languages - Languages spoken
- * @property {number} rating - Rating score
- * @property {number} reviewCount - Number of reviews
- * @property {string} email - Email address
- * @property {string} website - Website URL
- * @property {MentorSocial} social - Social media profiles
- * @property {MentorExperience[]} experience - Work experience
- * @property {MentorEducation[]} education - Educational background
- */
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" })
+    }
+  }
+
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" })
+    }
+  }
+
+  const handleExpertiseChange = (expertise) => {
+    setFormData((prev) => {
+      const updatedExpertise = prev.expertise.includes(expertise)
+        ? prev.expertise.filter((item) => item !== expertise)
+        : [...prev.expertise, expertise]
+
+      return { ...prev, expertise: updatedExpertise }
+    })
+
+    if (errors.expertise) {
+      setErrors({ ...errors, expertise: "" })
+    }
+  }
+
+  const handleFileChange = (e, fieldName) => {
+    const file = e.target.files?.[0] || null
+    setFormData({ ...formData, [fieldName]: file })
+    if (errors[fieldName]) {
+      setErrors({ ...errors, [fieldName]: "" })
+    }
+  }
+
+  const validateForm = () => {
+    const newErrors = {}
+
+    if (!formData.name.trim()) newErrors.name = "Name is required"
+    if (!formData.email.trim()) newErrors.email = "Email is required"
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid"
+
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required"
+    if (formData.expertise.length === 0) newErrors.expertise = "Select at least one area of expertise"
+    if (!formData.experience.trim()) newErrors.experience = "Experience details are required"
+    if (!formData.bio.trim()) newErrors.bio = "Bio is required"
+    if (!formData.availability) newErrors.availability = "Availability information is required"
+    if (!formData.profileImage) newErrors.profileImage = "Profile image is required"
+    if (!formData.resume) newErrors.resume = "Resume is required"
+    if (!formData.agreeToTerms) newErrors.agreeToTerms = "You must agree to the terms and conditions"
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    setSubmitError("")
+
+
+    
+
+    try {
+      // In a real application, you would upload the files to storage
+      // and send the form data to your backend
+      if (onSubmit) {
+        await onSubmit(formData)
+      } else {
+        // Simulate API call if no onSubmit provided
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+      }
+
+      // Success state
+      setSubmitSuccess(true)
+
+      // Reset form after success
+      setTimeout(() => {
+        onClose()
+        // Optionally redirect or show a success message
+      }, 2000)
+    } catch (error) {
+      setSubmitError("Failed to submit application. Please try again.")
+      console.error("Application submission error:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white z-10 border-b p-4 flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Mentor Application</h2>
+          <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Close">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6">
+          {submitError && (
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-md flex items-start">
+              <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold">Error</h3>
+                <p>{submitError}</p>
+              </div>
+            </div>
+          )}
+
+          {submitSuccess && (
+            <div className="mb-6 bg-green-50 border border-green-200 text-green-700 p-4 rounded-md">
+              <h3 className="font-semibold">Application Submitted!</h3>
+              <p>Your application has been submitted successfully. We'll review it and get back to you soon.</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-2">
+              <label htmlFor="name" className="block font-medium">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Enter your full name"
+                className="w-full p-2 border rounded-md"
+                disabled={isSubmitting || submitSuccess}
+              />
+              {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="email" className="block font-medium">
+                Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email address"
+                className="w-full p-2 border rounded-md"
+                disabled={isSubmitting || submitSuccess}
+              />
+              {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="phone" className="block font-medium">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="Enter your phone number"
+                className="w-full p-2 border rounded-md"
+                disabled={isSubmitting || submitSuccess}
+              />
+              {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="availability" className="block font-medium">
+                Availability <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="availability"
+                name="availability"
+                value={formData.availability}
+                onChange={handleSelectChange}
+                className="w-full p-2 border rounded-md"
+                disabled={isSubmitting || submitSuccess}
+              >
+                <option value="">Select your availability</option>
+                <option value="weekdays">Weekdays</option>
+                <option value="evenings">Evenings</option>
+                <option value="weekends">Weekends</option>
+                <option value="flexible">Flexible</option>
+              </select>
+              {errors.availability && <p className="text-sm text-red-500">{errors.availability}</p>}
+            </div>
+          </div>
+
+          <div className="space-y-2 mb-6">
+            <label className="block font-medium">
+              Areas of Expertise <span className="text-red-500">*</span>
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {expertiseOptions.map((expertise) => (
+                <div key={expertise} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id={`expertise-${expertise}`}
+                    checked={formData.expertise.includes(expertise)}
+                    onChange={() => handleExpertiseChange(expertise)}
+                    disabled={isSubmitting || submitSuccess}
+                    className="rounded"
+                  />
+                  <label htmlFor={`expertise-${expertise}`} className="text-sm font-medium">
+                    {expertise}
+                  </label>
+                </div>
+              ))}
+            </div>
+            {errors.expertise && <p className="text-sm text-red-500">{errors.expertise}</p>}
+          </div>
+
+          <div className="space-y-2 mb-6">
+            <label htmlFor="experience" className="block font-medium">
+              Professional Experience <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="experience"
+              name="experience"
+              value={formData.experience}
+              onChange={handleInputChange}
+              placeholder="Describe your professional experience, including years of experience and relevant roles"
+              className="w-full p-2 border rounded-md min-h-[100px]"
+              disabled={isSubmitting || submitSuccess}
+            />
+            {errors.experience && <p className="text-sm text-red-500">{errors.experience}</p>}
+          </div>
+
+          <div className="space-y-2 mb-6">
+            <label htmlFor="bio" className="block font-medium">
+              Bio <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="bio"
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+              placeholder="Write a short bio that will be displayed on your mentor profile"
+              className="w-full p-2 border rounded-md min-h-[100px]"
+              disabled={isSubmitting || submitSuccess}
+            />
+            {errors.bio && <p className="text-sm text-red-500">{errors.bio}</p>}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="space-y-2">
+              <label htmlFor="profileImage" className="block font-medium">
+                Profile Image <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="profileImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, "profileImage")}
+                  className="hidden"
+                  disabled={isSubmitting || submitSuccess}
+                />
+                <div className="border rounded-md p-2 w-full flex items-center justify-between">
+                  <span className="text-sm text-gray-500 truncate">
+                    {formData.profileImage ? formData.profileImage.name : "No file selected"}
+                  </span>
+                  <label htmlFor="profileImage" className="cursor-pointer">
+                    <button
+                      type="button"
+                      className="px-3 py-1 border rounded-md hover:bg-gray-50"
+                      onClick={() => document.getElementById("profileImage").click()}
+                    >
+                      <Upload className="h-4 w-4 inline mr-1" />
+                      Browse
+                    </button>
+                  </label>
+                </div>
+              </div>
+              {errors.profileImage && <p className="text-sm text-red-500">{errors.profileImage}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="resume" className="block font-medium">
+                Resume/CV <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="resume"
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => handleFileChange(e, "resume")}
+                  className="hidden"
+                  disabled={isSubmitting || submitSuccess}
+                />
+                <div className="border rounded-md p-2 w-full flex items-center justify-between">
+                  <span className="text-sm text-gray-500 truncate">
+                    {formData.resume ? formData.resume.name : "No file selected"}
+                  </span>
+                  <label htmlFor="resume" className="cursor-pointer">
+                    <button
+                      type="button"
+                      className="px-3 py-1 border rounded-md hover:bg-gray-50"
+                      onClick={() => document.getElementById("resume").click()}
+                    >
+                      <Upload className="h-4 w-4 inline mr-1" />
+                      Browse
+                    </button>
+                  </label>
+                </div>
+              </div>
+              {errors.resume && <p className="text-sm text-red-500">{errors.resume}</p>}
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-2 mb-6">
+            <input
+              type="checkbox"
+              id="agreeToTerms"
+              checked={formData.agreeToTerms}
+              onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
+              disabled={isSubmitting || submitSuccess}
+              className="mt-1"
+            />
+            <div>
+              <label htmlFor="agreeToTerms" className="text-sm font-medium">
+                I agree to the terms and conditions <span className="text-red-500">*</span>
+              </label>
+              <p className="text-sm text-gray-500">
+                By submitting this application, you agree to our mentor guidelines and code of conduct.
+              </p>
+              {errors.agreeToTerms && <p className="text-sm text-red-500">{errors.agreeToTerms}</p>}
+            </div>
+          </div>
+
+          <div className="flex justify-between border-t pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border rounded-md hover:bg-gray-50"
+              disabled={isSubmitting || submitSuccess}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-white rounded-md"
+              style={{ backgroundColor: "var(--secondary-color)" }}
+              disabled={isSubmitting || submitSuccess}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Application"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
 
 const Mentors = () => {
   // Custom hook for detecting mobile view
@@ -255,6 +506,7 @@ const Mentors = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState("about")
   const [toastMessage, setToastMessage] = useState(null)
+  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false)
   const isMobile = useMobile()
   const modalRef = useRef(null)
 
@@ -304,13 +556,65 @@ const Mentors = () => {
 
   // Handle booking a session
   const handleBookSession = (mentor) => {
-    showToast("Session Requested", `Your request to book a session with ${mentor.name} has been sent.`);
-  };
-  
+    showToast("Session Requested", `Your request to book a session with ${mentor.name} has been sent.`)
+  }
 
   // Handle contact mentor
   const handleContactMentor = (mentor) => {
     showToast("Message Sent", `Your message to ${mentor.name} has been sent.`)
+  }
+
+  // Handle mentor application submission
+  const handleApplicationSubmit = async (formData) => {
+    try {
+      // Upload profile image
+      const profileImageRef = ref(
+        storage,
+        `mentor-applications/profile-images/${Date.now()}-${formData.profileImage.name}`,
+      )
+      const profileUploadTask = uploadBytesResumable(profileImageRef, formData.profileImage)
+
+      // Upload resume
+      const resumeRef = ref(storage, `mentor-applications/resumes/${Date.now()}-${formData.resume.name}`)
+      const resumeUploadTask = uploadBytesResumable(resumeRef, formData.resume)
+
+      // Wait for uploads to complete
+      const [profileSnapshot, resumeSnapshot] = await Promise.all([
+        new Promise((resolve, reject) => {
+          profileUploadTask.on("state_changed", null, reject, () => resolve(profileUploadTask.snapshot))
+        }),
+        new Promise((resolve, reject) => {
+          resumeUploadTask.on("state_changed", null, reject, () => resolve(resumeUploadTask.snapshot))
+        }),
+      ])
+
+      // Get download URLs
+      const profileImageURL = await getDownloadURL(profileSnapshot.ref)
+      const resumeURL = await getDownloadURL(resumeSnapshot.ref)
+
+      // Save application to Firestore
+      await addDoc(collection(db, "mentor-applications"), {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        expertise: formData.expertise,
+        experience: formData.experience,
+        bio: formData.bio,
+        availability: formData.availability,
+        profileImageURL,
+        resumeURL,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      })
+
+      showToast(
+        "Application Submitted",
+        "Your mentor application has been submitted successfully. We'll review it and get back to you soon.",
+      )
+    } catch (error) {
+      console.error("Error submitting application:", error)
+      showToast("Submission Failed", "There was an error submitting your application. Please try again.")
+    }
   }
 
   const MentorCard = ({ mentor }) => (
@@ -323,14 +627,11 @@ const Mentors = () => {
     >
       <div className="h-full flex flex-col overflow-hidden border-2 border-gray-200 hover:border-gray-400 transition-all duration-300 rounded-lg shadow-sm">
         <div className="relative w-full pt-[10%] overflow-hidden bg-gray-100">
-          {/* <Image
-            src={mentor.image || "/placeholder.svg?height=400&width=400"}
-            alt={mentor.name}
-            fill
+          <img
+            src={Image || "/placeholder.svg"}
+            alt="Loading..."
             className="object-cover transition-transform duration-500 hover:scale-105"
-            priority
-          /> */}
-          <img src={Image} alt="Loading..." fill className="object-cover transition-transform duration-500 hover:scale-105"/>
+          />
           <div className="absolute top-2 right-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-sm font-medium">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span>{mentor.rating}</span>
@@ -340,7 +641,9 @@ const Mentors = () => {
         <div className="flex-grow flex flex-col p-5">
           <div className="space-y-1 mb-3">
             <h3 className="text-xl font-bold text-gray-900">{mentor.name}</h3>
-            <p className="text-sm font-medium"  style={{ color: 'var(--primary-color)' }}>{mentor.role}</p>
+            <p className="text-sm font-medium" style={{ color: "var(--primary-color)" }}>
+              {mentor.role}
+            </p>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
@@ -367,8 +670,8 @@ const Mentors = () => {
         <div className="p-5 pt-0">
           <button
             onClick={() => setSelectedMentor(mentor)}
-            className="w-full py-2 px-4  hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
-            style={{ backgroundColor: 'var(--secondary-color)' }}
+            className="w-full py-2 px-4 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+            style={{ backgroundColor: "var(--secondary-color)" }}
           >
             View Profile
           </button>
@@ -404,23 +707,24 @@ const Mentors = () => {
           <div className="relative bg-gradient-to-r from-blue-50 to-blue-100 p-6">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <div className="w-24 h-24 md:w-32 md:h-32 relative rounded-full overflow-hidden border-4 border-white shadow-xl">
-                {/* <Image
-                  src={mentor.image || "/placeholder.svg?height=400&width=400"}
-                  alt={mentor.name}
-                  fill
-                  className="object-cover"
-                /> */}
+                <img src={Image || "/placeholder.svg"} alt={mentor.name} className="object-cover w-full h-full" />
               </div>
 
               <div className="text-center md:text-left space-y-2 flex-grow">
                 <div>
                   <h3 className="text-2xl font-bold">{mentor.name}</h3>
-                  <p className=" font-medium" style={{ color: 'var(--secondary-color)' }}>{mentor.role}</p>
+                  <p className=" font-medium" style={{ color: "var(--secondary-color)" }}>
+                    {mentor.role}
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap justify-center md:justify-start gap-1.5 my-2">
                   {mentor.expertise.map((exp, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-100 text-white text-xs rounded-full" style={{ backgroundColor: 'var(--secondary-color)' }}>
+                    <span
+                      key={index}
+                      className="px-2 py-1 bg-blue-100 text-white text-xs rounded-full"
+                      style={{ backgroundColor: "var(--secondary-color)" }}
+                    >
                       {exp}
                     </span>
                   ))}
@@ -438,7 +742,8 @@ const Mentors = () => {
               <div className="flex flex-col gap-2 w-full md:w-auto">
                 <button
                   onClick={() => handleBookSession(mentor)}
-                  className="py-2 px-4  hover:bg-blue-700 text-white font-medium rounded-md transition-colors"  style={{ backgroundColor: 'var(--secondary-color)' }}
+                  className="py-2 px-4 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                  style={{ backgroundColor: "var(--secondary-color)" }}
                 >
                   Book a Session
                 </button>
@@ -590,7 +895,7 @@ const Mentors = () => {
                   <h4 className="text-lg font-semibold mb-3">Social Media</h4>
                   <div className="flex gap-3">
                     <a
-                      href={`1https://linkedin.com/in/${mentor.social.linkedin}`}
+                      href={`https://linkedin.com/in/${mentor.social.linkedin}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors"
@@ -701,25 +1006,30 @@ const Mentors = () => {
 
           <button
             className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "all" ? "bg--primary-color text-white" : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+              filter === "all"
+                ? "bg--primary-color text-white"
+                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
-            style={{backgroundColor:`var(--primary-color)`}}
+            style={{ backgroundColor: filter === "all" ? `var(--primary-color)` : "" }}
             onClick={() => setFilter("all")}
           >
             All
           </button>
           <button
             className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "React" ? "bg-[var(--secondary-color)] text-white" : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+              filter === "React"
+                ? "bg-[var(--secondary-color)] text-white"
+                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
-           
             onClick={() => setFilter("React")}
           >
             React
           </button>
           <button
             className={`flex-shrink-0 px-4 py-2 rounded-md ${
-              filter === "Python" ? "bg-[var(--secondary-color)] text-white" : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+              filter === "Python"
+                ? "bg-[var(--secondary-color)] text-white"
+                : "border border-gray-300 text-gray-700 hover:bg-gray-50"
             }`}
             onClick={() => setFilter("Python")}
           >
@@ -783,12 +1093,21 @@ const Mentors = () => {
         <p className="text-gray-500 mb-6 max-w-2xl mx-auto">
           Share your expertise and help others grow while expanding your professional network
         </p>
-        <button className="px-8 py-3  hover:bg-blue-700 text-white font-medium rounded-md transition-colors text-lg"  style={{ backgroundColor: 'var(--secondary-color)' }}>
+        <button
+          onClick={() => setIsApplicationFormOpen(true)}
+          className="px-8 py-3 hover:bg-blue-700 text-white font-medium rounded-md transition-colors text-lg"
+          style={{ backgroundColor: "var(--secondary-color)" }}
+        >
           Apply to be a Mentor
         </button>
       </motion.div>
 
-      {/* Modal */}
+      {/* Mentor Application Form Modal */}
+      {isApplicationFormOpen && (
+        <MentorApplicationForm onClose={() => setIsApplicationFormOpen(false)} onSubmit={handleApplicationSubmit} />
+      )}
+
+      {/* Mentor Profile Modal */}
       <AnimatePresence>
         {selectedMentor && <MentorModal mentor={selectedMentor} onClose={() => setSelectedMentor(null)} />}
       </AnimatePresence>
