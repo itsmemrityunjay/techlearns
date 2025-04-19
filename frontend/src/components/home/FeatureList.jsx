@@ -10,7 +10,7 @@ export default function HowItWorksScroll() {
   const [activeStep, setActiveStep] = useState(0)
   const containerRef = useRef(null)
   const stepsRef = useRef([])
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end center"]
@@ -22,7 +22,7 @@ export default function HowItWorksScroll() {
     useTransform(scrollYProgress, [0.3, 0.6], [100, 0]),
     useTransform(scrollYProgress, [0.6, 0.9], [100, 0])
   ]
-  
+
   const opacities = [
     useTransform(scrollYProgress, [0, 0.2], [0, 1]),
     useTransform(scrollYProgress, [0.3, 0.5], [0, 1]),
@@ -68,7 +68,7 @@ export default function HowItWorksScroll() {
     <div className="font-sans">
       {/* Steps Section */}
       <section ref={containerRef} className="py-16 relative">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto">
           <div className="max-w-4xl mx-auto">
             {/* Vertical connecting line */}
             <div className="hidden md:block absolute left-1/2 top-0 h-full w-px bg-gray-200 transform -translate-x-1/2">
@@ -81,7 +81,7 @@ export default function HowItWorksScroll() {
             </div>
 
             {steps.map((step, index) => (
-              <div 
+              <div
                 key={index}
                 ref={el => stepsRef.current[index] = el}
                 className={`flex flex-col md:flex-row items-center ${index !== steps.length - 1 ? 'mb-24' : ''}`}
@@ -97,12 +97,12 @@ export default function HowItWorksScroll() {
                   <img
                     src={step.icon}
                     alt={step.title}
-               
+
                   />
                 </motion.div>
 
                 {/* Content (alternates sides) */}
-                <motion.div 
+                <motion.div
                   className={`w-full md:w-1/2 relative ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8 md:order-1'}`}
                   initial={{ opacity: 0, x: index % 2 ? 50 : -50 }}
                   whileInView={{ opacity: 1, x: 0 }}

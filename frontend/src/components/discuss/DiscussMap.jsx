@@ -151,320 +151,270 @@ const DiscussMap = () => {
 
   // likes and dislikes
   const [likes, setLikes] = useState({});
-const [dislikes, setDislikes] = useState({});
+  const [dislikes, setDislikes] = useState({});
 
-const handleLike = (id) => {
-  setLikes((prev) => ({
-    ...prev,
-    [id]: (prev[id] || 0) + 1,
-  }));
-};
+  const handleLike = (id) => {
+    setLikes((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
+  };
 
-const handleDislike = (id) => {
-  setDislikes((prev) => ({
-    ...prev,
-    [id]: (prev[id] || 0) + 1,
-  }));
-};
-
+  const handleDislike = (id) => {
+    setDislikes((prev) => ({
+      ...prev,
+      [id]: (prev[id] || 0) + 1,
+    }));
+  };
 
   return (
-    <div className="container mx-auto py-8 lg:w-[97%] ">
-      <h1 className="lg:text-2xl sm:text-xl font-bold mb-6">Discussions</h1>
-      <input
-        type="text"
-        placeholder="Search topics..."
-        value={searchTerm}
-        onChange={handleSearch}
-        className="w-full p-2 mb-6 border border-gray-300 rounded-full h-12 "
-        style={{borderWidth:"2px"}}
-      />
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-gray-800">Discussions</h1>
+        <UpgradeButton />
+      </div>
 
-      <div className="flex items-start justify-between gap-8">
-        <div className="w-11/12">
-          <div className="lg:w-full mt-24">
-            <UpgradeButton />
-          </div>
-          <div className="mb-6 flex space-x-4 flex-wrap gap-8 w-3/4 mt-12">
-            <button
-              className={`flex justify-start items-center  w-40 h-16 text-2xl px-4 py-2 rounded-full ${
-                filterType === ""
-                  ? "primary-bg text-white"
-                  : "bg-white border-gray-300 hover:bg-gray-100"
-              }`}
-              style={{ borderWidth: "2px" }}
-              onClick={() => handleFilter("")}
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-blue-100">
-                <FilterList className="text-black" />
-              </span>
-              All
-            </button>
-            <button
-              className={`flex justify-start items-center w-80 h-16 text-2xl px-4 py-2 rounded-full border ${
-                filterType === "General Discussion"
-                  ? "secondary-bg text-white"
-                  : "bg-white  border-gray-300 hover:bg-gray-100 "
-              }`}
-              style={{ borderWidth: "2px" }}
-              onClick={() => handleFilter("General Discussion")}
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-purple-100">
-                <FilterList className="text-black" />
-              </span>
-              General Discussion
-            </button>
-            <button
-              className={`flex justify-start items-center w-52 h-16 text-2xl px-4 py-2 rounded-full ${
-                filterType === "Feedback"
-                  ? "secondary-bg text-white"
-                  : "bg-white  border-gray-300 hover:bg-gray-100"
-              }`}
-              style={{ borderWidth: "2px" }}
-              onClick={() => handleFilter("Feedback")}
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-orange-100">
-                <FilterList className="text-black" />
-              </span>
-              Feedback
-            </button>
-            <button
-              className={`flex justify-start items-center w-48 h-16 text-2xl px-4 py-2 rounded-full ${
-                filterType === "Question"
-                  ? "secondary-bg text-white"
-                  : "bg-white  border-gray-300 hover:bg-gray-100"
-              }`}
-              style={{ borderWidth: "2px" }}
-              onClick={() => handleFilter("Question")}
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-green-100">
-                <FilterList className="text-black" />
-              </span>
-              Question
-            </button>
-            <button
-              className={`flex justify-start items-center w-44 h-16 text-2xl px-4 py-2 rounded-full ${
-                filterType === "Course"
-                  ? "secondary-bg text-white"
-                  : "bg-white  border-gray-300 hover:bg-gray-100"
-              }`}
-              style={{ borderWidth: "2px" }}
-              onClick={() => handleFilter("Course")}
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 mr-4 rounded-full bg-pink-100">
-                <FilterList className="text-black" />
-              </span>
-              Course
-            </button>
-          </div>
-        </div>
-        <div className={`w-full lg:w-1/2 flex justify-center lg:justify-end`}>
-          <img
-            src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
-            alt="Right Side Image"
-            className="max-w-full h-auto rounded-lg"
+      <div className="mb-8">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search topics..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full p-3 pl-12 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
           />
+          <svg className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+          </svg>
         </div>
       </div>
 
-      {filteredTopics.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 ">
-          {filteredTopics.map((topic) => (
-            <div key={topic.id} className="p-4 rounded-3xl bg-gray-100">
-              <div
-                className="cursor-pointer flex justify-between items-center mt-4 ml-4"
-                onClick={() => toggleAccordion(topic.id)}
-              >
-                <div className="flex items-center">
-                  <img
-                    src={topic.authorImage}
-                    alt={topic.author}
-                    className="w-10 h-10 rounded-full mr-3"
-                    style={{ marginTop: "-40px" }}
-                  />
-                  <div>
-                    <div className="inline-block bg-gray-200 text-gray-600 px-2 py-1 rounded text-balance">
-                      {" "}
-                      {topic.author.length > 1
-                        ? `${topic.author.slice(
-                            0,
-                            Math.ceil(topic.author.length / 2)
-                          )}...`
-                        : topic.author}
-                    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="lg:col-span-2">
+          <div className="mb-6 flex flex-wrap gap-4">
+            <button
+              className={`flex items-center px-4 py-2 rounded-lg transition ${filterType === "" ? "bg-blue-600 text-white" : "bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              onClick={() => handleFilter("")}
+            >
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-full bg-blue-100">
+                <FilterList className="text-gray-700" fontSize="small" />
+              </span>
+              <span>All</span>
+            </button>
 
-                    <p className="text-gray-500">
-                      {new Date(
-                        topic.createdAt.seconds * 1000
-                      ).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </p>
-                    <h2 className="lg:text-2xl font-bold sm:text-lg mt-2" style={{color:"#003656"}}>
-                      {topic.title}
-                    </h2>
+            <button
+              className={`flex items-center px-4 py-2 rounded-lg transition ${filterType === "General Discussion" ? "bg-purple-600 text-white" : "bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              onClick={() => handleFilter("General Discussion")}
+            >
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-full bg-purple-100">
+                <FilterList className="text-gray-700" fontSize="small" />
+              </span>
+              <span>General Discussion</span>
+            </button>
+
+            <button
+              className={`flex items-center px-4 py-2 rounded-lg transition ${filterType === "Feedback" ? "bg-orange-600 text-white" : "bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              onClick={() => handleFilter("Feedback")}
+            >
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-full bg-orange-100">
+                <FilterList className="text-gray-700" fontSize="small" />
+              </span>
+              <span>Feedback</span>
+            </button>
+
+            <button
+              className={`flex items-center px-4 py-2 rounded-lg transition ${filterType === "Question" ? "bg-green-600 text-white" : "bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              onClick={() => handleFilter("Question")}
+            >
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-full bg-green-100">
+                <FilterList className="text-gray-700" fontSize="small" />
+              </span>
+              <span>Question</span>
+            </button>
+
+            <button
+              className={`flex items-center px-4 py-2 rounded-lg transition ${filterType === "Course" ? "bg-pink-600 text-white" : "bg-white border border-gray-300 hover:bg-gray-50"
+                }`}
+              onClick={() => handleFilter("Course")}
+            >
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-full bg-pink-100">
+                <FilterList className="text-gray-700" fontSize="small" />
+              </span>
+              <span>Course</span>
+            </button>
+          </div>
+        </div>
+        {/* <div className="lg:col-span-1">
+          <img
+            src="https://d8it4huxumps7.cloudfront.net/uploads/images/66a3829b1d2da_jobs_internships.png?d=996x803"
+            alt="Community discussions"
+            className="w-full h-auto rounded-lg shadow-md"
+          />
+        </div> */}
+      </div>
+
+      {filteredTopics.length > 0 ? (
+        <div className="space-y-6">
+          {filteredTopics.map((topic) => (
+            <div key={topic.id} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+              <div className="p-5">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start">
+                    <img
+                      src={topic.authorImage}
+                      alt={topic.author}
+                      className="w-10 h-10 rounded-full border border-gray-200"
+                    />
+                    <div className="ml-4">
+                      <span className="inline-block px-2 py-1 bg-gray-100 text-sm font-medium text-gray-700 rounded">
+                        {topic.author.length > 20 ? `${topic.author.slice(0, 20)}...` : topic.author}
+                      </span>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(topic.createdAt.seconds * 1000).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </div>
                   </div>
+
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${topic.type === "General Discussion" ? "bg-purple-100 text-purple-800" :
+                    topic.type === "Feedback" ? "bg-orange-100 text-orange-800" :
+                      topic.type === "Question" ? "bg-green-100 text-green-800" :
+                        topic.type === "Course" ? "bg-pink-100 text-pink-800" :
+                          "bg-blue-100 text-blue-800"
+                    }`}>
+                    {topic.type || "General"}
+                  </span>
                 </div>
 
-                {openAccordion === topic.id ? (
-                  <ExpandLessIcon className="secondary-text" />
-                ) : (
-                  <ExpandMoreIcon className="secondary-text" />
-                )}
-              </div>
-
- {/* Like and Dislike Buttons */}
-              {/* <div className="flex items-center space-x-1" style={{marginLeft:"57px"}}>
-  <button
-    onClick={() => handleLike(topic.id)}
-    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
-      likes[topic.id] ? " text-black" : " text-gray-700 "
-    } `}
-  >
-    <ThumbUpIcon className="w-5 h-5 mr-2"/>  {likes[topic.id] || 0}
-  </button>
-  <button
-    onClick={() => handleDislike(topic.id)}
-    className={`flex items-center px-3 py-1 rounded-full transition text-xl ${
-      dislikes[topic.id] ? " text-black" : " text-gray-700"
-    }`}
-  >
-      <ThumbDownIcon className="w-5 h-5 mr-2" /> {dislikes[topic.id] || 0}
-  </button>
-</div> */}
-              {openAccordion === topic.id && (
-                <div className="mt-1 ml-4">
-                  <ReactQuill
-                    value={topic.content}
-                    readOnly={true}
-                    theme="bubble"
-                    style={{
-                      marginLeft: "38px",
-                      width: "80%",
-                      marginTop: "-15px",
-                    }}
-                  />
-
-                  <div className="mt-1 ml-14">
-                    <button
-                      className="flex justify-start items-center text-black w-56 h-12 text-md  px-4 py-2 rounded-full border bg-white border-gray-300 hover:bg-gray-100"
-                      onClick={() =>
-                        setComments((prev) => ({
-                          ...prev,
-                          [topic.id]: !prev[topic.id],
-                        }))
-                      }
-                      style={{ borderWidth: "2px" }}
-                    >
-                      <span className="inline-flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-blue-100">
-                        <FilterList className="text-black" />
-                      </span>
-                      {comments[topic.id] ? "Hide Comments" : "Show Comments"}
-                    </button>
-
-                    {comments[topic.id] && (
-                      <div className="mt-2">
-                        <div className="mb-4 flex gap-4 flex-wrap">
-                          <input
-                            type="text"
-                            placeholder="Add a comment..."
-                            value={newComment[topic.id] || ""}
-                            onChange={(e) =>
-                              setNewComment((prev) => ({
-                                ...prev,
-                                [topic.id]: e.target.value,
-                              }))
-                            }
-                            className="lg:w-2/3 w-full p-2 border border-gray-300 rounded-full"
-                          style={{}}
-                          />
-                          <button
-                            onClick={() => handleAddComment(topic.id)}
-                            className="lg:px-4 mt-2 px-4 py-2 bg-none text-black w-48 h-12 text-md border-gray-300 bg-white flex justify-start items-center  text-md rounded-full border hover:bg-gray-100"
-                            style={{ marginTop: "-1px" }}
-                          >
-                            <span className="inline-flex items-center justify-center w-8 h-8 mr-4 rounded-full bg-purple-100">
-                              <FilterList className="text-black" />
-                            </span>
-                            Add Comment
-                          </button>
-                        </div>
-
-                        {(Array.isArray(topic.comments)
-                          ? topic.comments
-                          : []
-                        ).map((comment, index) => (
-                          <div key={index} className="mb-4 flex items-start">
-                            <img
-                              src={comment.authorImage}
-                              alt="Author"
-                              className="w-8 h-8 rounded-full mr-2"
-                            />
-                            <div>
-                              <p className="text-gray-800 mt-1">
-                                {comment.text}
-                              </p>
-
-                              <div className="mt-4 ml-1 lg:flex gap-4">
-                                <input
-                                  type="text"
-                                  placeholder="Add a reply..."
-                                  value={newReply[`${topic.id}-${index}`] || ""}
-                                  onChange={(e) =>
-                                    setNewReply((prev) => ({
-                                      ...prev,
-                                      [`${topic.id}-${index}`]: e.target.value,
-                                    }))
-                                   
-                                  }
-                                  className="w-full p-2 rounded  border-l-4"
-                                  style={{ borderColor: "blue" }}
-                                />
-                                <button
-                                  onClick={() =>
-                                    handleAddReply(topic.id, index)
-                                  }
-                                  className=" px-4 py-2 secondary-bg text-white rounded"
-                                  style={{ marginTop: "-1px" }}
-                                >
-                                  Reply
-                                </button>
-                              </div>
-
-                              {(Array.isArray(comment.replies)
-                                ? comment.replies
-                                : []
-                              ).map((reply, replyIndex) => (
-                                <div
-                                  key={replyIndex}
-                                  className="text-gray-600 flex items-start mt-2 ml-1"
-                                >
-                                  <img
-                                    src={reply.authorImage}
-                                    alt="Reply Author"
-                                    className="w-6 h-6 rounded-full mr-2"
-                                  />
-                                  <p>{reply.text}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                <div
+                  className="cursor-pointer mt-3"
+                  onClick={() => toggleAccordion(topic.id)}
+                >
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-md font-semibold text-gray-800">
+                      {topic.title}
+                    </h2>
+                    {openAccordion === topic.id ? (
+                      <ExpandLessIcon className="text-gray-500" />
+                    ) : (
+                      <ExpandMoreIcon className="text-gray-500" />
                     )}
                   </div>
                 </div>
-              )}
+
+                {openAccordion === topic.id && (
+                  <div className="mt-4">
+                    <div className="prose max-w-none">
+                      <ReactQuill
+                        value={topic.content}
+                        readOnly={true}
+                        theme="bubble"
+                      />
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-gray-100">
+                      <button
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        onClick={() => setComments((prev) => ({ ...prev, [topic.id]: !prev[topic.id] }))}
+                      >
+                        {comments[topic.id] ? "Hide Comments" : "Show Comments"}
+                      </button>
+
+                      {comments[topic.id] && (
+                        <div className="mt-4 space-y-4">
+                          <div className="flex items-start space-x-3">
+                            <input
+                              type="text"
+                              placeholder="Add a comment..."
+                              value={newComment[topic.id] || ""}
+                              onChange={(e) => setNewComment((prev) => ({ ...prev, [topic.id]: e.target.value }))}
+                              className="flex-1 min-w-0 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            />
+                            <button
+                              onClick={() => handleAddComment(topic.id)}
+                              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
+                              Comment
+                            </button>
+                          </div>
+
+                          {/* Comment list */}
+                          <div className="space-y-4 mt-4">
+                            {(Array.isArray(topic.comments) ? topic.comments : []).map((comment, index) => (
+                              <div key={index} className="pl-3 border-l-4 border-gray-200">
+                                <div className="flex items-start">
+                                  <img
+                                    src={comment.authorImage}
+                                    alt="Author"
+                                    className="w-8 h-8 rounded-full mr-3"
+                                  />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm text-gray-800">{comment.text}</p>
+                                    <div className="mt-3">
+                                      <div className="flex items-center space-x-2">
+                                        <input
+                                          type="text"
+                                          placeholder="Reply to this comment..."
+                                          value={newReply[`${topic.id}-${index}`] || ""}
+                                          onChange={(e) => setNewReply((prev) => ({ ...prev, [`${topic.id}-${index}`]: e.target.value }))}
+                                          className="flex-1 min-w-0 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                        <button
+                                          onClick={() => handleAddReply(topic.id, index)}
+                                          className="inline-flex items-center px-3 py-2 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                        >
+                                          Reply
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    {/* Replies */}
+                                    {(Array.isArray(comment.replies) ? comment.replies : []).length > 0 && (
+                                      <div className="mt-2 space-y-2">
+                                        {comment.replies.map((reply, replyIndex) => (
+                                          <div key={replyIndex} className="flex items-start pl-4 mt-2 border-l-2 border-gray-100">
+                                            <img
+                                              src={reply.authorImage}
+                                              alt="Reply Author"
+                                              className="w-6 h-6 rounded-full mr-2"
+                                            />
+                                            <p className="text-sm text-gray-700">{reply.text}</p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-gray-500">No topics found.</p>
+        <div className="flex flex-col items-center justify-center py-12 bg-white rounded-lg border border-gray-200">
+          <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+          </svg>
+          <p className="mt-4 text-lg font-medium text-gray-500">No topics found.</p>
+          <p className="text-gray-400">Try adjusting your search or filter criteria.</p>
+        </div>
       )}
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-      <Footer/>
+      <Footer />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import React from 'react';
 // import Guides from './Guides';
 import vaishnavi from "../assets/vaishnavi.jpg";
 
-const LearnSection = ({ title, description, image })=> {
+const LearnSection = ({ title, description, image }) => {
 
   return (
     <>
@@ -13,17 +13,17 @@ const LearnSection = ({ title, description, image })=> {
         {/* Left Section */}
         <div className="flex-1 mt-8 md:mt-16 px-4 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
-           {title}
+            {title}
           </h1>
           <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
-           {description}{''}
+            {description}{''}
           </p>
 
-          
+
         </div>
 
         {/* Right Section */}
-        <div className="w-full md:w-[45%] mt-8 md:mt-0 flex justify-center items-center">
+        <div className="w-full md:w-[25%] mt-8 md:mt-0 flex justify-center items-center">
           <img
             src={image}
             alt="Compete Visual"
@@ -33,7 +33,7 @@ const LearnSection = ({ title, description, image })=> {
       </div>
 
       {/* Courses Section */}
-      
+
 
       {/* Optional Guides Section */}
       {/* <Guides /> */}

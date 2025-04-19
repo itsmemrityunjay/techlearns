@@ -563,7 +563,7 @@ const Mentors = () => {
       await new Promise((resolve, reject) => {
         profileUploadTask.on(
           "state_changed",
-          (snapshot) => {},
+          (snapshot) => { },
           (error) => reject(error),
           () => resolve(),
         )
@@ -579,7 +579,7 @@ const Mentors = () => {
       await new Promise((resolve, reject) => {
         resumeUploadTask.on(
           "state_changed",
-          (snapshot) => {},
+          (snapshot) => { },
           (error) => reject(error),
           () => resolve(),
         )
@@ -643,13 +643,12 @@ const Mentors = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto py-8">
       {/* Toast Message */}
       {toastMessage && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-            toastMessage.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-          }`}
+          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${toastMessage.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+            }`}
         >
           {toastMessage.message}
         </div>
@@ -764,9 +763,8 @@ const Mentors = () => {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.floor(mentor.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                            }`}
+                            className={`h-4 w-4 ${i < Math.floor(mentor.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                              }`}
                           />
                         ))}
                       </div>
@@ -849,11 +847,10 @@ const Mentors = () => {
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-4 w-4 ${
-                                i < Math.floor(selectedMentor.rating)
+                              className={`h-4 w-4 ${i < Math.floor(selectedMentor.rating)
                                   ? "text-yellow-400 fill-yellow-400"
                                   : "text-gray-300"
-                              }`}
+                                }`}
                             />
                           ))}
                         </div>
@@ -942,25 +939,22 @@ const Mentors = () => {
                       <div className="flex space-x-4">
                         <button
                           onClick={() => setActiveTab("about")}
-                          className={`pb-2 px-1 ${
-                            activeTab === "about" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
-                          }`}
+                          className={`pb-2 px-1 ${activeTab === "about" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                            }`}
                         >
                           About
                         </button>
                         <button
                           onClick={() => setActiveTab("experience")}
-                          className={`pb-2 px-1 ${
-                            activeTab === "experience" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
-                          }`}
+                          className={`pb-2 px-1 ${activeTab === "experience" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                            }`}
                         >
                           Experience
                         </button>
                         <button
                           onClick={() => setActiveTab("education")}
-                          className={`pb-2 px-1 ${
-                            activeTab === "education" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
-                          }`}
+                          className={`pb-2 px-1 ${activeTab === "education" ? "border-b-2 border-gray-900 font-medium" : "text-gray-500"
+                            }`}
                         >
                           Education
                         </button>

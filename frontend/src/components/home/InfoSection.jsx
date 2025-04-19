@@ -2,7 +2,7 @@ import React from 'react';
 
 const InfoSection = () => {
     return (
-        <div className="container mx-auto py-12 px-6">
+        <div className="container mx-auto py-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Global Community Section */}
                 <div className="p-6 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg">

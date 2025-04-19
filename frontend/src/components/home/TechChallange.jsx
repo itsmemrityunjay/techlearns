@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import SkillIndia from "../../assets/SkillIndia.png";
+import NEP from "../../assets/NEP.png";
 
 const TechChallenge = () => {
     // Countdown logic
@@ -29,26 +31,28 @@ const TechChallenge = () => {
     }, [timeLeft]);
 
     return (
-        <div className="min-h-full py-10 px-8 lg:px-32">
+        <div className="min-h-full py-10 ">
             <div className="container mx-auto flex flex-col lg:flex-row justify-center items-center">
                 {/* Left Section */}
                 <div className="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
-                    <div className=" py-8 flex flex-col justify-between">
-                        <h1 className="text-4xl py-10 font-bold">
-                            Learn cutting edge<br></br> techniques in Techlearns
+                    <div className="py-8 flex flex-col justify-between">
+                        <h1 className="text-4xl leading-normal py-10 font-bold">
+                            Empowering Learners with <br /> <span className='text-[#ffaa00]'>Skill India</span>  & <span className='text-[#ffaa00]'>NEP</span>
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">
-                        TechLearns Academy offers comprehensive courses designed to equip learners with essential technology and digital skills.
+                            Our content and courses are aligned with Skill India and the New Education Policy,
+                            offering engaging competitions and skill-based learning for both elementary school
+                            and undergraduate students.
                         </p>
                     </div>
 
                     <div className="mt-10 mb-5 grid grid-cols-3 gap-3">
                         <div>
-                            <h2 className="text-3xl font-bold">1,000</h2>
+                            <h2 className="text-3xl font-bold">1,000+</h2>
                             <p className="font-bold py-2">COMPETITIONS</p>
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">500</h2>
+                            <h2 className="text-3xl font-bold text-gray-900">500+</h2>
                             <p className="font-bold py-2">NOTEBOOKS</p>
                         </div>
                         <div>
@@ -58,35 +62,23 @@ const TechChallenge = () => {
                     </div>
                 </div>
 
-
+                {/* Right Section */}
                 <div className="relative lg:w-1/2 flex justify-center items-center mt-12 lg:mt-0">
-
-                    {/* Background Overlapping Circles */}
-                    {/* <div className="absolute w-60 h-60 bg-yellow-300 rounded-full overflow-hidden -bottom-10 -right-10 opacity-70"></div>
-                    <div className="absolute w-60 h-60 bg-blue-400 rounded-full overflow-hidden -top-8 -right-16 opacity-70"></div> */}
-
-                    {/* Browser Mockup */}
                     <div className="bg-white shadow-xl rounded-xl overflow-hidden w-full max-w-2xl relative z-10">
-                        {/* Mockup Header with Circles */}
                         <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center space-x-2">
                             <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                             <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                             <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                         </div>
 
-                        {/* Mockup Content */}
                         <div className="p-6">
                             <div className="carousel carousel-vertical rounded-box h-96">
                                 <div className="carousel-item w-full">
-                                    <img src="https://www.kaggle.com/static/images/home/logged-out/datasets-landing@1.png" alt='image1' />
+                                    <img src={SkillIndia} alt='image1' />
                                 </div>
                                 <div className="carousel-item w-full">
-                                    <img src="https://www.kaggle.com/static/images/home/logged-out/notebooks-landing@1.png" alt='image2' />
+                                    <img src={NEP} alt='image2' />
                                 </div>
-                                <div className="carousel-item w-full">
-                                    <img src="https://www.kaggle.com/static/images/home/logged-out/models-landing@1.png" alt='image3' />
-                                </div>
-
 
                             </div>
                         </div>
@@ -96,23 +88,5 @@ const TechChallenge = () => {
         </div>
     );
 };
-
-// const ForumItem = ({ title, description, time, newReplies, users }) => (
-//     <div className="flex justify-between items-start">
-//         <div>
-//             <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-//             <p className="text-gray-600">{description}</p>
-//             <p className="text-sm text-gray-400">{time}</p>
-//         </div>
-//         <div className="flex items-center space-x-2">
-//             <div className="text-blue-500">{newReplies}</div>
-//             <div className="flex space-x-1">
-//                 {users.map((user, index) => (
-//                     <div key={index} className="w-6 h-6 bg-gray-200 rounded-full"></div>
-//                 ))}
-//             </div>
-//         </div>
-//     </div>
-// );
 
 export default TechChallenge;

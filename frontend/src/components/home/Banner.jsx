@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 const LearnAndGrow = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <section className="pt-[100px] bg-white mb-8 w-full">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <a
           href="/course"
           role="button"
@@ -57,7 +57,7 @@ const LearnAndGrow = () => {
             </ul>
 
             <button className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
-            onClick={() => navigate(`/course`)}>
+              onClick={() => navigate(`/course`)}>
               Explore Courses
             </button>
           </div>

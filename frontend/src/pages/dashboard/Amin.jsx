@@ -155,11 +155,11 @@ function AdminDashboard() {
     try {
       // First check if mentor already exists
       const mentorQuery = query(
-        collection(db, "mentors"), 
+        collection(db, "mentors"),
         where("email", "==", application.email)
       );
       const mentorDocs = await getDocs(mentorQuery);
-      
+
       if (!mentorDocs.empty) {
         throw new Error("Mentor already exists");
       }
@@ -193,11 +193,11 @@ function AdminDashboard() {
 
       // Update user role
       const userQuery = query(
-        collection(db, "users"), 
+        collection(db, "users"),
         where("email", "==", application.email)
       );
       const userDocs = await getDocs(userQuery);
-      
+
       if (!userDocs.empty) {
         const userDoc = userDocs.docs[0];
         await updateDoc(doc(db, "users", userDoc.id), {
@@ -223,17 +223,17 @@ function AdminDashboard() {
     try {
       const applicationRef = doc(db, "mentor-applications", id);
       const applicationSnap = await getDoc(applicationRef);
-      
+
       if (applicationSnap.exists()) {
-        const applicationData = { 
+        const applicationData = {
           ...applicationSnap.data(),
-          id: applicationSnap.id 
+          id: applicationSnap.id
         };
-        
+
         await createMentorDocument(applicationData);
-        
-        setApplications(prev => 
-          prev.map(app => 
+
+        setApplications(prev =>
+          prev.map(app =>
             app.id === id ? { ...app, status: "approved" } : app
           )
         );
@@ -316,7 +316,7 @@ function AdminDashboard() {
 
     uploadTask.on(
       "state_changed",
-      (snapshot) => {},
+      (snapshot) => { },
       (error) => {
         console.error("Error uploading profile image:", error)
         alert("Failed to upload profile image.")
@@ -423,7 +423,7 @@ function AdminDashboard() {
 
     uploadTask.on(
       "state_changed",
-      (snapshot) => {},
+      (snapshot) => { },
       (error) => {
         console.error("Error uploading icon: ", error)
         alert("Failed to upload icon")
@@ -859,13 +859,12 @@ function AdminDashboard() {
                 {applications.map((application) => (
                   <div
                     key={application.id}
-                    className={`border rounded-lg p-4 ${
-                      activeTab === "approved"
+                    className={`border rounded-lg p-4 ${activeTab === "approved"
                         ? "border-green-200 bg-green-50"
                         : activeTab === "rejected"
                           ? "border-red-200 bg-red-50"
                           : "border-gray-200"
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-start">
                       <div>

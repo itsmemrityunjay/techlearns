@@ -150,17 +150,17 @@ const Courses = () => {
   return (
     <div className="container mx-auto py-4">
       <div className="relative inline-block text-left ">
-        <div className="bg-yellow py-12 md:px-20 text-center">
+        <div className="bg-yellow  text-center">
           {/* Heading */}
-          <p className="text-grey-600 text-lg md:text-xl mb-8">
+          {/* <p className="text-grey-600 text-lg md:text-xl mb-8">
             Trusted by over{" "}
             <span className="font-bold">Industrial companies</span> and millions
             of learners around the world
           </p>
-          <hr className="my-4" />
+          <hr className="my-4" /> */}
 
           {/* Logos Section */}
-          <div className="flex flex-wrap items-center justify-between gap-8">
+          {/* <div className="flex flex-wrap items-center justify-between gap-8">
             <img
               src="https://www.sviet.ac.in/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLogo.8bdb37ea.webp&w=640&q=75"
               alt="SVIET"
@@ -181,10 +181,10 @@ const Courses = () => {
               alt="Vimeo"
               className="h-7 w-45 object-contain"
             />
-          </div>
+          </div> */}
         </div>
 
-        <div className="relative w-full rounded-3xl overflow-hidden py-16 px-4 sm:px-8 lg:px-16">
+        <div className="relative w-full rounded-3xl overflow-hidden py-6   ">
           {/* Icons */}
           {/* <div className="absolute top-12 left-8 text-yellow-400">
             <FontAwesomeIcon icon={faPaperPlane} size="4x" className="animate-bounce" />
@@ -194,22 +194,22 @@ const Courses = () => {
           </div> */}
 
           {/* Content */}
-          <div className="text-center">
-            <span className="inline-block bg-black text-white font-bold text-lg uppercase tracking-wide px-6 py-2 rounded-full shadow-lg mb-6">
-              Why Choose Us
+          <div className="text-left">
+            <span className="inline-block bg-black text-white font-bold text-lg uppercase tracking-wide px-6 py-2  shadow-lg mb-6">
+              Why Choose Us ?
             </span>
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
               Dive into Online Courses
-              
-              
+
+
             </h2>
             <p className="text-lg text-gray-600 mx-auto">
               Explore a wide range of topics with engaging, interactive lessons designed
               to help you learn at your own pace.
             </p>
           </div>
-          
+
           {/* Feature Cards */}
           {/* Feature Cards */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -248,11 +248,11 @@ const Courses = () => {
                 className="relative bg-white rounded-3xl shadow-md p-6 hover:shadow-lg transition-all  border-2 border-gray-100 hover:border-gray-300"
               >
                 <div
-              className="w-full h-full -top-2 -left-2 absolute inset-0 opacity-10 z-10"
-              style={{
-                backgroundImage: `radial-gradient(circle at 20% 20%, #ffaa00 10%, transparent 20%)`,
-              }}
-            />
+                  className="w-full h-full -top-2 -left-2 absolute inset-0 opacity-10 z-10"
+                  style={{
+                    backgroundImage: `radial-gradient(circle at 20% 20%, #ffaa00 10%, transparent 20%)`,
+                  }}
+                />
                 <div
                   className={`${feature.gradient} p-2 rounded-full text-5xl text-white flex items-center justify-start `}
                 >
@@ -273,88 +273,87 @@ const Courses = () => {
         {/* Dropdown Trigger */}
       </div>
 
-   {/* Mental Health & Image Section */}
-      <div className="px-4 py-10 sm:px-8 lg:px-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Left Column */}
-            <div className="space-y-10">
-              {/* Card 1 */}
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md w-full md:max-w-sm">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-                      <img
-                        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg"
-                        alt="Mental Health Icon"
-                        className="w-8 h-8"
-                      />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-                    <p className="text-sm text-gray-600">Take care of your mental well-being effectively.</p>
+      {/* Mental Health & Image Section */}
+      {/* <div className="px-4 py-10 sm:px-8 lg:px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          
+          <div className="space-y-10">
+            
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md w-full md:max-w-sm">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
                   </div>
                 </div>
-                <div className="flex w-full md:w-auto">
-                  <img
-                    src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg"
-                    alt="Meditation Class"
-                    className="w-full max-w-xs rounded-[90px] shadow-lg object-cover"
-                  />
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">Take care of your mental well-being effectively.</p>
                 </div>
               </div>
-
-              {/* Card 2 */}
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex w-full md:w-auto order-2 md:order-1">
-                  <img
-                    src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg"
-                    alt="Meditation Class"
-                    className="w-full max-w-xs rounded-[90px] shadow-lg object-cover"
-                  />
-                </div>
-                <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md w-full md:max-w-sm order-1 md:order-2">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
-                      <img
-                        src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg"
-                        alt="Mental Health Icon"
-                        className="w-8 h-8"
-                      />
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
-                    <p className="text-sm text-gray-600">Take care of your mental well-being effectively.</p>
-                  </div>
-                </div>
+              <div className="flex w-full md:w-auto">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs rounded-[90px] shadow-lg object-cover"
+                />
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="flex flex-col items-start justify-start pt-10 md:pt-24">
-              <h2 className="text-xl sm:text-2xl font-bold text-yellow-500 tracking-[0.3em]">
-                Techlearns
-              </h2>
-              <div className="mt-4 sm:mt-6 text-left">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
-                  <Typewriter
-                    words={['Every Story Has Its Purpose']}
-                    loop={10}
-                    cursor
-                    cursorStyle="_"
-                    typeSpeed={100}
-                    deleteSpeed={50}
-                    delaySpeed={1500}
-                  />
-                </h2>
-                <p className="text-base sm:text-lg text-gray-600 mt-4">
-                  Wondering how many times a day you're in a mindful state? Check your score.
-                </p>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex w-full md:w-auto order-2 md:order-1">
+                <img
+                  src="https://img.freepik.com/premium-photo/smiling-girl-looking-laptop-while-studying-library_1048944-22474512.jpg"
+                  alt="Meditation Class"
+                  className="w-full max-w-xs rounded-[90px] shadow-lg object-cover"
+                />
+              </div>
+              <div className="flex items-center bg-yellow-400 p-4 rounded-2xl shadow-md w-full md:max-w-sm order-1 md:order-2">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full shadow-sm">
+                    <img
+                      src="https://img.freepik.com/free-vector/young-man-with-glasses-avatar_1308-175763.jpg"
+                      alt="Mental Health Icon"
+                      className="w-8 h-8"
+                    />
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Mental Health</h3>
+                  <p className="text-sm text-gray-600">Take care of your mental well-being effectively.</p>
+                </div>
               </div>
             </div>
           </div>
+
+
+          <div className="flex flex-col items-start justify-start pt-10 md:pt-24">
+            <h2 className="text-xl sm:text-2xl font-bold text-yellow-500 tracking-[0.3em]">
+              Techlearns
+            </h2>
+            <div className="mt-4 sm:mt-6 text-left">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
+                <Typewriter
+                  words={['Every Story Has Its Purpose']}
+                  loop={10}
+                  cursor
+                  cursorStyle="_"
+                  typeSpeed={100}
+                  deleteSpeed={50}
+                  delaySpeed={1500}
+                />
+              </h2>
+              <p className="text-base sm:text-lg text-gray-600 mt-4">
+                Wondering how many times a day you're in a mindful state? Check your score.
+              </p>
+            </div>
+          </div>
         </div>
+      </div> */}
 
       <div className="h-auto dark:bg-gray-900 mt-12 ">
         {/* Header */}
@@ -393,20 +392,20 @@ const Courses = () => {
           We pare down complex topics to their key practical components, so you gain usable skills in a few hours. The courses are free, and you can earn certificates!
         </p> */}
 
-      
+
         <div
-          
+
         >
-      <Courseslist/>
+          <Courseslist />
         </div>
 
-     
-      
+
+
 
         {/* Goals Section */}
-        <TeamMemberCard/>
+        <TeamMemberCard />
       </div >
-     
+
 
       <CourseBanner></CourseBanner>
 

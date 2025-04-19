@@ -55,14 +55,11 @@ function App() {
             <Route
               path="/amin"
               element={
-                <>
-                  {/* <Navbar /> */}
-                  <Layout>
-                    <ProtectedRoute roles={["sub-admin"]}>
-                      <Admin />
-                    </ProtectedRoute>
-                  </Layout>
-                </>
+                <Layout>
+                  <ProtectedRoute roles={["sub-admin"]}>
+                    <Admin />
+                  </ProtectedRoute>
+                </Layout>
               }
             />
 
@@ -94,7 +91,6 @@ function App() {
               }
             />
 
-            {/* <Route path="/course/:id" element={<CourseDetail />} /> */}
             <Route
               path="/discussion"
               element={
@@ -108,7 +104,7 @@ function App() {
               element={
                 <Layout>
                   <ProtectedRoute
-                    roles={["user" || "admin" || "sub-admin" || ""]}
+                    roles={["user", "admin", "sub-admin", "mentor", ""]}
                   >
                     <User />
                   </ProtectedRoute>
@@ -128,9 +124,7 @@ function App() {
               path="/courses-edit/:courseId"
               element={
                 <Layout>
-                  {/* <ProtectedRoute roles={["sub-admin"]}> */}
                   <CourseDetailAdmin />
-                  {/* </ProtectedRoute> */}
                 </Layout>
               }
             />
@@ -153,58 +147,60 @@ function App() {
               }
             />
             <Route
-  path="/courses/upload"
-  element={
-    <Layout>
-      <ProtectedRoute roles={["user" || "admin" || "sub-admin" || ""]}>
-        <UploadCourseVideo />
-      </ProtectedRoute>
-    </Layout>
-  }
-/>
+              path="/courses/upload"
+              element={
+                <Layout>
+                  <ProtectedRoute roles={["user", "admin", "sub-admin"]}>
+                    <UploadCourseVideo />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
 
-<Route
-  path="/courses/:courseId/assignments/:assignmentId/submit"
-  element={
-    <Layout>
-      <ProtectedRoute roles={["user"]}>
-        <AssignmentSubmit />
-      </ProtectedRoute>
-    </Layout>
-  }
-/>
+            <Route
+              path="/courses/:courseId/assignments/:assignmentId/submit"
+              element={
+                <Layout>
+                  <ProtectedRoute roles={["user"]}>
+                    <AssignmentSubmit />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
 
-{/* <Route
-  path="/courses/:courseId/assignments/:assignmentId/submissions"
-  element={
-    <Layout>
-      <ProtectedRoute roles={["admin", "sub-admin"]}>
-        <ReviewSubmissions />
-      </ProtectedRoute>
-    </Layout>
-  }
-/> */}
+            {/* Uncomment if needed
+            <Route
+              path="/courses/:courseId/assignments/:assignmentId/submissions"
+              element={
+                <Layout>
+                  <ProtectedRoute roles={["admin", "sub-admin"]}>
+                    <ReviewSubmissions />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
+            */}
 
-<Route
-  path="/amin/notifications"
-  element={
-    <Layout>
-      <ProtectedRoute roles={["admin", "sub-admin"]}>
-        <Amin />
-      </ProtectedRoute>
-    </Layout>
-  }
-/>
-<Route
-  path="/live"
-  element={
-    <Layout>
-      <ProtectedRoute roles={["user"]}>
-        <LiveStream />
-      </ProtectedRoute>
-    </Layout>
-  }
-/>
+            <Route
+              path="/admin/notifications"
+              element={
+                <Layout>
+                  <ProtectedRoute roles={["admin", "sub-admin"]}>
+                    <Amin />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
+            <Route
+              path="/live"
+              element={
+                <Layout>
+                  <ProtectedRoute roles={["user"]}>
+                    <LiveStream />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
 
             <Route
               path="/host"
@@ -244,9 +240,7 @@ function App() {
               path="/edit-profile"
               element={
                 <Layout>
-                  {/* <ProtectedRoute roles={["user"]}> */}
                   <EditProfile />
-                  {/* </ProtectedRoute> */}
                 </Layout>
               }
             />

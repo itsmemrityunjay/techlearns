@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 const LearnAndGrow = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <section className="pt-[100px] mb-8 w-full">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <a
           href="/mentors"
           role="button"
@@ -58,17 +58,17 @@ const LearnAndGrow = () => {
             </ul>
 
             <motion.button
-  initial={{ opacity: 0, y: 20 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  transition={{ delay: 0.5 }}
-  onClick={() => navigate('/mentors')} // Update this path to match your mentor route
-  className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
->
-  <span>Meet Our Mentors</span>
-  {/* <Users className="w-5 h-5" /> */}
-</motion.button>
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ delay: 0.5 }}
+              onClick={() => navigate('/mentors')} // Update this path to match your mentor route
+              className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
+            >
+              <span>Meet Our Mentors</span>
+              {/* <Users className="w-5 h-5" /> */}
+            </motion.button>
           </div>
         </a>
       </div>

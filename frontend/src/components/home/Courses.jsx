@@ -291,9 +291,8 @@ const CourseCard = ({ course }) => {
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`flex items-center text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${
-              course.enrolled ? "bg-green-50 text-green-600 hover:bg-green-100" : "text-[#ffaa00] hover:bg-blue-50"
-            }`}
+            className={`flex items-center text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${course.enrolled ? "bg-green-50 text-green-600 hover:bg-green-100" : "text-[#ffaa00] hover:bg-blue-50"
+              }`}
           >
             {course.enrolled ? "Continue" : "View"}
             <ArrowRight className="ml-1 h-4 w-4" />
@@ -500,7 +499,7 @@ const CourseList = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto py-16 ">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (
             <div
@@ -527,7 +526,7 @@ const CourseList = () => {
   }
 
   return (
-    <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto py-16 ">
       {/* Header Section */}
       <motion.div
         className="text-left mb-12"
@@ -536,13 +535,13 @@ const CourseList = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="inline-flex items-center justify-center mb-4">
-          <motion.div
+          {/* <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
           >
             <GraduationCap size={64} className=" text-[#ffaa00] mr-4" />
-          </motion.div>
+          </motion.div> */}
           <h1 className="text-5xl font-bold text-gray-900 tracking-tight">
             <span className="text-transparent bg-clip-text bg-[#ffaa00]">
               Expand Your
@@ -637,11 +636,10 @@ const CourseList = () => {
                         key={level}
                         y={level}
                         onClick={() => toggleLevel(level)}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                          selectedLevels.includes(level)
-                            ? "bg-blue-100 text-blue-700 border border-blue-200"
-                            : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
-                        }`}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${selectedLevels.includes(level)
+                          ? "bg-blue-100 text-blue-700 border border-blue-200"
+                          : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
+                          }`}
                       >
                         {level}
                       </button>
@@ -650,7 +648,7 @@ const CourseList = () => {
                 </div>
 
                 <div>
-              
+
                 </div>
               </div>
 
@@ -784,7 +782,7 @@ const CourseList = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-         
+
         </motion.div>
       )}
 

@@ -7,9 +7,9 @@ const LearnSection = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="w-full flex flex-col md:flex-row items-center justify-between max-w-8xl p-4 md:p-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
+      <div className="w-full flex flex-col md:flex-row items-center justify-between py-4 md:py-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
         {/* Left Section */}
-        <div className="flex-1 mt-8 md:mt-16 px-4 flex flex-col justify-center">
+        <div className="flex-1 mt-8 md:mt-16 flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
             Empower Your Learning!
           </h1>
@@ -18,12 +18,12 @@ const LearnSection = () => {
             Build your expertise and turn raw data into actionable insights for real-world applications.
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          {/* <div className="flex flex-wrap gap-4">
             <button className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-6 rounded-3xl transition duration-200">
               Join Competition
             </button>
             
-          </div>
+          </div> */}
         </div>
 
         {/* Right Section */}
