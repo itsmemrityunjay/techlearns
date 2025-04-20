@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from '../database/Firebase';
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
@@ -50,26 +50,19 @@ export default function KaggleSignIn() {
             const result = await signInWithPopup(auth, provider);
             const User = result.user;
 
-            // Reference to 'users' collection
-            const usersRef = collection(db, "users");
+            // Always use setDoc with the user's UID as the document ID
+            await setDoc(doc(db, "users", User.uid), {
+                uid: User.uid,
+                email: User.email,
+                role: "user",
+                createdAt: new Date(),
+                // Optional: add profile info we can get from Google
+                firstName: User.displayName?.split(' ')[0] || '',
+                lastName: User.displayName?.split(' ').slice(1).join(' ') || '',
+                photoURL: User.photoURL || ''
+            }, { merge: true }); // Use merge: true to update existing documents without overwriting
 
-            // Query Firestore to check if the email already exists
-            const q = query(usersRef, where("email", "==", User.email));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                console.log("User already exists in Firestore. Skipping...");
-            } else {
-                // If user does not exist, add them to Firestore
-                await addDoc(usersRef, {
-                    createdAt: new Date(),
-                    role: "user",  // Set as pending for admin approval
-                    email: User.email,
-                });
-                console.log("New user added to Firestore.");
-            }
-
-            // Redirect to the user page after sign-in
+            console.log("User data saved to Firestore.");
             navigate("/user");
         } catch (error) {
             console.error("Error with Google sign-in:", error);

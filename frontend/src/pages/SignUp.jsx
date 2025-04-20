@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from "../database/Firebase"
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, setDoc, doc, getDoc } from 'firebase/firestore';
 import { registerWithEmail, signInWithGoogle } from '../database/Firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,14 +16,18 @@ const SignUp = () => {
     const handleEmailSignUp = async (e) => {
         e.preventDefault();
         try {
-            await addDoc(collection(db, 'users'), {
+            // First register the user to get their UID
+            const userCredential = await registerWithEmail(email, password);
+
+            // Use setDoc instead of addDoc to specify the document ID
+            await setDoc(doc(db, "users", userCredential.user.uid), {
                 email,
-                role: 'user', // Set as pending for admin approval
+                role: 'user',
+                uid: userCredential.user.uid, // Store UID in the document too
                 createdAt: new Date(),
             });
-            await registerWithEmail(email, password);
-            navigate("/user")
-            // Handle successful registration (e.g., redirect or show a success message)
+
+            navigate("/user");
         } catch (err) {
             setError(err.message);
         }
@@ -31,9 +35,26 @@ const SignUp = () => {
 
     const handleGoogleSignUp = async () => {
         try {
-            await signInWithGoogle();
-            navigate("/user")
-            // Handle successful registration with Google (e.g., redirect or show a success message)
+            const userCredential = await signInWithGoogle();
+
+            // Check if user document already exists
+            const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+
+            // Only create if it doesn't exist
+            if (!userDoc.exists()) {
+                await setDoc(doc(db, "users", userCredential.user.uid), {
+                    email: userCredential.user.email,
+                    role: 'user',
+                    uid: userCredential.user.uid,
+                    createdAt: new Date(),
+                    // Optional: add any profile info we can get from Google
+                    firstName: userCredential.user.displayName?.split(' ')[0] || '',
+                    lastName: userCredential.user.displayName?.split(' ').slice(1).join(' ') || '',
+                    photoURL: userCredential.user.photoURL || ''
+                });
+            }
+
+            navigate("/user");
         } catch (err) {
             setError(err.message);
         }

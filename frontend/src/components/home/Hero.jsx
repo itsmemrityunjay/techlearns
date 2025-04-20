@@ -74,7 +74,7 @@ const Hero = () => {
         </div>
 
         {/* Logos Section */}
-        <div className="flex justify-center lg:justify-start gap-8 mt-10 py-5">
+        {/* <div className="flex justify-center lg:justify-start gap-8 mt-10 py-5">
           <img
             src="https://www.theuniques.in/assets/theuniquesCommunity-CaNp0pLp.png"
             alt="TIME logo"
@@ -90,7 +90,7 @@ const Hero = () => {
             alt="TechCrunch logo"
             className="h-8"
           />
-        </div>
+        </div> */}
       </div>
       {/* Right Illustration */}
       <div className="mt-12 lg:mt-0 lg:ml-16 relative z-10">

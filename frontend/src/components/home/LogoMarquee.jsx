@@ -19,33 +19,31 @@ const companyLogos = [
 const LogoMarquee = () => {
   return (
     <div className="relative w-full bg-[#f7f6f2] py-10 overflow-hidden flex items-center">
-      {/* Title on the left */}
-      {/* <div className="absolute left-6 md:left-16 text-gray-700 text-lg font-semibold w-1/4">
-        <p>Trusted by employees of</p>
-        <p>some of the best</p>
-        <p>companies</p>
-      </div> */}
-
-      {/* Scrolling logos */}
+      {/* Scrolling logos container */}
       <div className="w-full overflow-hidden relative">
-        <div className="flex space-x-8 animate-marquee">
-          {companyLogos.map((src, index) => (
-            <img
-              key={index}
-              src={src}
-              alt="company logo"
-              className="h-12 md:h-16 opacity-60 hover:opacity-100 transition duration-300"
-            />
-          ))}
-          {/* Duplicate for seamless scrolling */}
-          {companyLogos.map((src, index) => (
-            <img
-              key={`duplicate-${index}`}
-              src={src}
-              alt="company logo"
-              className="h-12 md:h-16 opacity-60 hover:opacity-100 transition duration-1000"
-            />
-          ))}
+        <div className="marquee-container">
+          <div className="marquee-content">
+            {companyLogos.map((src, index) => (
+              <div key={index} className="logo-container">
+                <img
+                  src={src}
+                  alt="company logo"
+                  className="h-12 md:h-16 opacity-60 hover:opacity-100 transition duration-300"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="marquee-content">
+            {companyLogos.map((src, index) => (
+              <div key={`duplicate-${index}`} className="logo-container">
+                <img
+                  src={src}
+                  alt="company logo"
+                  className="h-12 md:h-16 opacity-60 hover:opacity-100 transition duration-300"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -53,18 +51,47 @@ const LogoMarquee = () => {
       <div className="absolute top-0 left-0 w-40 h-full bg-gradient-to-r from-[#f7f6f2] to-transparent"></div>
       <div className="absolute top-0 right-0 w-40 h-full bg-gradient-to-l from-[#f7f6f2] to-transparent"></div>
 
-      <style>{`
-        @keyframes marquee {
-          from {
+      <style jsx>{`
+        .marquee-container {
+          display: flex;
+          width: fit-content;
+          animation: scroll 20s linear infinite; /* Changed from 40s to 20s */
+          will-change: transform;
+        }
+        
+        .marquee-content {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0; /* Prevent content from shrinking */
+        }
+        
+        .logo-container {
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0 40px; /* Consistent spacing between all logos */
+        }
+        
+        @keyframes scroll {
+          0% {
             transform: translateX(0);
           }
-          to {
-            transform: translateX(-50%);
+          100% {
+            transform: translateX(-50%); /* Only move by half the width */
           }
         }
-        .animate-marquee {
-          display: flex;
-          animation: marquee 20s linear infinite;
+        
+        /* For smoother animation in modern browsers */
+        @media (prefers-reduced-motion: no-preference) {
+          .marquee-container {
+            animation-play-state: running;
+          }
+        }
+        
+        /* Pause on hover effect (optional) */
+        .marquee-container:hover {
+          animation-play-state: paused;
         }
       `}</style>
     </div>

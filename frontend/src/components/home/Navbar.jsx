@@ -17,8 +17,10 @@ import {
 } from "lucide-react";
 import logo from "../../assets/Logo.png";
 import GirlSittingSVG from "../../assets/undraw_exams_d2tf.svg";
+import { useAuth } from "../../database/AuthContext"; // Add this import
 
 const Navbar = () => {
+  const { currentUser, userData } = useAuth(); // Add this to access user data
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -98,14 +100,24 @@ const Navbar = () => {
                 )}
               </button>
               <button
-                onClick={() => navigate("/user")}
+                onClick={() => navigate(currentUser ? "/user" : "/signin")}
                 className="rounded-full border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500 transition-colors"
               >
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  alt="User"
-                  className="h-10 w-10 object-cover rounded-full"
-                />
+                {currentUser && (userData?.photoURL || currentUser.photoURL) ? (
+                  <img
+                    src={userData?.photoURL || currentUser.photoURL}
+                    alt="User Profile"
+                    className="h-10 w-10 object-cover rounded-full"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+                    }}
+                  />
+                ) : (
+                  <div className="h-10 w-10 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300">
+                    <User className="h-6 w-6" />
+                  </div>
+                )}
               </button>
             </div>
           </div>

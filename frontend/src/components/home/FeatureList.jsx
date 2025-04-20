@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
-import sign from "../../assets/sign.svg"
-import signup from "../../assets/signup.png"
-import vote from "../../assets/votes.png"
+// Import new icons - you'll need to add these images to your assets folder
+import nepIcon from "../../assets/education-policy.png" // Replace with actual NEP icon
+import skillIcon from "../../assets/skill-india.png" // Replace with actual Skill India icon
+import coursesIcon from "../../assets/courses-icon.png" // Replace with courses icon
 
 export default function HowItWorksScroll() {
   const [activeStep, setActiveStep] = useState(0)
@@ -48,19 +49,28 @@ export default function HowItWorksScroll() {
 
   const steps = [
     {
-      title: "Open free account",
-      description: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-      icon: signup
+      title: "Aligned with New Education Policy",
+      description:
+        "Our learning platform is designed in accordance with the New Education Policy 2020, focusing on critical thinking, creativity, and experiential learning for young minds.",
+      icon: nepIcon,
+      buttonText: "Explore NEP Features",
+      buttonLink: "https://www.education.gov.in/sites/upload_files/mhrd/files/NEP_Final_English_0.pdf"
     },
     {
-      title: "Submit your design",
-      description: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-      icon: sign
+      title: "Skill Development for All",
+      description:
+        "Through hands-on training and real-world projects, we're contributing to Skill India by preparing a workforce equipped with industry-ready technical and soft skills.",
+      icon: skillIcon,
+      buttonText: "Discover Skill India Programs",
+      buttonLink: "https://www.skillindiadigital.gov.in/home"
     },
     {
-      title: "Grow in the community",
-      description: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.",
-      icon: vote
+      title: "Empowering with Courses",
+      description:
+        "Access our curated collection of courses designed to build practical skills and foster innovation. Learn at your own pace with interactive content and expert guidance.",
+      icon: coursesIcon,
+      buttonText: "Browse Our Courses",
+      buttonLink: "/course"
     }
   ]
 
@@ -88,7 +98,7 @@ export default function HowItWorksScroll() {
               >
                 {/* Image (alternates sides) */}
                 <motion.div
-                  className={`w-full md:w-1/2  mb-8 md:mb-0 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:order-2'}`}
+                  className={`w-full md:w-1/2 mb-8 md:mb-0 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8 md:order-2'}`}
                   style={{
                     y: yPositions[index],
                     opacity: opacities[index]
@@ -97,7 +107,7 @@ export default function HowItWorksScroll() {
                   <img
                     src={step.icon}
                     alt={step.title}
-
+                    className="mx-auto max-h-64 object-contain"
                   />
                 </motion.div>
 
@@ -124,9 +134,20 @@ export default function HowItWorksScroll() {
                     <h3 className={`text-xl font-medium mb-2 ${activeStep >= index ? 'text-gray-900' : 'text-gray-500'}`}>
                       {step.title}
                     </h3>
-                    <p className={`${activeStep >= index ? 'text-gray-600' : 'text-gray-400'}`}>
+                    <p className={`${activeStep >= index ? 'text-gray-600' : 'text-gray-400'} mb-5`}>
                       {step.description}
                     </p>
+
+                    {/* Added CTA Button */}
+                    <a
+                      href={step.buttonLink}
+                      className={`inline-block px-6 py-3 rounded-lg text-white font-medium transition-all duration-300 transform hover:scale-105 ${index === 0 ? 'bg-blue-600 hover:bg-blue-700' :
+                        index === 1 ? 'bg-[#FF7722] hover:bg-[#E05500]' :
+                          'bg-[--primary-color] hover:bg-[--secondary-color]'
+                        }`}
+                    >
+                      {step.buttonText}
+                    </a>
                   </div>
                 </motion.div>
               </div>
@@ -134,8 +155,6 @@ export default function HowItWorksScroll() {
           </div>
         </div>
       </section>
-
-      {/* Footer remains the same */}
     </div>
   )
 }

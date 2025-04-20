@@ -6,6 +6,8 @@ import {
   where,
   getDocs,
   addDoc,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import {
   getAuth,
@@ -46,6 +48,15 @@ export const registerWithEmail = async (email, password) => {
       email,
       password
     );
+
+    // Create user document with matching UID
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      email,
+      uid: userCredential.user.uid,
+      role: "user",
+      createdAt: new Date(),
+    });
+
     return userCredential.user;
   } catch (error) {
     throw new Error(error.message);
