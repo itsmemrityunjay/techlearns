@@ -7,24 +7,17 @@ import { useNavigate } from "react-router-dom"
 import {
   Clock,
   Star,
-  Bookmark,
   GraduationCap,
-  Zap,
   CheckCircle,
   Users,
-  Award,
   PlayCircle,
   BarChart2,
-  BadgeCheck,
-  Heart,
-  Eye,
   ArrowRight,
   Search,
   Filter,
   X,
   ChevronDown,
   Sliders,
-  TrendingUp,
   Clock3,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -39,6 +32,15 @@ const CourseCard = ({ course }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isLiked, setIsLiked] = useState(false)
   const [likeCount, setLikeCount] = useState(Math.floor(Math.random() * 100) + 10)
+  const [isViewed, setIsViewed] = useState(false)
+
+  // Check if this course has been viewed before
+  useEffect(() => {
+    const viewedCourses = JSON.parse(localStorage.getItem("viewedCourses") || "[]")
+    if (viewedCourses.includes(course.id)) {
+      setIsViewed(true)
+    }
+  }, [course.id])
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return
@@ -49,14 +51,14 @@ const CourseCard = ({ course }) => {
     })
   }
 
-  useEffect(() => {
-    if (course.enrolled) {
-      const timer = setInterval(() => {
-        setProgress((prev) => Math.min(prev + Math.random() * 5, course.completion || 35))
-      }, 300)
-      return () => clearInterval(timer)
-    }
-  }, [course.enrolled, course.completion])
+  // useEffect(() => {
+  //   if (course.enrolled) {
+  //     const timer = setInterval(() => {
+  //       setProgress((prev) => Math.min(prev + Math.random() * 5, course.completion || 35))
+  //     }, 300)
+  //     return () => clearInterval(timer)
+  //   }
+  // }, [course.enrolled, course.completion])
 
   const handleBookmark = (e) => {
     e.stopPropagation()
@@ -74,10 +76,22 @@ const CourseCard = ({ course }) => {
     setShowPreview(true)
   }
 
+  const handleCourseClick = () => {
+    // Save this course ID to localStorage when clicked
+    const viewedCourses = JSON.parse(localStorage.getItem("viewedCourses") || "[]")
+    if (!viewedCourses.includes(course.id)) {
+      viewedCourses.push(course.id)
+      localStorage.setItem("viewedCourses", JSON.stringify(viewedCourses))
+    }
+
+    // Navigate to the course page
+    navigate(`/courses/${course.id}`)
+  }
+
   return (
     <motion.div
       ref={cardRef}
-      onClick={() => navigate(`/courses/${course.id}`)}
+      onClick={handleCourseClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false)
@@ -87,7 +101,7 @@ const CourseCard = ({ course }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative justify-between my-auto h-[475px] bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-blue-100 cursor-pointer group"
+      className="relative justify-between my-auto h-[415x] bg-white rounded-xl overflow-hidden  duration-300 border border-gray-100 hover:border-blue-100 cursor-pointer group"
       style={{
         transform: isHovered ? "translateY(-4px)" : "translateY(0)",
         boxShadow: isHovered
@@ -95,105 +109,21 @@ const CourseCard = ({ course }) => {
           : "0 2px 8px rgba(0, 0, 0, 0.05)",
       }}
     >
-      {/* Premium Ribbon */}
-      {/* {course.premium && (
-        <div className="absolute -right-8 top-5 w-32 bg-gradient-to-r from-blue-700 to-blue-600 text-white text-xs font-bold py-1.5 px-4 text-center transform rotate-45 shadow-md z-10 flex items-center justify-center">
-          <Zap className="h-3 w-3 mr-1 fill-current" />
-          <span>PREMIUM</span>
-        </div>
-      )} */}
-
       {/* Course Image with Interactive Overlay */}
       <div className="relative h-48 overflow-hidden">
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent z-10"></div>
 
         <img
-          src={
-            course.icon
-          }
+          src={course.icon || "/placeholder.svg"}
           alt={course.title}
           className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? "scale-105" : "scale-100"}`}
           loading="lazy"
         />
-
-        {/* Image hover actions */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 ${showPreview ? "hidden" : ""}`}
-        >
-          {/* <button
-            onClick={handleQuickView}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-800 hover:bg-white transition-all hover:scale-105"
-          >
-            <Eye className="h-4 w-4" />
-            Quick Preview
-          </button> */}
-        </div>
-
-        {/* Price Tag */}
-        {/* <div className="absolute bottom-4 left-4 z-10">
-          <div
-            className={`px-3 py-1.5 rounded-lg font-bold text-sm flex items-center shadow-sm ${
-              course.discount > 0
-                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white"
-                : course.price === "0.00"
-                  ? "bg-gradient-to-r from-green-600 to-green-500 text-white"
-                  : "bg-white text-gray-900"
-            }`}
-          >
-            {course.discount > 0 && (
-              <span className="text-xs text-white/80 line-through mr-2">${course.originalPrice}</span>
-            )}
-            <span>{course.price === "0.00" ? "FREE" : `$${course.price}`}</span>
-            {course.discount > 0 && (
-              <span className="ml-2 bg-white text-blue-600 text-xs px-1.5 py-0.5 rounded-md">-{course.discount}%</span>
-            )}
-          </div>
-        </div> */}
-
-        {/* Action Buttons */}
-        {/* <div className="absolute top-4 right-4 flex gap-2 z-20">
-          
-          <motion.button
-            onClick={handleBookmark}
-            whileTap={{ scale: 0.9 }}
-            className={`p-2 rounded-full backdrop-blur-sm transition-all ${
-              isBookmarked
-                ? "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                : "bg-white/90 text-gray-500 hover:bg-white hover:text-blue-500"
-            }`}
-          >
-            <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-current" : ""}`} />
-          </motion.button>
-
-          
-          <motion.button
-            onClick={handleLike}
-            whileTap={{ scale: 0.9 }}
-            className={`p-2 rounded-full backdrop-blur-sm transition-all ${
-              isLiked
-                ? "bg-red-100 text-red-500 hover:bg-red-200"
-                : "bg-white/90 text-gray-500 hover:bg-white hover:text-red-500"
-            }`}
-          >
-            <Heart className={`h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
-          </motion.button>
-        </div> */}
       </div>
 
       {/* Card Content */}
       <div className="p-5">
-        {/* Category and Likes */}
-        {/* <div className="flex justify-between items-center mb-3">
-          <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium tracking-wide text-blue-700 bg-blue-50 rounded-full uppercase">
-            {course.category || "Development"}
-          </span>
-          <span className="inline-flex items-center text-xs text-gray-500">
-            <Heart className={`h-3.5 w-3.5 mr-1 ${isLiked ? "text-red-500 fill-red-500" : ""}`} />
-            {likeCount}
-          </span>
-        </div> */}
-
         {/* Course Title */}
         <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200 leading-tight line-clamp-2">
           {course.title}
@@ -205,11 +135,7 @@ const CourseCard = ({ course }) => {
         {/* Progress Bar (for enrolled courses) */}
         {course.enrolled && (
           <div className="mb-4">
-            {/* <div className="flex justify-between text-xs text-gray-500 mb-1">
-              <span>Your progress</span>
-              <span>{Math.round(progress)}% complete</span>
-            </div> */}
-            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+            {/* <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <motion.div
                 className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full"
                 style={{ width: `${progress}%` }}
@@ -217,7 +143,7 @@ const CourseCard = ({ course }) => {
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5 }}
               ></motion.div>
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -241,35 +167,12 @@ const CourseCard = ({ course }) => {
         </div>
 
         {/* Course Details */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span
-            className="inline-flex items-center text-xs px-2.5 py-1 bg-gray-50 text-gray-700 rounded-full border border-gray-200"
-            title={`${course.lessonCount || 12} lessons`}
-          >
-            <Clock className="h-3 w-3 mr-1.5" />
-            {course.duration || "8h 15m"}
-          </span>
-          <span
-            className="text-xs px-2.5 py-1 bg-gray-50 text-gray-700 rounded-full border border-gray-200"
-            title={`${course.level} level content`}
-          >
-            {course.level}
-          </span>
-          {/* {course.certificate && (
-            <span
-              className="inline-flex items-center text-xs px-2.5 py-1 bg-blue-50 text-[#ffaa00] rounded-full border border-blue-200"
-              title="Verified certificate upon completion"
-            >
-              <BadgeCheck className="h-3 w-3 mr-1.5" />
-              Certificate
-            </span>
-          )} */}
-        </div>
+     
 
         {/* Instructor and CTA */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <div className="flex items-center">
-            <div className="relative w-8 h-8 rounded-full overflow-hidden mr-2 border-2 border-white shadow-sm">
+            {/* <div className="relative w-8 h-8 rounded-full overflow-hidden mr-2 border-2 border-white shadow-sm">
               <img
                 src={course.instructorAvatar || `https://i.pravatar.cc/150?u=${course.instructorId || "instructor"}`}
                 alt="Instructor"
@@ -281,20 +184,23 @@ const CourseCard = ({ course }) => {
                   <CheckCircle className="h-2 w-2 text-white" />
                 </div>
               )}
-            </div>
+            </div> */}
             <p className="text-sm text-gray-700 truncate max-w-[100px]">{course.instructor}</p>
           </div>
           <motion.button
             onClick={(e) => {
               e.stopPropagation()
-              navigate(`/courses/${course.id}`)
+              handleCourseClick()
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`flex items-center text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${course.enrolled ? "bg-green-50 text-green-600 hover:bg-green-100" : "text-[#ffaa00] hover:bg-blue-50"
-              }`}
+            className={`flex items-center text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${
+              course.enrolled || isViewed
+                ? "bg-green-50 text-green-600 hover:bg-green-100"
+                : "text-[#ffaa00] hover:bg-blue-50"
+            }`}
           >
-            {course.enrolled ? "Continue" : "View"}
+            {course.enrolled || isViewed ? "Continue" : "View"}
             <ArrowRight className="ml-1 h-4 w-4" />
           </motion.button>
         </div>
@@ -354,7 +260,7 @@ const CourseCard = ({ course }) => {
                   Close
                 </button>
                 <motion.button
-                  onClick={() => navigate(`/courses/${course.id}`)}
+                  onClick={() => handleCourseClick()}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className="flex-1 text-sm px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
@@ -385,7 +291,7 @@ const CourseList = () => {
   const navigate = useNavigate()
 
   const categories = ["Development", "Design", "Business", "Marketing", "Photography", "Music"]
-  const levels = ["Beginner", "Intermediate", "Advanced"]
+  // const levels = ["Beginner", "Intermediate", "Advanced"]
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -406,7 +312,7 @@ const CourseList = () => {
           enrolledStudents: Math.floor(Math.random() * 2000) + 100,
           lessonCount: Math.floor(Math.random() * 30) + 10,
           duration: `${Math.floor(Math.random() * 10) + 1}h ${Math.floor(Math.random() * 60)}m`,
-          level: levels[Math.floor(Math.random() * 3)],
+          // level: levels[Math.floor(Math.random() * 3)],
           certificate: Math.random() > 0.5,
           createdAt: new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 30)),
         }))
@@ -431,23 +337,10 @@ const CourseList = () => {
           return 0
         })
 
-        // Apply basic filtering
-        // if (filter !== "all") {
-        //   fetchedCourses = fetchedCourses.filter((course) =>
-        //     filter === "premium"
-        //       ? course.premium
-        //       : filter === "free"
-        //         ? course.price === "0.00"
-        //         : filter === "certificate"
-        //           ? course.certificate
-        //           : course.category?.toLowerCase() === filter.toLowerCase(),
-        //   )
-        // }
-
         // Apply advanced filtering
-        if (selectedLevels.length > 0) {
-          fetchedCourses = fetchedCourses.filter((course) => selectedLevels.includes(course.level))
-        }
+        // if (selectedLevels.length > 0) {
+        //   fetchedCourses = fetchedCourses.filter((course) => selectedLevels.includes(course.level))
+        // }
 
         if (selectedCategories.length > 0) {
           fetchedCourses = fetchedCourses.filter((course) => selectedCategories.includes(course.category))
@@ -467,16 +360,16 @@ const CourseList = () => {
       }
     }
     fetchCourses()
-  }, [sortBy, filter, searchQuery, selectedLevels, selectedCategories, priceRange])
+  }, [sortBy, filter, searchQuery,  selectedCategories, priceRange])
 
   const handleSearch = (e) => {
     e.preventDefault()
     // The search is already handled by the useEffect dependency
   }
 
-  const toggleLevel = (level) => {
-    setSelectedLevels((prev) => (prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]))
-  }
+  // const toggleLevel = (level) => {
+  //   setSelectedLevels((prev) => (prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]))
+  // }
 
   const toggleCategory = (category) => {
     setSelectedCategories((prev) =>
@@ -488,7 +381,7 @@ const CourseList = () => {
     setFilter("all")
     setSortBy("popular")
     setSearchQuery("")
-    setSelectedLevels([])
+    // setSelectedLevels([])
     setSelectedCategories([])
     setPriceRange([0, 200])
   }
@@ -535,18 +428,8 @@ const CourseList = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="inline-flex items-center justify-center mb-4">
-          {/* <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-          >
-            <GraduationCap size={64} className=" text-[#ffaa00] mr-4" />
-          </motion.div> */}
           <h1 className="text-5xl font-bold text-gray-900 tracking-tight">
-            <span className="text-transparent bg-clip-text bg-[#ffaa00]">
-              Expand Your
-            </span>{" "}
-            Knowledge
+            <span className="text-transparent bg-clip-text bg-[#ffaa00]">Expand Your</span> Knowledge
           </h1>
         </div>
         <p className="text-gray-600 leading-relaxed max-w-4xl">
@@ -625,7 +508,7 @@ const CourseList = () => {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <h3 className="font-medium text-gray-900 mb-3 flex items-center">
                     <BarChart2 className="h-4 w-4 mr-2" />
                     Level
@@ -634,22 +517,20 @@ const CourseList = () => {
                     {levels.map((level) => (
                       <button
                         key={level}
-                        y={level}
                         onClick={() => toggleLevel(level)}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${selectedLevels.includes(level)
-                          ? "bg-blue-100 text-blue-700 border border-blue-200"
-                          : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
-                          }`}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                          selectedLevels.includes(level)
+                            ? "bg-blue-100 text-blue-700 border border-blue-200"
+                            : "bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200"
+                        }`}
                       >
                         {level}
                       </button>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
-                <div>
-
-                </div>
+                <div></div>
               </div>
 
               <div className="flex justify-end mt-6">
@@ -663,64 +544,6 @@ const CourseList = () => {
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex flex-wrap gap-2">
-            <motion.button
-              onClick={() => setFilter("all")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${filter === "all" ? "bg-black text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-            >
-              All Courses
-            </motion.button>
-            <motion.button
-              onClick={() => setFilter("premium")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${filter === "premium" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-            >
-              <Zap className="h-3.5 w-3.5" />
-              Premium
-            </motion.button>
-            <motion.button
-              onClick={() => setFilter("free")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${filter === "free" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-            >
-              Free
-            </motion.button>
-            <motion.button
-              onClick={() => setFilter("certificate")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${filter === "certificate" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-            >
-              <BadgeCheck className="h-3.5 w-3.5" />
-              Certificate
-            </motion.button>
-          </div>
-
-          <div className="flex items-center">
-            <label htmlFor="sort" className="text-sm text-gray-600 mr-2 whitespace-nowrap flex items-center">
-              <TrendingUp className="h-3.5 w-3.5 mr-1" />
-              Sort by:
-            </label>
-            <select
-              id="sort"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-gray-100 border-0 rounded-full text-sm px-4 py-2 focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="popular">Most Popular</option>
-              <option value="rating">Highest Rated</option>
-              <option value="newest">Newest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
-          </div>
-        </div> */}
       </motion.div>
 
       {/* Courses Grid */}
@@ -771,18 +594,6 @@ const CourseList = () => {
               Reset filters
             </motion.button>
           </div>
-        </motion.div>
-      )}
-
-      {/* View All Button */}
-      {courses.length > 0 && visibleCourses >= courses.length && (
-        <motion.div
-          className="text-center mt-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-
         </motion.div>
       )}
 

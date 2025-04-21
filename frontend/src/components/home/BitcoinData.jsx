@@ -73,11 +73,9 @@ const CompetitionList = () => {
     <div className="container mx-auto py-12  px-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
         <div>
-          <h2 className="text-3xl font-extrabold tracking-tight flex items-center text-customBlue uppercase relative">
-            <span className="relative z-10">Competitions</span>
-            <span className="absolute bottom-0 left-0 w-1/2 h-2"></span>
-            <EmojiEventsIcon className="ml-4 text-customBlue" fontSize="large" />
-          </h2>
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+                    Explore <span className="text-[#ffaa00]">Competitons</span>
+                </h1>
           <p className="mt-3 text-lg text-gray-600 max-w-2xl font-light">
             "Showcase your talent with exciting competition challenges. Compete, learn, and win amazing prizes!"
           </p>
@@ -115,7 +113,7 @@ const CompetitionList = () => {
               onClick={() => navigate(`/competition/${competition.id}`)}
             >
               {/* Card Header with Competition Image Background */}
-              <div className="h-64 relative overflow-hidden">
+              <div className="h-24 relative overflow-hidden">
                 {/* Background Image with Gradient Overlay */}
                 <div
                   className="absolute inset-0 bg-cover bg-center"

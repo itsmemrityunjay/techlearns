@@ -181,7 +181,7 @@ const Competitions = () => {
   return (
     <div className="container mx-auto py-8 ">
       <div
-        className="w-full mt-5 flex flex-col md:flex-row items-start justify-between rounded-xl bg-[#cf9dd1] md:bg-transparent min-h-[450px]"
+        className="w-full mt-5 flex flex-col md:flex-row items-start justify-between rounded-xl  md:bg-transparent min-h-[450px]"
       >
         {/* Left Section */}
         <div className="flex-1 mb-6 md:mb-0 mt-8 md:mt-14 flex flex-col justify-center">

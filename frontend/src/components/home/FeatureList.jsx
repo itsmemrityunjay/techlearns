@@ -6,7 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import nepIcon from "../../assets/education-policy.png" // Replace with actual NEP icon
 import skillIcon from "../../assets/skill-india.png" // Replace with actual Skill India icon
 import coursesIcon from "../../assets/courses-icon.png" // Replace with courses icon
-
+import { ChevronRight } from "@mui/icons-material"
 export default function HowItWorksScroll() {
   const [activeStep, setActiveStep] = useState(0)
   const containerRef = useRef(null)
@@ -120,11 +120,14 @@ export default function HowItWorksScroll() {
                   transition={{ duration: 0.6 }}
                 >
                   {/* Step indicator dot */}
-                  <div className={`absolute ${index % 2 === 0 ? '-left-16' : '-right-10'} top-1/2 transform -translate-y-1/2`}>
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${activeStep >= index ? 'bg-[#ffaa00]' : 'bg-gray-200'}`}>
-                      <span className="text-white font-semibold text-sm">{index + 1}</span>
-                    </div>
-                  </div>
+                <div className={`absolute ${index % 2 === 0 ? '-left-16' : '-right-10'} 
+  hidden sm:hidden md:block lg:block xl:block 
+  top-1/2 transform -translate-y-1/2`}>
+  <div className={`w-6 h-6 rounded-full flex items-center justify-center 
+    ${activeStep >= index ? 'bg-[#ffaa00]' : 'bg-gray-200'}`}>
+    <span className="text-white font-semibold text-sm">{index + 1}</span>
+  </div>
+</div>
 
                   {/* Content card */}
                   <div className={`p-8 rounded-lg shadow-md transition-all duration-300 ${activeStep >= index ? 'bg-white' : 'bg-gray-50'}`}>
@@ -155,6 +158,9 @@ export default function HowItWorksScroll() {
           </div>
         </div>
       </section>
+
+      {/* Feature List Section */}
+      
     </div>
   )
 }

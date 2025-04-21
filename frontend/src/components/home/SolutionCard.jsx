@@ -157,7 +157,7 @@ const SolutionCards = () => {
         <div className="container mx-auto py-12 px-4 sm:px-6 max-w-7xl">
             {/* Header Section */}
             <div className="text-left mb-12 px-4">
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                <h1 className="text-5xl font-bold text-gray-900 mb-4">
                     Solution <span className="text-[#ffaa00]">Write-ups</span>
                 </h1>
                 <p className="text-lg text-gray-600 max-w-2xl">
