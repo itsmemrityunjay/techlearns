@@ -28,10 +28,10 @@ const LearnAndGrow = () => {
           <div className="md:w-1/2 p-6 flex flex-col justify-center gap-4">
             <div>
               <h2 className="text-[24px] md:text-[28px] font-bold leading-tight">
-                <strong>Learn &amp;</strong> Level Up Your Skills
+                <strong>Meet the Minds Behind the Courses  </strong>
               </h2>
               <p className="text-gray-600 text-[15px] mt-2">
-                Select from a wide range of courses to upskill and advance your career!
+              Check out our mentors — the legends, the pros, the lowkey geniuses shaping the future.
               </p>
             </div>
 
@@ -66,7 +66,7 @@ const LearnAndGrow = () => {
               onClick={() => navigate('/mentors')} // Update this path to match your mentor route
               className="w-fit mt-4 px-5 py-2 bg-black text-white rounded hover:bg-gray-800 transition-all duration-200"
             >
-              <span>Meet Our Mentors</span>
+              <span>Meet Your Mentors</span>
               {/* <Users className="w-5 h-5" /> */}
             </motion.button>
           </div>

@@ -196,8 +196,8 @@ const Courses = () => {
           {/* Content */}
           <div className="text-left">
             <span className="inline-block bg-black text-white font-bold text-lg uppercase tracking-wide px-6 py-2  shadow-lg mb-6">
-              Why Choose Us ?
-            </span>
+            Why We're Different ?
+            </span> 
 
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
               Dive into Online Courses
@@ -215,31 +215,31 @@ const Courses = () => {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                icon: '💻',
-                title: 'Progress Tracking & Certifications',
+                icon: '💡',
+                title: 'Learn from Top Mentors',
                 description:
-                  'Track your progress with features like completion percentage, module achievements, and certificates.',
+                  'Our instructors aren’t just teachers — they’re industry pros, startup founders, tech wizards, and creators who’ve been in the game. You’ll get insider insights, hands-on guidance, and mentorship that actually makes sense in the real world.',
                 // gradient: 'bg-gradient-to-r from-orange-500 to-orange-300',
               },
               {
-                icon: '🌐',
-                title: 'Accessibility & Convenience',
+                icon: '🏁',
+                title: 'Participate in Skill-Based Challenges',
                 description:
-                  'Flexible learning anytime, anywhere, making education accessible to everyone.',
+                  'Every course comes with real challenges — not just boring quizzes. Solve problems, build projects, and compete in mini-hackathons or assignments that test what you actually learned. Get feedback. Grow fast.',
                 // gradient: 'bg-gradient-to-r from-blue-500 to-blue-300',
               },
               {
-                icon: '📚',
-                title: 'Diverse Course Selection',
+                icon: '🧾',
+                title: 'Get Certified and Recognized',
                 description:
-                  'A wide range of courses to choose from, helping you explore and acquire new skills.',
+                  'You will earn legit certificates after completing your course — the kind that actually matter. Share them on LinkedIn, add em to your resume, or flex them on your socials. Employers and clients love proof of skill.',
                 // gradient: 'bg-gradient-to-r from-yellow-500 to-yellow-300',
               },
               {
-                icon: '📊',
-                title: 'Interactive Learning Experience',
+                icon: '💬',
+                title: ' Join a Like-Minded Community',
                 description:
-                  'Enhance your learning with quizzes, exercises, and discussion forums.',
+                  'You are not learning alone. Join private groups, Discord channels, and community spaces filled with learners, creators, and mentors. Ask questions, collab on projects, or just vibe with people who get your hustle.',
                 // gradient: 'bg-gradient-to-r from-green-500 to-green-300',
               },
             ].map((feature, index) => (
@@ -415,14 +415,15 @@ const Courses = () => {
           {/* Heading */}
           <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#ffa800] to-yellow-600">
-              Top Trends
+            Learning’s better 
             </span>
-            for the Future of Work
+            when you do it together.
           </h1>
 
           {/* Paragraph */}
           <p className="text-gray-700 text-lg mb-8 leading-relaxed">
-            Our <span className="font-semibold text-gray-900">2025 Global Learning & Skills Trends Report</span> is out now! Find out how to build the right skills to stay ahead of rapid change in the workplace.
+          Ask questions, drop answers, share tips, or just vibe with the com<br/> munity.
+          No gatekeeping. Just pure collab energy.
           </p>
 
           {/* Call-to-Action Button */}

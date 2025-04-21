@@ -180,18 +180,11 @@ const Competitions = () => {
 >
   {/* Left Section */}
   <div className="flex-1 mb-6 md:mb-0 mt-8 md:mt-14 px-4 md:ml-12 flex flex-col justify-center">
-    <h1 className="text-4xl sm:text-4xl md:text-6xl font-bold text-gray-800 mb-4">Competitions</h1>
+    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4">Level Up Your Skills. Compete. Learn. Win Big.
+
+</h1>
     <p className="text-gray-600 mb-6 text-sm sm:text-base md:text-lg leading-relaxed">
-      Grow your data science skills by competing in our exciting <br className="hidden md:inline" /> competitions.
-      Find help in the{" "}
-      <a className="text-black-600 underline" href="/docs/competitions" target="_blank" rel="noopener noreferrer">
-        documentation
-      </a>{" "}
-      or learn about <br className="hidden md:inline" />
-      <a className="text-black-600 underline" href="/c/about/community" target="_blank" rel="noopener noreferrer">
-        Community Competitions
-      </a>
-      .
+    Join thousands of learners and competitors across the globe. Participate in challenges, sharpen your skills with expert-led <br/> courses, and get rewarded.
     </p>
 
     <div className="flex space-x-4">
@@ -201,13 +194,6 @@ const Competitions = () => {
       >
         Join Competition
       </button>
-
-      <button
-  className="border border-black hover:bg-[--primary-color] text-blue font-semibold py-2 px-6 rounded-3xl transition duration-200 text-sm sm:text-base"
-  onClick={handleHostClick}
->
-  + Host a Competition
-</button>
 
     </div>
   </div>

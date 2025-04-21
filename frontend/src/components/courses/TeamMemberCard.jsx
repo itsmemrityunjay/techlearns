@@ -44,8 +44,8 @@ export default function TeamShowcase() {
 
   return (
     <div className="w-full box-border container py-4 m-0 mx-auto">
-      <header className="h-20 flex items-center justify-center mb-7 gap-4 md:gap-8">
-        <h3 className="text-5xl font-medium text-gray-800 text-center">Team <span className="text-[#47226b]">TeachLearners</span></h3>
+      <header className="h-20 flex text-left mb-7 gap-4 md:gap-8">
+        <h3 className="text-5xl font-medium text-gray-800 text-center">What Students<span className="text-[#ffaa00]"> Are Saying</span></h3>
       </header>
 
       <div className="relative" ref={containerRef}>

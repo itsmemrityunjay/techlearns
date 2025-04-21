@@ -35,6 +35,7 @@ import Trophy from '@mui/icons-material/EmojiEvents';
 import PersonIcon from "@mui/icons-material/Person";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Footer from "./footer";
+import logo from "../../assets/Logo.png"
 const faqs = [
   {
     question: "What is a Getting Started competition?",
@@ -186,7 +187,7 @@ function CompDetail() {
                 <div className="flex flex-col sm:flex-col md:flex-row items-center justify-between gap-6 w-full  " style={{ gap: "16px", }}>
                   <CardMedia
                     component="img"
-                    image="/placeholder.svg?height=100&width=100"
+                    image={logo}
                     alt="Host Logo"
                     sx={{ height: 64, width: 64, borderRadius: 1, objectFit: "cover" }}
                   />
