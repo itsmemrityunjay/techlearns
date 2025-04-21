@@ -4,15 +4,15 @@ import { auth, db } from "../database/Firebase";
 import Auth from "../database/Auth";
 import Editor from "../components/comp/Editor";
 import ReactQuill from "react-quill";
-import Note from "../assets/Notebook.svg";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { collection, addDoc } from "firebase/firestore";
-import { FaEdit, FaFileAlt, FaTags, FaLock, FaUnlock, FaCode, FaPenFancy, FaRocket } from "react-icons/fa";
-import nb from "../components/comp/nb.jpg";
+import { collection, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { FaPen, FaCode, FaMoon, FaSun } from "react-icons/fa";
 import Footer from "../components/comp/footer";
+import vaishnavi from "../assets/vaishnavi.jpg"; // Import your image here
+
 const Notebook = () => {
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState("");
@@ -21,6 +21,7 @@ const Notebook = () => {
   const [privacy, setPrivacy] = useState("public");
   const [code, setCode] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -56,26 +57,56 @@ const Notebook = () => {
     return () => unsubscribe(); // Cleanup on unmount
   }, []);
 
-
   // Handle publishing notebook
   const handlePublish = async () => {
-    const notebook = {
-      title,
-      content: editorContent,
-      tags: tags.split(",").map((tag) => tag.trim()),
-      privacy,
-      code,
-      author: user ? user.displayName || user.email : "Anonymous",
-      createdAt: new Date(),
-    };
+    if (!title) {
+      toast.error("Please provide a title for your notebook");
+      return;
+    }
 
     try {
+      setIsSubmitting(true);
+
+      const notebook = {
+        title,
+        content: editorContent,
+        tags: tags.split(",").map((tag) => tag.trim()).filter(tag => tag !== ""),
+        privacy,
+        code,
+        author: user ? user.displayName || user.email : "Anonymous",
+        authorId: user.uid,
+        authorEmail: user.email,
+        createdAt: new Date(),
+      };
+
+      // 1. Create the notebook document
       const docRef = await addDoc(collection(db, "notebooks"), notebook);
-      console.log("Notebook published with ID:", docRef.id);
+
+      // 2. Update the user document
+      const userDocRef = doc(db, "users", user.uid);
+      await updateDoc(userDocRef, {
+        notebooks: arrayUnion({
+          id: docRef.id,
+          title: title,
+          createdAt: new Date(),
+          privacy: privacy,
+          tags: notebook.tags,
+          previewContent: editorContent.substring(0, 100).replace(/<[^>]*>/g, '') // Strip HTML tags
+        })
+      });
+
       toast.success("Notebook published successfully!");
+
+      // Optional: Clear the form
+      setTitle("");
+      setEditorContent("");
+      setTags("");
+      setCode("");
     } catch (error) {
       console.error("Error publishing notebook:", error);
       toast.error("Error publishing notebook!");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -83,143 +114,178 @@ const Notebook = () => {
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   return (
-    <div className="min-h-screen">
-      <ToastContainer />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <ToastContainer position="top-right" autoClose={3000} theme={darkMode ? "dark" : "light"} />
+
       {user ? (
-        <div className="container mx-auto px-6 py-12">
-          {/* Header Section */}
-          <div className="bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between p-8"
-            style={{
-              backgroundImage: `url(${nb})`,
-              backgroundSize: "contain", // Ensures the whole image is visible
-              backgroundRepeat: "no-repeat", // Prevents tiling of the image
-              backgroundPosition: "center",
-              height: "450px",
-              width: '100%',
-            }}>
-            <div className="flex-1 mb-6 md:mb-0 mt-12">
-              <h1 className="text-5xl font-bold text-gray-800 mb-4 ml-32">
-                Logic & Latte
+        <div className="container mx-auto px-0 py-8 sm:px-2 lg:px-0">
+          <div className="w-full flex flex-col md:flex-row items-start justify-between py-4 md:py-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
+            {/* Left Section */}
+            <div className="flex-1 mt-8 md:mt-16 flex flex-col ">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+                Empower Your Learning!
               </h1>
-              <p className="text-gray-600 mb-6 ml-32 lg:w-[50%]">
-                Where code meets caffeine, creativity sparks to life, and possibilities become limitless. It’s a space where ideas turn into innovation, and every line of code drives progress. Fueled by passion and imagination, this is where extraordinary creations come to life.
+              <p className="text-gray-700 mb-6 text-base md:text-lg leading-relaxed">
+                Unlock the power of data with hands-on learning! Gain the skills and confidence to tackle independent data science projects — from data analysis to machine learning. <br className="hidden md:block" />
+                Build your expertise and turn raw data into actionable insights for real-world applications.
               </p>
+
+              {/* <div className="flex flex-wrap gap-4">
+                      <button className="bg-[--secondary-color] hover:bg-[--primary-color] text-white font-semibold py-2 px-6 rounded-3xl transition duration-200">
+                        Join Competition
+                      </button>
+                      
+                    </div> */}
             </div>
 
+            {/* Right Section */}
+            <div className="w-full md:w-[45%] mt-8 md:mt-0 flex justify-center items-center">
+              <img
+                src={vaishnavi}
+                alt="Compete Visual"
+                className="w-full h-auto object-contain rounded-lg max-h-[400px]"
+              />
+            </div>
+          </div>
+          {/* Header with dark mode toggle */}
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+              Create Notebook
+              <FaPen className="text-black px-1" />
+            </h1>
 
+            {/* <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? <FaSun className="text-amber-400" /> : <FaMoon className="text-indigo-600" />}
+            </button> */}
           </div>
 
-          {/* Dark Mode Toggle */}
-
-
-          {/* Form Section */}
-          <div className="mt-12 bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8 transition-all transform duration-300">
-            <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-8 flex items-center">
-              <FaPenFancy className="mr-3 text-yellow-500 animate-spin" />
-              Create Your Notebook
-            </h2>
-
+          {/* Card container for form */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             {/* Title Input */}
-            <div className="mb-6">
-              <label className="block text-lg font-medium text-gray-800 dark:text-gray-300 mb-2">
-                <FaFileAlt className="inline mr-2 text-yellow-500" />
+            <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+              <label htmlFor="notebook-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Notebook Title
               </label>
               <input
+                id="notebook-title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter an engaging title..."
-                className="w-full p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 shadow-sm hover:shadow-sm hover:border-yellow-400"
+                placeholder="Enter a descriptive title..."
+                className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
 
             {/* Rich Text Editor */}
-            <div className="mb-6">
-              <label className="block text-lg font-medium text-gray-800 dark:text-gray-300 mb-2">
-                <FaEdit className="inline mr-2 text-yellow-600" />
+            <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+              <label htmlFor="notebook-content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Content
               </label>
               <div
-                className="border rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-white text-gray-800 dark:border-gray-600 focus:outline-none transition-all duration-300 shadow-sm hover:shadow-sm hover:border-yellow-400"
-                style={{
-                  resize: "vertical",  // Enables resizing like a textarea
-                  overflow: "auto",     // Prevents content overflow
-                  minHeight: "150px",   // Sets a minimum height
-                  maxHeight: "600px"    // Optional: Prevents excessive height
-                }}
+                className="border rounded-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 transition-colors"
+                style={{ minHeight: "200px" }}
               >
-                <ReactQuill className="border-0"
+                <ReactQuill
+                  id="notebook-content"
                   value={editorContent}
                   onChange={setEditorContent}
                   placeholder="Write your notebook content here..."
+                  className="h-64"
+                  theme="snow"
                 />
               </div>
             </div>
 
+            {/* Tags & Privacy in a row for better space usage */}
+            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-gray-100 dark:border-gray-700">
+              {/* Tags Input */}
+              <div>
+                <label htmlFor="notebook-tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Tags (comma separated)
+                </label>
+                <input
+                  id="notebook-tags"
+                  type="text"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder="e.g., React, Firebase, Tailwind"
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                />
+              </div>
 
-            {/* Tags Input */}
-            <div className="mb-6">
-              <label className="block text-lg font-medium text-gray-800 dark:text-gray-300 mb-2">
-                <FaTags className="inline mr-2 text-yellow-500" />
-                Tags
-              </label>
-              <input
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="e.g., React, Firebase, Tailwind"
-                className="w-full p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 hover:shadow-sm transition-all duration-300 hover:border-yellow-400"
+              {/* Privacy Options */}
+              <div>
+                <label htmlFor="notebook-privacy" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Privacy Setting
+                </label>
+                <select
+                  id="notebook-privacy"
+                  value={privacy}
+                  onChange={(e) => setPrivacy(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                >
+                  <option value="public">Public - Visible to everyone</option>
+                  <option value="private">Private - Only visible to you</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Code Editor Section */}
+            <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Code Editor
+                </label>
+                <span className="text-xs text-gray-500 dark:text-gray-400 italic">
+                  Optional: Add code snippets to your notebook
+                </span>
+              </div>
+              <Editor
+                onRun={(code) => toast.info("Code executed")}
+                onCodeChange={setCode}
+                initialCode={code}
               />
             </div>
 
-            {/* Privacy Options */}
-            <div className="mb-6">
-              <label className="block text-lg font-medium text-gray-800 dark:text-gray-300 mb-2">
-                {privacy === "public" ? (
-                  <FaUnlock className="inline mr-2 text-yellow-500 animate-bounce" />
-                ) : (
-                  <FaLock className="inline mr-2 text-red-500 animate-bounce" />
-                )}
-                Privacy
-              </label>
-              <select
-                value={privacy}
-                onChange={(e) => setPrivacy(e.target.value)}
-                className="w-full p-4 rounded-lg border hover:border-yellow-400 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
-              >
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-              </select>
-            </div>
-
-            {/* Publish Button */}
-            <div className="flex justify-end mt-6">
+            {/* Action buttons */}
+            <div className="p-6 bg-gray-50 dark:bg-gray-750 flex justify-end">
               <button
                 onClick={handlePublish}
-                className="bg-yellow-500 text-white font-bold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
+                disabled={isSubmitting || !title}
+                className={`
+                  px-5 py-2 rounded-md font-medium shadow-sm 
+                  ${isSubmitting || !title ?
+                    'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed' :
+                    'bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+                  }
+                  flex items-center gap-2
+                `}
               >
-                <FaRocket className="text-white text-2xl animate-pulse" />
-                <span className="text-lg">Publish Notebook</span>
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Publishing...
+                  </>) : (
+                  <>Publish Notebook</>
+                )}
               </button>
             </div>
-
           </div>
 
-          {/* Code Editor Section */}
-
-
-          {/* Code Editor Section */}
-          <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-            <h2 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">
-              Code Editor <FaCode className="inline ml-2 text-gray-500 dark:text-gray-300" />
-            </h2>
-            <Editor onRun={(code) => toast.success("Code executed!")} onCodeChange={setCode} />
+          {/* Help text */}
+          <div className="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
+            Your notebook will be saved to your profile and can be edited later.
           </div>
         </div>
       ) : (
-        // <Auth onAuth={() => setUser(auth.currentUser)} />
-        console.log("Hello")
+        <Auth onAuth={() => setUser(auth.currentUser)} />
       )}
       <Footer />
     </div>

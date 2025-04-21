@@ -36,7 +36,7 @@ const TechChallenge = () => {
                 {/* Left Section */}
                 <div className="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
                     <div className="py-8 flex flex-col justify-between">
-                        <h1 className="text-4xl leading-normal py-10 font-bold">
+                        <h1 className="text-5xl leading-normal py-10 font-bold">
                             Empowering Learners with <br /> <span className='text-[#ffaa00]'>Skill India</span>  & <span className='text-[#ffaa00]'>NEP</span>
                         </h1>
                         <p className="mt-4 text-lg text-gray-600">

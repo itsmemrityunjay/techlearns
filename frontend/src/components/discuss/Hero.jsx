@@ -112,11 +112,11 @@ const DiscussHero = () => {
                 </div>
 
                 {/* Image Section */}
-                <div className="w-full lg:w-1/2 h-[250px] md:h-[350px]">
+                <div className="w-full lg:w-1/2 h-auto flex items-center justify-end">
                     <img
                         src={vaishnavi}
                         alt="Join the Discussion"
-                        className="w-full h-full object-cover"
+                        className="w-auto h-[300px] object-cover"
                     />
                 </div>
             </div>

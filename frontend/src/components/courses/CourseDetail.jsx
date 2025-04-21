@@ -304,8 +304,8 @@ const QuizComponent = ({ courseId, courseName, onComplete }) => {
                   <div
                     key={optionIndex}
                     className={`p-3 border rounded-lg cursor-pointer transition-colors ${userAnswers[question.id] === optionIndex
-                        ? 'bg-blue-50 border-blue-300'
-                        : 'hover:bg-gray-50'
+                      ? 'bg-blue-50 border-blue-300'
+                      : 'hover:bg-gray-50'
                       }`}
                     onClick={() => handleAnswerSelect(question.id, optionIndex)}
                   >
@@ -328,8 +328,8 @@ const QuizComponent = ({ courseId, courseName, onComplete }) => {
             onClick={calculateScore}
             disabled={Object.keys(userAnswers).length < questions.length}
             className={`w-full py-3 rounded-lg font-medium ${Object.keys(userAnswers).length === questions.length
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
               } transition-colors`}
           >
             Submit Answers
@@ -720,11 +720,11 @@ const CourseDetail = () => {
 
           {/* Sidebar with Table of Contents */}
           <div className="lg:w-1/4 order-1 lg:order-2">
-            <div className="sticky top-20">
+            <div className="sticky top-1">
               <div className="bg-white rounded-xl shadow-sm p-6 hidden lg:block">
                 <h3 className="font-bold text-gray-900 mb-4">Table of Contents</h3>
                 {course && sections.length > 0 &&
-                  <div className="space-y-1 max-h-[70vh] overflow-y-auto pr-2">
+                  <div className="space-y-1 max-h-[65vh] overflow-y-auto pr-2">
                     {sections
                       .filter(section => section.type === 'subHeading')
                       .map((section, index) => {
@@ -739,10 +739,10 @@ const CourseDetail = () => {
                             href={isAccessible ? `#section-${sectionIndex}` : "#"}
                             key={index}
                             className={`flex items-center py-2 px-3 rounded-md text-sm transition-colors ${!isAccessible
-                                ? 'text-gray-400 cursor-not-allowed'
-                                : activeSection === sectionIndex
-                                  ? 'bg-blue-50 text-blue-600 font-medium'
-                                  : 'text-gray-600 hover:bg-gray-100'
+                              ? 'text-gray-400 cursor-not-allowed'
+                              : activeSection === sectionIndex
+                                ? 'bg-blue-50 text-blue-600 font-medium'
+                                : 'text-gray-600 hover:bg-gray-100'
                               }`}
                           >
                             {!isAccessible && <Lock className="w-3 h-3 mr-2 text-gray-400" />}
