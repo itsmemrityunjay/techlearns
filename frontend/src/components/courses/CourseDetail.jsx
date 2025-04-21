@@ -11,6 +11,15 @@ import Editor from '@monaco-editor/react';
 import { SaveIcon, Copy, Code2, Menu, X, ChevronRight, Lock } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import bronzeBadge from '../../assets/bronze-badge.png'; // Adjust path as needed
+import silverBadge from '../../assets/silver-badge.png';
+import goldBadge from '../../assets/gold-badge.png';
+
+const badgeImages = {
+  'bronze': bronzeBadge,
+  'silver': silverBadge,
+  'gold': goldBadge
+};
 
 const CodeEditor = ({ initialCode, language, onSave }) => {
   const [code, setCode] = useState(initialCode || '// Write your code here');
@@ -563,8 +572,8 @@ const CourseDetail = () => {
           <div className="mb-8 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-6 flex items-center">
             <div className="w-16 h-16 mr-6">
               <img
-                src={`/badges/${earnedBadge.badgeType}-badge.png`}
-                alt="Achievement Badge"
+                src={badgeImages[earnedBadge.badgeType] || `https://via.placeholder.com/100?text=${earnedBadge.badgeType}`}
+                alt={`${earnedBadge.badgeType} Badge`}
                 className="w-full h-full object-contain"
               />
             </div>
@@ -646,7 +655,7 @@ const CourseDetail = () => {
 
                 {/* Content restriction message for non-registered users */}
                 {!user && sections.length > visibleSections.length && (
-                  <div className="mt-10 border-t pt-10 border-dashed">
+                  <div className="my-10 border-t pt-10 border-dashed">
                     <div className="bg-gradient-to-b from-transparent to-white relative">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-center bg-white border border-gray-200 shadow-lg rounded-xl p-8 max-w-lg">
@@ -661,7 +670,7 @@ const CourseDetail = () => {
                           </p>
                           <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button
-                              onClick={() => navigate("/login")}
+                              onClick={() => navigate("/signin")}
                               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                             >
                               Log In
@@ -778,8 +787,8 @@ const CourseDetail = () => {
                   <div className="flex flex-col items-center">
                     <div className="w-24 h-24 my-4">
                       <img
-                        src={`/badges/${earnedBadge.badgeType}-badge.png`}
-                        alt="Achievement Badge"
+                        src={badgeImages[earnedBadge.badgeType] || `https://via.placeholder.com/100?text=${earnedBadge.badgeType}`}
+                        alt={`${earnedBadge.badgeType} Badge`}
                         className="w-full h-full object-contain"
                       />
                     </div>

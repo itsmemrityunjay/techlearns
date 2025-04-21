@@ -56,7 +56,7 @@ const TechChallenge = () => {
                             <p className="font-bold py-2">NOTEBOOKS</p>
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-900">5+ hrs</h2>
+                            <h2 className="text-3xl font-bold text-gray-900">5+</h2>
                             <p className="font-bold py-2">COURSES</p>
                         </div>
                     </div>
