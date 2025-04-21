@@ -35,6 +35,7 @@ import Trophy from '@mui/icons-material/EmojiEvents';
 import PersonIcon from "@mui/icons-material/Person";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Footer from "./footer";
+import { toast } from "react-toastify";
 const faqs = [
   {
     question: "What is a Getting Started competition?",
@@ -94,14 +95,32 @@ function CompDetail() {
     fetchCompData();
   }, [id, currentUser.email]);
 
+  // Modify the handleJoinCompetition function
   const handleJoinCompetition = async () => {
     try {
+      // 1. Update the competition document
       await updateDoc(doc(db, "competitions", id), {
         registeredUsers: arrayUnion(currentUser.email),
       });
-      setIsRegistered(true); // Update UI to show Submit button
+
+      // 2. Update the user document
+      const userDocRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userDocRef, {
+        competitions: arrayUnion({
+          id: id,
+          title: compData.title,
+          icon: compData.icon || compData.imageUrl,
+          activity: "joined",
+          timestamp: new Date(),
+          status: "active"
+        })
+      });
+
+      setIsRegistered(true);
+      toast.success("Successfully joined competition!");
     } catch (error) {
       console.error("Error registering for competition:", error);
+      toast.error("Failed to join competition. Please try again.");
     }
   };
 

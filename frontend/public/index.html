@@ -2,36 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="https://techlearns.in/Logo.png" />
+    <!-- Replace the standard favicon link with an id so we can modify it -->
+    <link rel="icon" href="favicon.ico" id="favicon" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="https://techlearns.in/Logo.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    <link rel="apple-touch-icon" href="favicon.ico" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
 
     <title>Techlearns Academy</title>
+
+    <!-- Add script to handle favicon switching based on color scheme -->
+    <script>
+      // Function to set the favicon based on theme
+      function setFaviconByTheme() {
+        const darkModeOn =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const favicon = document.getElementById("favicon");
+
+        if (darkModeOn) {
+          favicon.href = "favicon-dark.ico";
+        } else {
+          favicon.href = "favicon.ico";
+        }
+      }
+
+      // Set favicon on page load
+      setFaviconByTheme();
+
+      // Watch for changes in color scheme preference
+      if (window.matchMedia) {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addEventListener("change", setFaviconByTheme);
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-   
     <script src="https://meet.jit.si/external_api.js"></script>
-
   </body>
 </html>

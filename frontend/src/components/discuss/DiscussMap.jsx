@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../../database/Firebase";
 import ReactQuill from "react-quill";
@@ -87,6 +88,7 @@ const DiscussMap = () => {
     fetchTopics();
   }, []);
 
+  // Modify the handleAddComment function
   const handleAddComment = async (topicId) => {
     const commentText = newComment[topicId];
     if (commentText) {
@@ -95,17 +97,42 @@ const DiscussMap = () => {
       const commentAuthorImage = user ? user.photoURL : "";
 
       try {
+        // Get topic details to store in user's profile
         const topicDocRef = doc(db, "topics", topicId);
+        const topicSnap = await getDoc(topicDocRef);
+        const topicData = topicSnap.exists() ? topicSnap.data() : {};
+
+        // Create the comment object
+        const newCommentObj = {
+          text: commentText,
+          createdAt: new Date(),
+          authorImage: commentAuthorImage,
+          authorId: user.uid,
+          authorEmail: user.email,
+          replies: [],
+        };
+
+        // 1. Update the topic document with the new comment
         await updateDoc(topicDocRef, {
-          comments: arrayUnion({
-            text: commentText,
-            createdAt: new Date(),
-            authorImage: commentAuthorImage, // Save author's image for the comment
-            replies: [],
-          }),
+          comments: arrayUnion(newCommentObj),
         });
+
+        // 2. Update the user document to track this comment
+        const userDocRef = doc(db, "users", user.uid);
+
+        await updateDoc(userDocRef, {
+          topics: arrayUnion({
+            id: topicId,
+            title: topicData.title || "Unknown Topic",
+            activity: "comment",
+            timestamp: new Date(),
+            content: commentText.substring(0, 100) // Store a preview
+          })
+        });
+
         setNewComment((prev) => ({ ...prev, [topicId]: "" }));
         fetchTopics();
+        toast.success("Comment added successfully");
       } catch (error) {
         setErrorMessage("Error adding comment: " + error.message);
         toast.error("Error adding comment");
@@ -113,6 +140,7 @@ const DiscussMap = () => {
     }
   };
 
+  // Similarly modify the handleAddReply function
   const handleAddReply = async (topicId, commentIndex) => {
     const replyText = newReply[`${topicId}-${commentIndex}`];
     if (replyText) {
@@ -121,27 +149,51 @@ const DiscussMap = () => {
       const replyAuthorImage = user ? user.photoURL : "";
 
       try {
+        // Get topic details
         const topicDocRef = doc(db, "topics", topicId);
-        const topic = topics.find((t) => t.id === topicId);
+        const topicSnap = await getDoc(topicDocRef);
+        const topic = topicSnap.exists() ? topicSnap.data() : {};
+        const topicTitle = topic.title || "Unknown Topic";
 
         const updatedComments = [
           ...(Array.isArray(topic.comments) ? topic.comments : []),
         ];
-        updatedComments[commentIndex].replies.push({
+
+        // Create reply object
+        const newReplyObj = {
           text: replyText,
           createdAt: new Date(),
-          authorImage: replyAuthorImage, // Save author's image for the reply
-        });
+          authorImage: replyAuthorImage,
+          authorId: user.uid,
+          authorEmail: user.email
+        };
 
+        updatedComments[commentIndex].replies.push(newReplyObj);
+
+        // 1. Update the topic
         await updateDoc(topicDocRef, {
           comments: updatedComments,
+        });
+
+        // 2. Update the user document
+        const userDocRef = doc(db, "users", user.uid);
+        await updateDoc(userDocRef, {
+          topics: arrayUnion({
+            id: topicId,
+            title: topicTitle,
+            activity: "reply",
+            timestamp: new Date(),
+            content: replyText.substring(0, 100) // Store a preview
+          })
         });
 
         setNewReply((prev) => ({
           ...prev,
           [`${topicId}-${commentIndex}`]: "",
         }));
+
         fetchTopics();
+        toast.success("Reply added successfully");
       } catch (error) {
         setErrorMessage("Error adding reply: " + error.message);
         toast.error("Error adding reply");

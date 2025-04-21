@@ -60,7 +60,7 @@ const Navbar = () => {
           : "bg-transparent dark:bg-black"
           }`}
       >
-        <div className="container mx-auto py-4 px-6">
+        <div className="container mx-auto py-4">
           <div className="flex items-center justify-between">
             {/* Toggle Button */}
             <button
@@ -84,12 +84,12 @@ const Navbar = () => {
               to="/"
               className="absolute left-1/2 transform -translate-x-1/2"
             >
-              <img src={logo} alt="Logo" className="h-8 w-auto" />
+              <img src={logo} alt="Logo" className="h-12 w-auto" />
             </Link>
 
             {/* Right Side Profile */}
             <div className="flex items-center space-x-4">
-              <button
+              {/* <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
               >
@@ -98,7 +98,7 @@ const Navbar = () => {
                 ) : (
                   <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
                 )}
-              </button>
+              </button> */}
               <button
                 onClick={() => navigate(currentUser ? "/user" : "/signin")}
                 className="rounded-full border-2 border-gray-200 dark:border-gray-600 hover:border-blue-500 transition-colors"

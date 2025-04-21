@@ -65,6 +65,73 @@ const CustomComponent = () => {
     const fileInputRef = useRef(null);
     const [uploading, setUploading] = useState(false);
 
+    // Add these state variables at the top of your component
+    const [activeModal, setActiveModal] = useState(null); // 'notebooks', 'topics', 'competitions'
+    const [viewModal, setViewModal] = useState(null); // 'notebook', 'topic'
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const [isLoadingDetails, setIsLoadingDetails] = useState(false);
+
+    // Function to fetch complete notebook
+    const fetchCompleteNotebook = async (notebookId) => {
+        try {
+            setIsLoadingDetails(true);
+            const notebookRef = doc(db, "notebooks", notebookId);
+            const notebookSnap = await getDoc(notebookRef);
+
+            if (notebookSnap.exists()) {
+                const notebookData = {
+                    id: notebookSnap.id,
+                    ...notebookSnap.data()
+                };
+                setSelectedItem(notebookData);
+                setViewModal('notebook');
+            } else {
+                toast.error("Notebook not found");
+            }
+        } catch (error) {
+            console.error("Error fetching notebook:", error);
+            toast.error("Failed to load notebook details");
+        } finally {
+            setIsLoadingDetails(false);
+        }
+    };
+
+    // Function to fetch complete discussion
+    const fetchCompleteDiscussion = async (discussionId) => {
+        try {
+            setIsLoadingDetails(true);
+            const discussionRef = doc(db, "discussions", discussionId);
+            const discussionSnap = await getDoc(discussionRef);
+
+            if (discussionSnap.exists()) {
+                const discussionData = {
+                    id: discussionSnap.id,
+                    ...discussionSnap.data()
+                };
+
+                // Also fetch comments if needed
+                const commentsRef = collection(db, "discussions", discussionId, "comments");
+                const commentsSnap = await getDocs(commentsRef);
+                const commentsData = commentsSnap.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                discussionData.comments = commentsData;
+                setSelectedItem(discussionData);
+                setViewModal('topic');
+            } else {
+                toast.error("Discussion not found");
+            }
+        } catch (error) {
+            console.error("Error fetching discussion:", error);
+            toast.error("Failed to load discussion details");
+        } finally {
+            setIsLoadingDetails(false);
+        }
+    };
+
     // Fetch the authenticated user's data
     useEffect(() => {
         const auth = getAuth();
@@ -826,7 +893,10 @@ const CustomComponent = () => {
                     className="grid grid-cols-1 md:grid-cols-3 gap-6"
                 >
                     {/* Notebooks Card */}
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div
+                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                        onClick={() => setActiveModal('notebooks')}
+                    >
                         <div className="flex items-center gap-4 mb-4">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center">
                                 <svg
@@ -846,34 +916,31 @@ const CustomComponent = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Notebooks</h3>
                         </div>
-                        <div className="max-h-40 overflow-y-auto pr-2">
-                            {userData.notebooks.length > 0 ? (
-                                <ul className="space-y-2">
-                                    {userData.notebooks.map((notebook, index) => (
-                                        <li
-                                            key={index}
-                                            className="p-2 rounded-lg bg-yellow-50 dark:bg-yellow-900/30 text-gray-700 dark:text-yellow-100 flex justify-between items-center"
-                                        >
-                                            <span>{notebook.title}</span>
-                                            <Link to={`/notebook/${notebook.id}`} className="text-blue-500 hover:text-blue-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                                </svg>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <div className="text-center py-4 text-gray-500">
-                                    No notebooks created yet.
-                                    <Link to="/notebook" className="block mt-2 text-blue-500 hover:text-blue-600">Create one?</Link>
-                                </div>
-                            )}
+
+                        <div className="flex flex-col items-center justify-center py-6">
+                            <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">
+                                {userData.notebooks?.length || 0}
+                            </div>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">
+                                {userData.notebooks?.length === 1 ? 'Notebook' : 'Notebooks'} Created
+                            </p>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the parent div's onClick
+                                    setActiveModal('notebooks'); // Open the notebooks modal instead
+                                }}
+                                className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1.5 rounded-md text-sm hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors"
+                            >
+                                View
+                            </button>
                         </div>
                     </div>
 
                     {/* Topics Card */}
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div
+                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                        onClick={() => setActiveModal('topics')}
+                    >
                         <div className="flex items-center gap-4 mb-4">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center">
                                 <svg
@@ -893,34 +960,31 @@ const CustomComponent = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Topics</h3>
                         </div>
-                        <div className="max-h-40 overflow-y-auto pr-2">
-                            {userData.topics.length > 0 ? (
-                                <ul className="space-y-2">
-                                    {userData.topics.map((topic, index) => (
-                                        <li
-                                            key={index}
-                                            className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-gray-700 dark:text-blue-100 flex justify-between items-center"
-                                        >
-                                            <span>{topic.title}</span>
-                                            <Link to={`/discussion/${topic.id}`} className="text-blue-500 hover:text-blue-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                                </svg>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <div className="text-center py-4 text-gray-500">
-                                    No topics posted yet.
-                                    <Link to="/discussForm" className="block mt-2 text-blue-500 hover:text-blue-600">Start a discussion?</Link>
-                                </div>
-                            )}
+
+                        <div className="flex flex-col items-center justify-center py-6">
+                            <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+                                {userData.topics?.length || 0}
+                            </div>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">
+                                Discussion {userData.topics?.length === 1 ? 'Topic' : 'Topics'}
+                            </p>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the parent div's onClick
+                                    setActiveModal('topics'); // Open the topics modal instead
+                                }}
+                                className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-200 px-3 py-1.5 rounded-md text-sm hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors"
+                            >
+                                View
+                            </button>
                         </div>
                     </div>
 
                     {/* Competitions Card */}
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <div
+                        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                        onClick={() => setActiveModal('competitions')}
+                    >
                         <div className="flex items-center gap-4 mb-4">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-400 to-pink-500 flex items-center justify-center">
                                 <svg
@@ -940,33 +1004,261 @@ const CustomComponent = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Competitions</h3>
                         </div>
-                        <div className="max-h-40 overflow-y-auto pr-2">
-                            {userData.competitions.length > 0 ? (
-                                <ul className="space-y-2">
-                                    {userData.competitions.map((competition, index) => (
-                                        <li
-                                            key={index}
-                                            className="p-2 rounded-lg bg-pink-50 dark:bg-pink-900/30 text-gray-700 dark:text-pink-100 flex justify-between items-center"
-                                        >
-                                            <span>{competition.title}</span>
-                                            <Link to={`/competition/${competition.id}`} className="text-blue-500 hover:text-blue-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                                </svg>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <div className="text-center py-4 text-gray-500">
-                                    No competitions participated in yet.
-                                    <Link to="/competition" className="block mt-2 text-blue-500 hover:text-blue-600">Join a competition?</Link>
-                                </div>
-                            )}
+
+                        <div className="flex flex-col items-center justify-center py-6">
+                            <div className="text-4xl font-bold text-rose-600 dark:text-rose-400">
+                                {userData.competitions?.length || 0}
+                            </div>
+                            <p className="text-gray-600 dark:text-gray-400 mt-2">
+                                {userData.competitions?.length === 1 ? 'Competition' : 'Competitions'} Joined
+                            </p>
+                            <button
+                                className="mt-4 flex items-center gap-1 text-blue-500 hover:text-blue-600 transition-colors"
+                            >
+                                <span>View All</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </motion.div>
             </div>
+
+            {/* Activity Modals */}
+            <AnimatePresence>
+                {activeModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4"
+                        onClick={() => setActiveModal(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    {activeModal === 'notebooks' && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                                            </svg>
+                                            My Notebooks
+                                        </>
+                                    )}
+                                    {activeModal === 'topics' && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+                                                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                                            </svg>
+                                            My Discussion Topics
+                                        </>
+                                    )}
+                                    {activeModal === 'competitions' && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-rose-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zm7-10a1 1 0 01.707.293l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 8l-3.293-3.293A1 1 0 0112 4z" clipRule="evenodd" />
+                                            </svg>
+                                            My Competitions
+                                        </>
+                                    )}
+                                </h3>
+                                <button
+                                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    onClick={() => setActiveModal(null)}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="p-6 overflow-y-auto max-h-[60vh]">
+                                {activeModal === 'notebooks' && (
+                                    userData.notebooks.length > 0 ? (
+                                        <ul className="space-y-3 divide-y divide-gray-100 dark:divide-gray-700">
+                                            {userData.notebooks.map((notebook, index) => (
+                                                <li key={index} className="pt-3 first:pt-0">
+                                                    <div className="flex justify-between items-center">
+                                                        <div>
+                                                            <h4 className="font-medium text-gray-800 dark:text-white">{notebook.title}</h4>
+                                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                                Created: {notebook.createdAt?.toDate ?
+                                                                    notebook.createdAt.toDate().toLocaleDateString() :
+                                                                    new Date(notebook.createdAt).toLocaleDateString()}
+                                                            </p>
+                                                            {notebook.tags && notebook.tags.length > 0 && (
+                                                                <div className="flex flex-wrap gap-1 mt-1">
+                                                                    {notebook.tags.map((tag, tagIndex) => (
+                                                                        <span key={tagIndex} className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-300">
+                                                                            {tag}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                fetchCompleteNotebook(notebook.id);
+                                                            }}
+                                                            className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1.5 rounded-md text-sm hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors"
+                                                        >
+                                                            View
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1M19 20a2 2 0 002-2V8a2 2 0 00-2-2h-5M9 14l2 2m0 0l2-2m-2 2V4" />
+                                            </svg>
+                                            <p className="mt-2 text-gray-500 dark:text-gray-400">No notebooks created yet</p>
+                                            <Link to="/notebook" className="inline-block mt-3 text-blue-500 hover:underline">
+                                                Create your first notebook
+                                            </Link>
+                                        </div>
+                                    )
+                                )}
+
+                                {activeModal === 'topics' && (
+                                    userData.topics.length > 0 ? (
+                                        <ul className="space-y-3 divide-y divide-gray-100 dark:divide-gray-700">
+                                            {userData.topics.map((topic, index) => (
+                                                <li key={index} className="pt-3 first:pt-0">
+                                                    <div className="flex justify-between items-center">
+                                                        <div>
+                                                            <h4 className="font-medium text-gray-800 dark:text-white">{topic.title}</h4>
+                                                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                                                <span className={`inline-block w-2 h-2 rounded-full mr-2 ${topic.activity === 'created' ? 'bg-green-500' :
+                                                                    topic.activity === 'comment' ? 'bg-blue-500' : 'bg-purple-500'
+                                                                    }`}></span>
+                                                                <span className="capitalize">{topic.activity}</span>
+                                                                {topic.timestamp && (
+                                                                    <span className="ml-2">
+                                                                        {topic.timestamp?.toDate ?
+                                                                            topic.timestamp.toDate().toLocaleDateString() :
+                                                                            new Date(topic.timestamp).toLocaleDateString()}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                fetchCompleteDiscussion(topic.id);
+                                                            }}
+                                                            className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-200 px-3 py-1.5 rounded-md text-sm hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors"
+                                                        >
+                                                            View
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                            </svg>
+                                            <p className="mt-2 text-gray-500 dark:text-gray-400">No discussion topics found</p>
+                                            <Link to="/discussForm" className="inline-block mt-3 text-blue-500 hover:underline">
+                                                Start a discussion
+                                            </Link>
+                                        </div>
+                                    )
+                                )}
+
+                                {activeModal === 'competitions' && (
+                                    userData.competitions.length > 0 ? (
+                                        <ul className="space-y-3 divide-y divide-gray-100 dark:divide-gray-700">
+                                            {userData.competitions.map((competition, index) => (
+                                                <li key={index} className="pt-3 first:pt-0">
+                                                    <div className="flex justify-between items-center">
+                                                        <div>
+                                                            <h4 className="font-medium text-gray-800 dark:text-white">{competition.title}</h4>
+                                                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                                                <span className={`inline-block px-2 py-0.5 rounded-full text-xs ${competition.status === 'active'
+                                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
+                                                                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
+                                                                    }`}>
+                                                                    {competition.status || 'Joined'}
+                                                                </span>
+                                                                {competition.timestamp && (
+                                                                    <span className="ml-2">
+                                                                        {competition.timestamp?.toDate ?
+                                                                            competition.timestamp.toDate().toLocaleDateString() :
+                                                                            new Date(competition.timestamp).toLocaleDateString()}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <Link to={`/competition/${competition.id}`} className="bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-200 px-3 py-1.5 rounded-md text-sm hover:bg-rose-200 dark:hover:bg-rose-900/50 transition-colors">
+                                                            View
+                                                        </Link>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                            <p className="mt-2 text-gray-500 dark:text-gray-400">No competitions joined yet</p>
+                                            <Link to="/competition" className="inline-block mt-3 text-blue-500 hover:underline">
+                                                Explore competitions
+                                            </Link>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+
+                            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750 text-right">
+                                <button
+                                    onClick={() => setActiveModal(null)}
+                                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    Close
+                                </button>
+                                {activeModal === 'notebooks' && (
+                                    <Link
+                                        to="/notebook"
+                                        className="ml-3 px-4 py-2 bg-yellow-500 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-yellow-600 transition-colors"
+                                    >
+                                        Create New
+                                    </Link>
+                                )}
+                                {activeModal === 'topics' && (
+                                    <Link
+                                        to="/discussForm"
+                                        className="ml-3 px-4 py-2 bg-indigo-500 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-indigo-600 transition-colors"
+                                    >
+                                        Start Discussion
+                                    </Link>
+                                )}
+                                {activeModal === 'competitions' && (
+                                    <Link
+                                        to="/competition"
+                                        className="ml-3 px-4 py-2 bg-rose-500 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-rose-600 transition-colors"
+                                    >
+                                        Join Competition
+                                    </Link>
+                                )}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Login Activity / Submissions */}
             <motion.div
@@ -1167,6 +1459,279 @@ const CustomComponent = () => {
                     </div>
                 )}
             </motion.div>
+
+            {/* View Modal for Notebooks and Topics */}
+            <AnimatePresence>
+                {viewModal && selectedItem && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"
+                        onClick={() => {
+                            setViewModal(null);
+                            setSelectedItem(null);
+                        }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[85vh] overflow-hidden"
+                            onClick={e => e.stopPropagation()}
+                        >
+                            {/* Header */}
+                            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    {viewModal === 'notebook' && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                                            </svg>
+                                            {selectedItem.title || 'Notebook'}
+                                        </>
+                                    )}
+                                    {viewModal === 'topic' && (
+                                        <>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+                                                <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                                            </svg>
+                                            {selectedItem.title || 'Topic'}
+                                        </>
+                                    )}
+                                </h3>
+                                <button
+                                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    onClick={() => {
+                                        setViewModal(null);
+                                        setSelectedItem(null);
+                                    }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 130px)' }}>
+                                {/* Notebook View */}
+                                {viewModal === 'notebook' && (
+                                    <div>
+                                        {isLoadingDetails ? (
+                                            <div className="flex justify-center items-center py-12">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="mb-6">
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
+                                                            {selectedItem.title}
+                                                        </h4>
+                                                        <div className="flex space-x-2">
+                                                            {selectedItem.tags && selectedItem.tags.map((tag, i) => (
+                                                                <span key={i} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300">
+                                                                    {tag}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                </svg>
+                                                                Created: {selectedItem.createdAt?.toDate ?
+                                                                    selectedItem.createdAt.toDate().toLocaleDateString() :
+                                                                    new Date(selectedItem.createdAt).toLocaleDateString()}
+                                                            </div>
+
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                                By: {selectedItem.author || selectedItem.authorName || "Unknown"}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                            </svg>
+                                                            Privacy: {selectedItem.privacy || 'Public'}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Full content */}
+                                                    <div className="prose dark:prose-invert max-w-none mt-6 border-t border-gray-100 dark:border-gray-700 pt-6">
+                                                        {selectedItem.content ? (
+                                                            <div dangerouslySetInnerHTML={{ __html: selectedItem.content }}></div>
+                                                        ) : (
+                                                            <p className="text-gray-500 dark:text-gray-400 italic">No content available for this notebook</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-8 flex justify-center gap-4">
+                                                    <button
+                                                        onClick={() => {
+                                                            setViewModal(null);
+                                                            setSelectedItem(null);
+                                                        }}
+                                                        className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                                    >
+                                                        Close
+                                                    </button>
+                                                    <Link
+                                                        to={`/notebook/${selectedItem.id}`}
+                                                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors"
+                                                    >
+                                                        Edit Notebook
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Topic View */}
+                                {viewModal === 'topic' && (
+                                    <div>
+                                        {isLoadingDetails ? (
+                                            <div className="flex justify-center items-center py-12">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="mb-6">
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
+                                                            {selectedItem.title}
+                                                        </h4>
+                                                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${selectedItem.category === 'question' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' :
+                                                            selectedItem.category === 'discussion' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200' :
+                                                                'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200'
+                                                            }`}>
+                                                            {selectedItem.category || 'Discussion'}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                </svg>
+                                                                Posted: {selectedItem.createdAt?.toDate ?
+                                                                    selectedItem.createdAt.toDate().toLocaleDateString() :
+                                                                    new Date(selectedItem.createdAt || selectedItem.timestamp).toLocaleDateString()}
+                                                            </div>
+
+                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                                By: {selectedItem.author || selectedItem.authorName || "Unknown"}
+                                                            </div>
+                                                        </div>
+
+                                                        {selectedItem.tags && selectedItem.tags.length > 0 && (
+                                                            <div className="flex flex-wrap gap-1 mt-2">
+                                                                {selectedItem.tags.map((tag, tagIndex) => (
+                                                                    <span key={tagIndex} className="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-0.5 rounded-full text-gray-700 dark:text-gray-300">
+                                                                        {tag}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Full content */}
+                                                    <div className="prose dark:prose-invert max-w-none mt-6 border-t border-gray-100 dark:border-gray-700 pt-6">
+                                                        {selectedItem.content ? (
+                                                            <div dangerouslySetInnerHTML={{ __html: selectedItem.content }}></div>
+                                                        ) : (
+                                                            <p className="text-gray-500 dark:text-gray-400 italic">
+                                                                {selectedItem.body || selectedItem.description || "No content available for this topic"}
+                                                            </p>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Comments section */}
+                                                    {selectedItem.comments && selectedItem.comments.length > 0 && (
+                                                        <div className="mt-8">
+                                                            <h5 className="text-lg font-semibold mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                                                                Comments ({selectedItem.comments.length})
+                                                            </h5>
+                                                            <ul className="space-y-4">
+                                                                {selectedItem.comments.map((comment, index) => (
+                                                                    <li key={index} className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                                                                        <div className="flex justify-between items-start">
+                                                                            <div className="flex items-start gap-3">
+                                                                                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                                                                    <span className="text-blue-600 dark:text-blue-300 text-sm font-medium">
+                                                                                        {comment.author ? comment.author.charAt(0).toUpperCase() : "U"}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <p className="font-medium text-sm text-gray-700 dark:text-gray-200">
+                                                                                        {comment.author || "Anonymous"}
+                                                                                    </p>
+                                                                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                                                        {comment.createdAt?.toDate ?
+                                                                                            comment.createdAt.toDate().toLocaleString() :
+                                                                                            new Date(comment.createdAt).toLocaleString()}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="mt-2 text-gray-600 dark:text-gray-300 text-sm pl-11">
+                                                                            {comment.content || comment.text}
+                                                                        </div>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="mt-8 flex justify-center gap-4">
+                                                    <button
+                                                        onClick={() => {
+                                                            setViewModal(null);
+                                                            setSelectedItem(null);
+                                                        }}
+                                                        className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                                    >
+                                                        Close
+                                                    </button>
+                                                    <Link
+                                                        to={`/discussion/${selectedItem.id}`}
+                                                        className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors"
+                                                    >
+                                                        Join Discussion
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer */}
+                            <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750 text-right">
+                                <button
+                                    onClick={() => {
+                                        setViewModal(null);
+                                        setSelectedItem(null);
+                                    }}
+                                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
