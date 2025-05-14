@@ -119,7 +119,7 @@ const Notebook = () => {
 
       {user ? (
         <div className="container mx-auto px-0 py-8 sm:px-2 lg:px-0">
-          <div className="w-full flex flex-col md:flex-row items-start justify-between py-4 md:py-10 bg-[#cf9dd1] md:bg-transparent min-h-[450px] rounded-xl">
+          <div className="w-full flex flex-col md:flex-row items-start justify-between py-4 md:py-10 md:bg-transparent min-h-[450px] rounded-xl">
             {/* Left Section */}
             <div className="flex-1 mt-8 md:mt-16 flex flex-col ">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
